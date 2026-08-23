@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<DTE version="1.0">
+  <Documento ID="F123T33">
+    <Encabezado>
+      <IdDoc>
+        <TipoDTE>33</TipoDTE>
+        <Folio>98765</Folio>
+      </IdDoc>
+      <Emisor>
+        <RUTEmisor>76.543.210-K</RUTEmisor>
+        <RznSoc>Suministros Industriales SpA</RznSoc>
+      </Emisor>
+    </Encabezado>
+    
+    <!-- Ítem 1: Compra de Combustible -->
+    <Detalle>
+      <NroLinDet>1</NroLinDet>
+      <NmbItem>Petróleo Diesel D50 (Granel)</NmbItem>
+      <QtyItem>1500</QtyItem>
+      <PrcItem>1000</PrcItem>
+      <MontoItem>1500000</MontoItem>
+    </Detalle>
+    
+    <!-- Ítem 2: Consumo Eléctrico -->
+    <Detalle>
+      <NroLinDet>2</NroLinDet>
+      <NmbItem>Suministro de Electricidad KWH Base</NmbItem>
+      <QtyItem>5000</QtyItem>
+      <PrcItem>120</PrcItem>
+      <MontoItem>600000</MontoItem>
+    </Detalle>
+    
+    <!-- Ítem 3: Insumo común sin impacto ASG directo -->
+    <Detalle>
+      <NroLinDet>3</NroLinDet>
+      <NmbItem>Repuestos de maquinaria pesada</NmbItem>
+      <QtyItem>10</QtyItem>
+      <PrcItem>5000</PrcItem>
+      <MontoItem>50000</MontoItem>
+    </Detalle>
+
+  </Documento>
+</DTE>
