@@ -1,5 +1,4 @@
 ﻿// server/services/ollamaService.js
-const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
 
 async function auditarTextoConOllama(textoDocumento) {
     try {

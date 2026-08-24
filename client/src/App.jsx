@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Building2, FolderKanban, ShieldCheck, UploadCloud, PlusCircle, Database, Cpu, FileText } from 'lucide-react';
+import { Building2, FolderKanban, ShieldCheck, UploadCloud, PlusCircle, Database, Cpu, FileText, Truck } from 'lucide-react';
+import FlotaModule from './FlotaModule';
 
 const API_URL = 'http://localhost:5000/api';
 
 export default function App() {
+  const [vista, setVista] = useState('FORENSE'); // 'FORENSE' | 'FLOTAS'
   const [clientes, setClientes] = useState([]);
   const [clienteSeleccionado, setClienteSeleccionado] = useState(null);
   const [expedientes, setExpedientes] = useState([]);
@@ -152,13 +154,29 @@ export default function App() {
           </h1>
           <p className="text-sm text-slate-400">Plataforma Independiente de Aseguramiento y Contabilidad Forense</p>
         </div>
-        <div className="bg-slate-900 border border-slate-800 px-4 py-2 rounded-lg text-xs flex items-center gap-2 text-emerald-400">
-          <Database className="w-4 h-4" /> SQLite Criptográfico & Ollama (Llama 3) Activo
+        <div className="flex items-center gap-3">
+          <div className="bg-slate-900 border border-slate-800 px-4 py-2 rounded-lg text-xs flex items-center gap-2 text-emerald-400">
+            <Database className="w-4 h-4" /> SQLite Criptográfico & Ollama (Llama 3) Activo
+          </div>
+          <div className="flex bg-slate-900 border border-slate-800 rounded-lg overflow-hidden text-xs">
+            <button onClick={() => setVista('FORENSE')}
+              className={`px-3 py-2 flex items-center gap-1.5 ${vista === 'FORENSE' ? 'bg-emerald-600 text-white' : 'text-slate-400 hover:text-slate-200'}`}>
+              <ShieldCheck className="w-3.5 h-3.5" /> Forense
+            </button>
+            <button onClick={() => setVista('FLOTAS')}
+              className={`px-3 py-2 flex items-center gap-1.5 ${vista === 'FLOTAS' ? 'bg-emerald-600 text-white' : 'text-slate-400 hover:text-slate-200'}`}>
+              <Truck className="w-3.5 h-3.5" /> Flotas ASG
+            </button>
+          </div>
         </div>
       </header>
 
+      {vista === 'FLOTAS' ? (
+        <FlotaModule />
+      ) : (
+      <>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        
+
         {/* COLUMNA 1: Directorio de Clientes */}
         <div className="bg-slate-900 border border-slate-800 rounded-xl p-5 flex flex-col gap-4">
           <h2 className="text-lg font-semibold flex items-center gap-2 text-slate-200">
@@ -340,6 +358,8 @@ export default function App() {
             </div>
           </div>
         </div>
+      )}
+      </>
       )}
     </div>
   );
