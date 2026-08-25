@@ -11,11 +11,11 @@ export async function GET() {
 }
 
 export async function POST(request) {
-    const { rut, razon_social, ciudad, tipo_negocio } = await request.json();
+    const { rut, razon_social, ciudad, pais, tipo_negocio } = await request.json();
     try {
         const result = db.prepare(
-            `INSERT INTO flota_empresas (rut, razon_social, ciudad, tipo_negocio) VALUES (?, ?, ?, ?)`
-        ).run(rut, razon_social, ciudad, tipo_negocio);
+            `INSERT INTO flota_empresas (rut, razon_social, ciudad, pais, tipo_negocio) VALUES (?, ?, ?, ?, ?)`
+        ).run(rut, razon_social, ciudad, pais || 'CL', tipo_negocio);
         return NextResponse.json({ mensaje: 'Empresa de flota registrada', id: result.lastInsertRowid }, { status: 201 });
     } catch (error) {
         return NextResponse.json({ error: 'Error al registrar empresa de flota', detalle: error.message }, { status: 400 });

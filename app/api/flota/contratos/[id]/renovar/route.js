@@ -15,7 +15,7 @@ export async function POST(request, { params }) {
 
     try {
         const contrato = db.prepare(
-            `SELECT c.*, a.tasa_referencia_litros, a.tipo_combustible, a.unidad_medida, a.patente, e.tipo_negocio
+            `SELECT c.*, a.tasa_referencia_litros, a.tipo_combustible, a.unidad_medida, a.patente, e.tipo_negocio, e.pais
              FROM flota_contratos c
              JOIN flota_activos a ON a.id = c.activo_id
              JOIN flota_empresas e ON e.id = a.empresa_id
@@ -34,7 +34,7 @@ export async function POST(request, { params }) {
 
         const consumoEsperado = flotaService.calcularConsumoEsperado(contrato.tasa_referencia_litros, lecturaUso.valor);
         const discrepanciaPct = flotaService.calcularDiscrepanciaPct(lecturaCombustible.litros, consumoEsperado);
-        const co2Kg = flotaService.calcularCO2Kg(lecturaCombustible.litros, contrato.tipo_combustible);
+        const co2 = flotaService.calcularCO2(lecturaCombustible.litros, contrato.tipo_combustible, contrato.pais);
         const alcanceGhg = flotaService.determinarAlcanceGHG(contrato.tipo_negocio);
         const hashEvidencia = flotaService.generarHashEvidencia(xml_uso, xml_combustible);
 
@@ -51,13 +51,15 @@ export async function POST(request, { params }) {
             `INSERT INTO flota_renovaciones (
                 contrato_id, numero_adhesivo, codigo_qr, fecha_vencimiento,
                 lectura_uso, lectura_combustible_litros, consumo_esperado_litros, discrepancia_pct,
-                alcance_ghg, co2_kg, hash_evidencia, xml_uso_origen, xml_combustible_origen, auditor_firmante,
+                alcance_ghg, co2_fosil_kg, co2_biogenico_kg, mezcla_biocombustible_pct, factor_fuente,
+                hash_evidencia, xml_uso_origen, xml_combustible_origen, auditor_firmante,
                 estado_firma
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
         ).run(
             contratoId, numeroAdhesivo, codigoQr, fechaVencimiento.toISOString(),
             lecturaUso.valor, lecturaCombustible.litros, consumoEsperado, discrepanciaPct,
-            alcanceGhg, co2Kg, hashEvidencia, xml_uso, xml_combustible, auditor_firmante || null,
+            alcanceGhg, co2.co2_fosil_kg, co2.co2_biogenico_kg, co2.mezcla_biocombustible_pct, co2.factor_fuente,
+            hashEvidencia, xml_uso, xml_combustible, auditor_firmante || null,
             auditor_firmante ? 'FIRMADO' : 'PENDIENTE_FEA'
         );
 
@@ -80,7 +82,10 @@ export async function POST(request, { params }) {
             consumo_esperado_litros: consumoEsperado,
             discrepancia_pct: discrepanciaPct,
             alcance_ghg: alcanceGhg,
-            co2_kg: co2Kg,
+            co2_fosil_kg: co2.co2_fosil_kg,
+            co2_biogenico_kg: co2.co2_biogenico_kg,
+            mezcla_biocombustible_pct: co2.mezcla_biocombustible_pct,
+            factor_fuente: co2.factor_fuente,
             hash_evidencia: hashEvidencia,
             fecha_vencimiento: fechaVencimiento.toISOString(),
             estado_firma: auditor_firmante ? 'FIRMADO' : 'PENDIENTE_FEA',

@@ -32,7 +32,7 @@ export default function FlotaModule() {
   const [cargandoEmpresas, setCargandoEmpresas] = useState(true);
   const [cargandoDetalleEmpresa, setCargandoDetalleEmpresa] = useState(false);
 
-  const [nuevaEmpresa, setNuevaEmpresa] = useState({ rut: '', razon_social: '', ciudad: '', tipo_negocio: 'RENT_A_CAR' });
+  const [nuevaEmpresa, setNuevaEmpresa] = useState({ rut: '', razon_social: '', ciudad: '', pais: 'CL', tipo_negocio: 'RENT_A_CAR' });
   const [nuevoCliente, setNuevoCliente] = useState({ nombre: '' });
   const [nuevoActivo, setNuevoActivo] = useState({ patente: '', tipo_activo: 'VEHICULO', unidad_medida: 'KM', descripcion: '', tasa_referencia_litros: '', tipo_combustible: 'DIESEL' });
   const [nuevoContrato, setNuevoContrato] = useState({ activo_id: '', cliente_id: '', dias_renovacion: 30 });
@@ -129,7 +129,7 @@ export default function FlotaModule() {
         method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(nuevaEmpresa)
       });
       if (res.ok) {
-        setNuevaEmpresa({ rut: '', razon_social: '', ciudad: '', tipo_negocio: 'RENT_A_CAR' });
+        setNuevaEmpresa({ rut: '', razon_social: '', ciudad: '', pais: 'CL', tipo_negocio: 'RENT_A_CAR' });
         cargarEmpresas();
       }
     } catch (e) { console.error('Error creando empresa:', e); }
@@ -221,6 +221,13 @@ export default function FlotaModule() {
             <input type="text" placeholder="Ciudad (ej: Antofagasta)" value={nuevaEmpresa.ciudad}
               onChange={e => setNuevaEmpresa({ ...nuevaEmpresa, ciudad: e.target.value })}
               className="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm text-slate-200" required />
+            <select value={nuevaEmpresa.pais}
+              onChange={e => setNuevaEmpresa({ ...nuevaEmpresa, pais: e.target.value })}
+              className="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm text-slate-200">
+              <option value="CL">Chile</option>
+              <option value="PE">Perú</option>
+              <option value="BR">Brasil</option>
+            </select>
             <select value={nuevaEmpresa.tipo_negocio}
               onChange={e => setNuevaEmpresa({ ...nuevaEmpresa, tipo_negocio: e.target.value })}
               className="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm text-slate-200">
@@ -240,7 +247,7 @@ export default function FlotaModule() {
               <button key={emp.id} type="button" onClick={() => setEmpresaSeleccionada(emp)}
                 className={`w-full text-left p-3 rounded-lg border transition-all ${empresaSeleccionada?.id === emp.id ? 'bg-emerald-950/30 border-emerald-500' : 'bg-slate-950 border-slate-800 hover:border-slate-700'}`}>
                 <div className="font-semibold text-sm text-slate-200">{emp.razon_social}</div>
-                <div className="text-xs text-slate-400">{emp.ciudad} · {emp.tipo_negocio}</div>
+                <div className="text-xs text-slate-400">{emp.ciudad}, {emp.pais} · {emp.tipo_negocio}</div>
               </button>
             ))}
             {!cargandoEmpresas && empresas.length === 0 && <p className="text-xs text-slate-500 text-center py-4">No hay empresas registradas.</p>}
@@ -389,14 +396,18 @@ export default function FlotaModule() {
                       </div>
                     </div>
                     <div className="bg-slate-900 rounded p-2">
-                      <div className="text-slate-500 flex items-center gap-1"><Leaf className="w-3 h-3" /> CO2e</div>
-                      <div className="text-slate-200">{certificado.co2_kg} kg</div>
+                      <div className="text-slate-500 flex items-center gap-1"><Leaf className="w-3 h-3" /> CO2e fósil</div>
+                      <div className="text-slate-200">{certificado.co2_fosil_kg} kg</div>
+                      {certificado.co2_biogenico_kg > 0 && (
+                        <div className="text-slate-500">+ {certificado.co2_biogenico_kg} kg biogénico ({certificado.mezcla_biocombustible_pct}% mezcla)</div>
+                      )}
                     </div>
                     <div className="bg-slate-900 rounded p-2">
                       <div className="text-slate-500">Alcance GHG</div>
                       <div className="text-slate-200">{certificado.alcance_ghg.replace('_', ' ')}</div>
                     </div>
                   </div>
+                  <div className="text-[10px] text-slate-500">Fuente del factor: {certificado.factor_fuente}</div>
                   <div className="text-[10px] text-slate-500 break-all">Hash: {certificado.hash_evidencia}</div>
                   <a href={certificado.url_verificacion} target="_blank" rel="noopener noreferrer"
                     className="text-[11px] text-emerald-400 hover:text-emerald-300 underline underline-offset-2">
@@ -429,29 +440,56 @@ export default function FlotaModule() {
         </div>
       </div>
 
-      {/* Informe agregado de flota */}
+      {/* Informe agregado de flota — alineado a elementos del GHG Protocol Corporate Standard */}
       {empresaSeleccionada && informeCO2 && (
         <div className="bg-slate-900 border border-slate-800 rounded-xl p-5">
-          <h2 className="text-lg font-semibold flex items-center gap-2 text-emerald-400 mb-3">
-            <Leaf className="w-5 h-5" /> Informe de Flota — CO2 por Alcance
-          </h2>
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="text-lg font-semibold flex items-center gap-2 text-emerald-400">
+              <Leaf className="w-5 h-5" /> Informe de Flota — CO2 por Alcance
+            </h2>
+            {informeCO2.periodo_cubierto && (
+              <span className="text-[10px] text-slate-500">
+                Período: {new Date(informeCO2.periodo_cubierto.desde).toLocaleDateString()} – {new Date(informeCO2.periodo_cubierto.hasta).toLocaleDateString()}
+              </span>
+            )}
+          </div>
           {informeCO2.por_alcance.length === 0 ? (
             <p className="text-xs text-slate-500">Aún no hay renovaciones registradas para esta empresa.</p>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              {informeCO2.por_alcance.map(a => (
-                <div key={a.alcance_ghg} className="bg-slate-950 border border-slate-800 rounded-lg p-4">
-                  <div className="text-sm font-bold text-slate-200">{a.alcance_ghg.replace('_', ' ')}</div>
-                  <div className="text-2xl font-bold text-emerald-400">{a.co2_kg_total.toFixed(1)} kg CO2e</div>
-                  <div className="text-xs text-slate-400">{a.cantidad_renovaciones} renovaciones registradas</div>
-                  {a.renovaciones_con_discrepancia_alta > 0 && (
-                    <div className="text-xs text-amber-400 flex items-center gap-1 mt-1">
-                      <AlertTriangle className="w-3 h-3" /> {a.renovaciones_con_discrepancia_alta} con discrepancia &gt;15%
-                    </div>
-                  )}
+            <>
+              <div className="grid grid-cols-2 gap-3 mb-3">
+                <div className="bg-slate-950 border border-emerald-500/30 rounded-lg p-3">
+                  <div className="text-[10px] text-slate-500 uppercase">Total CO2e fósil (Alcance 1+3)</div>
+                  <div className="text-xl font-bold text-emerald-400">{informeCO2.total_co2_fosil_ton} t CO2e</div>
                 </div>
-              ))}
-            </div>
+                <div className="bg-slate-950 border border-slate-800 rounded-lg p-3">
+                  <div className="text-[10px] text-slate-500 uppercase">CO2 biogénico (aparte, no suma al alcance)</div>
+                  <div className="text-xl font-bold text-slate-300">{informeCO2.total_co2_biogenico_ton} t CO2</div>
+                </div>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                {informeCO2.por_alcance.map(a => (
+                  <div key={a.alcance_ghg} className="bg-slate-950 border border-slate-800 rounded-lg p-4">
+                    <div className="text-sm font-bold text-slate-200">{a.alcance_ghg.replace('_', ' ')}</div>
+                    <div className="text-2xl font-bold text-emerald-400">{a.co2_fosil_ton} t CO2e</div>
+                    {a.co2_biogenico_ton > 0 && <div className="text-xs text-slate-500">+ {a.co2_biogenico_ton} t biogénico</div>}
+                    <div className="text-xs text-slate-400">{a.cantidad_renovaciones} renovaciones registradas</div>
+                    {a.renovaciones_con_discrepancia_alta > 0 && (
+                      <div className="text-xs text-amber-400 flex items-center gap-1 mt-1">
+                        <AlertTriangle className="w-3 h-3" /> {a.renovaciones_con_discrepancia_alta} con discrepancia &gt;15%
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+              {informeCO2.metodologia && (
+                <div className="mt-3 text-[10px] text-slate-500 space-y-1 border-t border-slate-800 pt-2">
+                  <div><strong className="text-slate-400">Estándar:</strong> {informeCO2.metodologia.estandar}</div>
+                  <div><strong className="text-slate-400">Límites organizacionales:</strong> {informeCO2.metodologia.limites_organizacionales}</div>
+                  <div><strong className="text-slate-400">CO2 biogénico:</strong> {informeCO2.metodologia.co2_biogenico_nota}</div>
+                </div>
+              )}
+            </>
           )}
           <p className="text-[10px] text-slate-500 italic mt-3">{informeCO2.nota}</p>
         </div>

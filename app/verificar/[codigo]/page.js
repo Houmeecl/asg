@@ -104,8 +104,11 @@ export default function VerificarPage({ params }) {
             <div className={discrepanciaAlta ? 'text-amber-300 font-bold print:text-amber-700' : ''}>{dato.discrepancia_pct}%</div>
           </div>
           <div className="bg-slate-950 rounded-lg p-3 print:bg-slate-50 print:border print:border-slate-200">
-            <div className="text-slate-500 flex items-center gap-1 text-xs"><Leaf className="w-3.5 h-3.5" /> CO2e</div>
-            <div>{dato.co2_kg} kg</div>
+            <div className="text-slate-500 flex items-center gap-1 text-xs"><Leaf className="w-3.5 h-3.5" /> CO2e fósil</div>
+            <div>{dato.co2_fosil_kg} kg</div>
+            {dato.co2_biogenico_kg > 0 && (
+              <div className="text-xs text-slate-500">+ {dato.co2_biogenico_kg} kg biogénico ({dato.mezcla_biocombustible_pct}%)</div>
+            )}
           </div>
           <div className="bg-slate-950 rounded-lg p-3 print:bg-slate-50 print:border print:border-slate-200">
             <div className="text-slate-500 text-xs">Alcance GHG</div>
@@ -119,6 +122,7 @@ export default function VerificarPage({ params }) {
             <div>Hash de evidencia:</div>
             <div className="font-mono break-all">{dato.hash_evidencia}</div>
             {dato.auditor_firmante && <div className="mt-1">Firmado por: {dato.auditor_firmante}</div>}
+            {dato.factor_fuente && <div className="mt-1">Fuente del factor de emisión: {dato.factor_fuente}</div>}
           </div>
         </div>
 

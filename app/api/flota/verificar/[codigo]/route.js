@@ -11,10 +11,11 @@ export async function GET(request, { params }) {
         const renovacion = db.prepare(
             `SELECT r.numero_adhesivo, r.codigo_qr, r.fecha_renovacion, r.fecha_vencimiento,
                     r.lectura_uso, r.lectura_combustible_litros, r.consumo_esperado_litros,
-                    r.discrepancia_pct, r.alcance_ghg, r.co2_kg, r.hash_evidencia,
+                    r.discrepancia_pct, r.alcance_ghg, r.co2_fosil_kg, r.co2_biogenico_kg,
+                    r.mezcla_biocombustible_pct, r.factor_fuente, r.hash_evidencia,
                     r.estado_firma, r.auditor_firmante,
                     a.patente, a.tipo_activo, a.unidad_medida, a.tipo_combustible,
-                    e.razon_social AS empresa_razon_social, e.ciudad AS empresa_ciudad, e.tipo_negocio
+                    e.razon_social AS empresa_razon_social, e.ciudad AS empresa_ciudad, e.pais, e.tipo_negocio
              FROM flota_renovaciones r
              JOIN flota_contratos c ON c.id = r.contrato_id
              JOIN flota_activos a ON a.id = c.activo_id
