@@ -19,7 +19,7 @@ function SicrLogo() {
         </span>
         <span>cr3p</span>
       </div>
-      <div className="text-[10px] font-bold text-slate-400">Tu contabilidad, tu trazabilidad</div>
+      <div className="text-[10px] font-bold text-slate-400">Tu evidencia, tu trazabilidad</div>
     </div>
   );
 }
