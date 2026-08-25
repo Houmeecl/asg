@@ -398,6 +398,10 @@ export default function FlotaModule() {
                     </div>
                   </div>
                   <div className="text-[10px] text-slate-500 break-all">Hash: {certificado.hash_evidencia}</div>
+                  <a href={certificado.url_verificacion} target="_blank" rel="noopener noreferrer"
+                    className="text-[11px] text-emerald-400 hover:text-emerald-300 underline underline-offset-2">
+                    Ver Pasaporte Digital público →
+                  </a>
                   <div className="text-[10px] text-slate-500 italic">{certificado.aviso_legal}</div>
                 </div>
               )}

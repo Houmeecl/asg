@@ -109,14 +109,17 @@ export default function ForenseModule() {
       const res = await fetch(`${API_URL}/expedientes/${expedienteSeleccionado.id}/evidencia`, { method: 'POST', body: formData });
       const data = await res.json();
       if (res.ok) {
-        setMensajeRespuesta(`✅ Evidencia blindada. Hash SHA-256: ${data.hash_inmutabilidad.substring(0, 16)}...`);
+        setMensajeRespuesta({
+          texto: `✅ Evidencia blindada y almacenada. Hash SHA-256: ${data.hash_inmutabilidad.substring(0, 16)}...`,
+          urlDescarga: data.url_descarga,
+        });
         setArchivoEvidencia(null);
       } else {
-        setMensajeRespuesta(`❌ Error: ${data.error}`);
+        setMensajeRespuesta({ texto: `❌ Error: ${data.error}` });
       }
     } catch (error) {
       console.error('Error subiendo evidencia:', error);
-      setMensajeRespuesta('❌ Error de conexión con el servidor.');
+      setMensajeRespuesta({ texto: '❌ Error de conexión con el servidor.' });
     } finally {
       setSubiendoEvidencia(false);
     }
@@ -258,8 +261,13 @@ export default function ForenseModule() {
               </form>
 
               {mensajeRespuesta && (
-                <div className="p-2 bg-slate-950 border border-emerald-500/50 rounded text-[11px] text-slate-300">
-                  {mensajeRespuesta}
+                <div className="p-2 bg-slate-950 border border-emerald-500/50 rounded text-[11px] text-slate-300 flex flex-col gap-1">
+                  <span>{mensajeRespuesta.texto}</span>
+                  {mensajeRespuesta.urlDescarga && (
+                    <a href={mensajeRespuesta.urlDescarga} className="text-emerald-400 hover:text-emerald-300 underline underline-offset-2">
+                      Descargar archivo original →
+                    </a>
+                  )}
                 </div>
               )}
             </div>

@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { ShieldCheck, Leaf, FileCheck2, Truck, ArrowRight, Link2, Calculator, Radar } from 'lucide-react';
 import SicrLogo from './components/SicrLogo';
+import { obtenerUsuarioSesion } from '@/lib/auth';
 
 const SERVICIOS = [
   {
@@ -31,15 +32,17 @@ const PASOS = [
   { n: '3', titulo: 'Publica trazabilidad', desc: 'La evidencia, el hash y la cadena quedan visibles para terceros — no solo un PDF bonito.' },
 ];
 
-export default function LandingPage() {
+export default async function LandingPage() {
+  const usuario = await obtenerUsuarioSesion();
+
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100">
       {/* Header */}
       <header className="flex justify-between items-center px-6 py-5 border-b border-slate-800">
         <SicrLogo size="sm" />
         <nav className="flex items-center gap-3 text-sm">
-          <Link href="/ingresar" className="px-4 py-2 rounded-lg border border-slate-700 hover:border-emerald-500 hover:text-emerald-400 transition-colors">
-            Ingresar
+          <Link href={usuario ? '/panel' : '/ingresar'} className="px-4 py-2 rounded-lg border border-slate-700 hover:border-emerald-500 hover:text-emerald-400 transition-colors">
+            {usuario ? 'Ir al panel' : 'Ingresar'}
           </Link>
         </nav>
       </header>
@@ -58,8 +61,8 @@ export default function LandingPage() {
           sostienen — y nada más. Tus costos, tus márgenes y tus otros clientes no salen de tu empresa.
         </p>
         <div className="flex flex-col sm:flex-row gap-3 mt-2">
-          <Link href="/ingresar" className="bg-emerald-600 hover:bg-emerald-500 text-white px-6 py-3 rounded-lg text-sm font-medium flex items-center justify-center gap-2">
-            Ingresar al panel <ArrowRight className="w-4 h-4" />
+          <Link href={usuario ? '/panel' : '/ingresar'} className="bg-emerald-600 hover:bg-emerald-500 text-white px-6 py-3 rounded-lg text-sm font-medium flex items-center justify-center gap-2">
+            {usuario ? 'Ir al panel' : 'Ingresar al panel'} <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
         <div className="flex items-center gap-4 text-[11px] text-slate-500 uppercase tracking-wider mt-4">

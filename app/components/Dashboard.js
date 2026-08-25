@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { Database, Truck, ShieldCheck, LogOut } from 'lucide-react';
 import SicrLogo from './SicrLogo';
 import ForenseModule from './ForenseModule';
@@ -21,7 +22,9 @@ export default function Dashboard({ usuario }) {
     <div className="min-h-screen bg-slate-950 text-slate-100 p-6 flex flex-col gap-6">
       <header className="flex justify-between items-center border-b border-slate-800 pb-4">
         <div className="flex items-center gap-3">
-          <SicrLogo />
+          <Link href="/" title="Volver a la landing">
+            <SicrLogo />
+          </Link>
           <span className="text-slate-600">|</span>
           <div>
             <div className="text-sm font-semibold text-emerald-400">Assurance, Forensic &amp; Sustainable Finance</div>

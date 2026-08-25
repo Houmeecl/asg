@@ -61,7 +61,11 @@ export async function POST(request, { params }) {
             auditor_firmante ? 'FIRMADO' : 'PENDIENTE_FEA'
         );
 
-        const qrDataUrl = await flotaService.generarQR(codigoQr);
+        // El QR codifica la URL pública de verificación, no solo el código —
+        // así escanearlo lleva directo al Pasaporte Digital, no a un UUID suelto.
+        const origin = request.headers.get('origin') || `${request.headers.get('x-forwarded-proto') || 'http'}://${request.headers.get('host')}`;
+        const urlVerificacion = `${origin}/verificar/${codigoQr}`;
+        const qrDataUrl = await flotaService.generarQR(urlVerificacion);
 
         return NextResponse.json({
             mensaje: 'Renovación registrada y certificado generado',
@@ -69,6 +73,7 @@ export async function POST(request, { params }) {
             numero_adhesivo: numeroAdhesivo,
             codigo_qr: codigoQr,
             qr_data_url: qrDataUrl,
+            url_verificacion: urlVerificacion,
             lectura_uso: lecturaUso.valor,
             unidad_medida: contrato.unidad_medida,
             lectura_combustible_litros: lecturaCombustible.litros,
