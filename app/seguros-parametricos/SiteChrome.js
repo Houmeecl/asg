@@ -35,7 +35,10 @@ export async function SiteHeader() {
         </nav>
         <div className="flex items-center gap-2 text-sm">
           {sesion ? (
+            <>
+            {sesion.rol === 'ADMIN' && <Link href={`${BASE}/admin`} className="hidden sm:block rounded-full border border-[#0b1a12]/30 font-semibold px-5 py-2.5 hover:bg-white">Admin</Link>}
             <Link href={`${BASE}/panel`} className="rounded-full bg-[#0b1a12] text-[#d7ff3f] font-semibold px-5 py-2.5 hover:bg-[#16301f]">Mi panel</Link>
+            </>
           ) : (
             <>
               <Link href={`${BASE}/ingresar`} className="hidden sm:block rounded-full border border-[#0b1a12]/30 font-semibold px-5 py-2.5 hover:bg-white">Ingresar</Link>
