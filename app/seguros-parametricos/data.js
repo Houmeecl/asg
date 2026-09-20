@@ -9,6 +9,7 @@ export const RIESGOS = {
   lluvia: { nombre: 'Lluvia intensa / aluvión', indice: 'Precipitación en 24 h', unidad: 'mm', dir: 'mayor', umbral: 40, salida: 90, base: 0.07 },
   viento: { nombre: 'Viento', indice: 'Ráfaga máxima', unidad: 'km/h', dir: 'mayor', umbral: 70, salida: 130, base: 0.06 },
   calor: { nombre: 'Ola de calor', corto: 'Calor', indice: 'Días sobre 35 °C', unidad: 'días', dir: 'mayor', umbral: 5, salida: 20, base: 0.1 },
+  calorMax: { nombre: 'Calor anómalo', indice: 'Temperatura máxima diaria', unidad: '°C', dir: 'mayor', umbral: 26, salida: 32, base: 0.1 },
   marejada: { nombre: 'Marejada', indice: 'Altura significativa de ola', unidad: 'm', dir: 'mayor', umbral: 3, salida: 6, base: 0.08 },
 };
 
@@ -46,8 +47,8 @@ export const SECTORES = [
     icon: 'Sprout',
     zonas: ['Arica y Parinacota', 'Atacama', 'Coquimbo'],
     zonaDefault: 'Arica y Parinacota',
-    riesgoDefault: 'helada',
-    riesgos: ['helada', 'calor', 'sequia'],
+    riesgoDefault: 'calorMax',
+    riesgos: ['calorMax', 'helada', 'sequia'],
     resumen:
       'Los valles del norte producen en microclimas muy sensibles: una helada tardía o una ola de calor en floración se traduce en pérdidas de temporada. Cubre el índice, no la discusión sobre el daño.',
     dolores: [
@@ -57,7 +58,7 @@ export const SECTORES = [
     ],
     riesgoDetalle: {
       helada: 'Temperatura mínima nocturna en la estación agroclimática del valle.',
-      calor: 'Cantidad de días sobre 35 °C durante la temporada de cosecha.',
+      calorMax: 'Temperatura máxima diaria en la estación agroclimática del valle; los valles costeros como Azapa rara vez pasan de 25 °C.',
       sequia: 'Precipitación acumulada del periodo frente al promedio histórico.',
     },
   },

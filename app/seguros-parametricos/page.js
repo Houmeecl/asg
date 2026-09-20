@@ -6,8 +6,8 @@ import {
 import Cotizador from './Cotizador';
 import TileGrid from './TileGrid';
 import MapaInteractivo from './MapaInteractivo';
-import EjemploHelada from './EjemploHelada';
-import { EJEMPLO } from './ejemplo';
+import EjemploClima from './EjemploClima';
+import { EJEMPLO, fechaDia } from './ejemplo';
 import { MotionRoot, Reveal, Stagger, Item, Lift, Parallax, Contador } from './Motion';
 import { SiteHeader, SiteFooter } from './SiteChrome';
 import { ICONOS } from './iconos';
@@ -37,16 +37,16 @@ const PASOS = [
 
 const COBERTURAS = [
   { icon: Snowflake, k: 'helada' }, { icon: Droplets, k: 'sequia' }, { icon: CloudRain, k: 'lluvia' },
-  { icon: Wind, k: 'viento' }, { icon: Flame, k: 'calor' }, { icon: Waves, k: 'marejada' },
+  { icon: Wind, k: 'viento' }, { icon: Flame, k: 'calorMax' }, { icon: Waves, k: 'marejada' },
 ];
-const ICONO_RIESGO = { helada: Snowflake, sequia: Droplets, lluvia: CloudRain, viento: Wind, calor: Thermometer, marejada: Waves };
+const ICONO_RIESGO = { helada: Snowflake, sequia: Droplets, lluvia: CloudRain, viento: Wind, calor: Thermometer, calorMax: Thermometer, marejada: Waves };
 
 const FAQ = [
   ['¿Qué es un seguro paramétrico?', 'Es un contrato que paga un monto acordado cuando un índice medible (por ejemplo, la temperatura mínima o la lluvia acumulada) cruza un umbral pactado, en lugar de indemnizar una pérdida evaluada por un perito.'],
   ['¿Cómo se mide el evento?', 'Con una estación meteorológica de referencia y datos satelitales definidos en la póliza. Ambas partes pueden auditar el mismo dato.'],
   ['¿Cuánto tarda un pago?', 'Cuando el periodo cierra y el índice se confirma, el pago se libera en días, no en meses.'],
   ['¿Y si sufro pérdidas pero el índice no se activa?', 'Es el riesgo base del producto: paga el índice, no la pérdida. Por eso calibramos el umbral con el historial de tu ubicación.'],
-  ['¿Las cifras de esta página son reales?', 'Las primas y el ejemplo de helada son ilustrativos. Las imágenes satelitales sí son reales (Copernicus Sentinel-2). La prima definitiva depende del análisis de riesgo y de la aceptación del asegurador.'],
+  ['¿Las cifras de esta página son reales?', 'Las temperaturas del ejemplo (Xweather) y las imágenes satelitales (Copernicus Sentinel-2) son reales. Las primas, el asegurado y el polígono del predio son ilustrativos. La prima definitiva depende del análisis de riesgo y de la aceptación del asegurador.'],
 ];
 
 export default function SegurosParametricos() {
@@ -92,15 +92,15 @@ export default function SegurosParametricos() {
                   <span className="uppercase tracking-wider font-semibold">Cobertura activa</span>
                   <span className="inline-flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-[#5ce08a] animate-pulse" /> Monitoreando</span>
                 </div>
-                <p className="mt-3 text-2xl font-semibold">Helada · Valle de Azapa</p>
+                <p className="mt-3 text-2xl font-semibold">Calor anómalo · Valle de Azapa</p>
                 <p className="text-sm text-white/65">Arica y Parinacota</p>
                 <dl className="mt-5 grid grid-cols-2 gap-3 text-sm">
-                  <div className="rounded-xl bg-white/10 p-3"><dt className="text-xs text-white/60">Umbral</dt><dd className="mt-0.5 font-semibold">bajo {EJEMPLO.umbral.toFixed(0)} °C</dd></div>
+                  <div className="rounded-xl bg-white/10 p-3"><dt className="text-xs text-white/60">Umbral</dt><dd className="mt-0.5 font-semibold">sobre {EJEMPLO.umbral.toFixed(0)} °C</dd></div>
                   <div className="rounded-xl bg-white/10 p-3"><dt className="text-xs text-white/60">Monto asegurado</dt><dd className="mt-0.5 font-semibold">{clp(EJEMPLO.monto)}</dd></div>
-                  <div className="rounded-xl bg-white/10 p-3"><dt className="text-xs text-white/60">Última mínima</dt><dd className="mt-0.5 font-semibold">6,4 °C</dd></div>
-                  <div className="rounded-xl bg-white/10 p-3"><dt className="text-xs text-white/60">Estado</dt><dd className="mt-0.5 font-semibold text-[#5ce08a]">Sin evento</dd></div>
+                  <div className="rounded-xl bg-white/10 p-3"><dt className="text-xs text-white/60">Máxima del periodo</dt><dd className="mt-0.5 font-semibold">{EJEMPLO.maximo.toFixed(1).replace('.', ',')} °C</dd></div>
+                  <div className="rounded-xl bg-white/10 p-3"><dt className="text-xs text-white/60">Estado</dt><dd className="mt-0.5 font-semibold text-[#5ce08a]">Umbral superado</dd></div>
                 </dl>
-                <p className="mt-4 text-[11px] text-white/45">Ejemplo ilustrativo de un panel de cliente.</p>
+                <p className="mt-4 text-[11px] text-white/45">Panel de ejemplo con datos reales de temperatura (Xweather).</p>
               </div>
             </Reveal>
           </div>
@@ -123,10 +123,10 @@ export default function SegurosParametricos() {
         <section id="ejemplo" className="max-w-6xl mx-auto px-6 py-24 scroll-mt-16">
           <Reveal>
             <p className="text-xs uppercase tracking-widest text-[#28a745] font-semibold">Un ejemplo</p>
-            <h2 className="mt-3 text-3xl md:text-4xl font-semibold tracking-tight max-w-3xl">Así paga un seguro paramétrico: helada en el Valle de Azapa.</h2>
+            <h2 className="mt-3 text-3xl md:text-4xl font-semibold tracking-tight max-w-3xl">Así paga un seguro paramétrico: calor anómalo en el Valle de Azapa.</h2>
             <p className="mt-4 text-[#0f1f2e]/65 max-w-2xl">
-              Un productor asegura su predio de olivos y hortalizas contra heladas. La estación de referencia mide la temperatura mínima cada noche.
-              Cuando baja del umbral, el pago se calcula solo.
+              Un productor asegura su predio de olivos y hortalizas contra calor anómalo. Se mide la temperatura máxima diaria; en el valle lo normal
+              ronda los {EJEMPLO.normal.toFixed(0)} °C. Con datos reales de los últimos 90 días, este es el pago que se habría activado.
             </p>
           </Reveal>
 
@@ -135,14 +135,14 @@ export default function SegurosParametricos() {
               <div className="h-[420px]">
                 <MapaInteractivo {...PREDIO_EJEMPLO} etiquetaPredio="Predio asegurado" etiquetaEstacion="Estación de referencia" />
               </div>
-              <p className="px-5 py-3 text-xs text-[#0f1f2e]/55">Imagen satelital real (Sentinel-2). El polígono del predio es ilustrativo. Arrastra y haz zoom para explorar.</p>
+              <p className="px-5 py-3 text-xs text-[#0f1f2e]/55">Imagen satelital real (Sentinel-2). El polígono del predio y su asegurado son ilustrativos. Arrastra y haz zoom para explorar.</p>
             </Reveal>
-            <EjemploHelada />
+            <EjemploClima />
           </div>
 
           <Stagger className="mt-10 grid md:grid-cols-3 gap-4">
             {[
-              ['1', 'La helada ocurre', `La mínima cae a ${EJEMPLO.minimo.toFixed(1)} °C, bajo el umbral de ${EJEMPLO.umbral.toFixed(0)} °C.`],
+              ['1', 'El calor ocurre', `El ${fechaDia(EJEMPLO.diaMax)} la máxima llega a ${EJEMPLO.maximo.toFixed(1).replace('.', ',')} °C, sobre el umbral de ${EJEMPLO.umbral.toFixed(0)} °C (${EJEMPLO.diasSobreUmbral} días lo superaron).`],
               ['2', 'El sistema lo detecta', 'La estación de referencia registra el dato y se verifica contra la póliza.'],
               ['3', 'Se paga automáticamente', `El productor recibe ${clp(Math.round(EJEMPLO.pago / 1000) * 1000)} sin peritajes ni trámites.`],
             ].map(([n, t, d]) => (
@@ -253,9 +253,9 @@ export default function SegurosParametricos() {
               </div>
               <dl className="mt-6 grid grid-cols-2 gap-x-6 gap-y-4 text-sm">
                 {[
-                  ['Asegurado', 'Agrícola Azapa Ltda. (ejemplo)'], ['Riesgo', 'Helada'],
-                  ['Índice', 'Temperatura mínima diaria'], ['Ubicación', 'Valle de Azapa, Arica'],
-                  ['Umbral', `bajo ${EJEMPLO.umbral.toFixed(0)} °C`], ['Pago total', 'en −6 °C o menos'],
+                  ['Asegurado', 'Agrícola Azapa Ltda. (ejemplo)'], ['Riesgo', 'Calor anómalo'],
+                  ['Índice', 'Temperatura máxima diaria'], ['Ubicación', 'Valle de Azapa, Arica'],
+                  ['Umbral', `sobre ${EJEMPLO.umbral.toFixed(0)} °C`], ['Pago total', `en ${EJEMPLO.riesgo.salida} °C o más`],
                   ['Monto asegurado', clp(EJEMPLO.monto)], ['Vigencia', '3 meses'],
                 ].map(([k, v]) => (
                   <div key={k}><dt className="text-xs uppercase tracking-wider text-[#0f1f2e]/45 font-semibold">{k}</dt><dd className="mt-0.5">{v}</dd></div>
