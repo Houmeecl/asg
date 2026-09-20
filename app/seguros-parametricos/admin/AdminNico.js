@@ -2,8 +2,11 @@
 
 import { useEffect, useState } from 'react';
 import { RIESGOS, SECTORES, clp } from '../data';
+import NuevoClienteNico from './NuevoClienteNico';
 
 const PESTANAS = [
+  ['nuevo', 'Nuevo cliente'],
+  ['historial', 'Bitácora'],
   ['cotizaciones', 'Cotizaciones SICR3P'],
   ['polizas', 'Pólizas Nico'],
   ['leads', 'Leads Nico'],
@@ -297,8 +300,102 @@ function FilaCotizacion({ p, abierta, onAbrir, onListo }) {
   );
 }
 
+
+const SUGERENCIAS = ['paramétrico', 'clima', 'agrícola', 'cosecha', 'catastrófico', 'riesgos'];
+
+// Busca una palabra clave en ramos, compañías y productos a la vez (para ver si algo sirve como paramétrico).
+function BuscadorCatalogo() {
+  const [q, setQ] = useState('');
+  const [res, setRes] = useState(null); // { q, ramos, companias, productos } | { q, error }
+
+  async function buscar(termino) {
+    const t = termino.trim();
+    if (!t) return;
+    setQ(t);
+    setRes({ q: t, cargando: true });
+    try {
+      const partes = await Promise.all(['ramos', 'companias', 'productos'].map(async (r) => {
+        const x = await fetch(`/api/seguros/admin/nico/${r}?display_length=30&query=${encodeURIComponent(t)}`);
+        const j = await x.json().catch(() => null);
+        if (!x.ok) throw new Error(j?.error ?? 'Error al consultar Nico.');
+        return filas(j);
+      }));
+      setRes({ q: t, ramos: partes[0], companias: partes[1], productos: partes[2] });
+    } catch (e) {
+      setRes({ q: t, error: e.message });
+    }
+  }
+
+  return (
+    <div className="rounded-2xl border border-[#0f1f2e]/10 bg-white p-5 flex flex-col gap-3">
+      <p className="font-semibold">¿Hay algo paramétrico en el catálogo de Nico?</p>
+      <p className="text-sm text-[#0f1f2e]/65">La API no tiene un campo «paramétrico»: se busca por nombre de ramo, compañía o producto.</p>
+      <form onSubmit={(e) => { e.preventDefault(); buscar(q); }} className="flex gap-2 max-w-md">
+        <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="paramétrico, clima, agrícola…" className={inputCls} />
+        <button className={btn}>Buscar</button>
+      </form>
+      <div className="flex flex-wrap gap-2">
+        {SUGERENCIAS.map((s) => <button key={s} type="button" onClick={() => buscar(s)} className="text-xs rounded-full border border-[#0f1f2e]/20 px-3 py-1 hover:bg-[#f4f7fa]">{s}</button>)}
+      </div>
+      {res?.cargando && <p className="text-sm text-[#0f1f2e]/60">Buscando «{res.q}»…</p>}
+      {res?.error && <p role="alert" className="text-sm text-red-700">{res.error}</p>}
+      {res && !res.cargando && !res.error && (
+        <div className="grid md:grid-cols-3 gap-4 text-sm">
+          {[['Ramos', res.ramos], ['Compañías', res.companias], ['Productos', res.productos]].map(([t, l]) => (
+            <div key={t}>
+              <p className="text-xs uppercase tracking-wider font-semibold text-[#0f1f2e]/50">{t} ({l.length})</p>
+              <ul className="mt-1 flex flex-col gap-1">
+                {l.length === 0 ? <li className="text-[#0f1f2e]/45">Sin resultados</li> : l.slice(0, 15).map((it, i) => <li key={it.id ?? i}>{etiqueta(it)}</li>)}
+              </ul>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// Bitácora de lo enviado (y simulado) a Nico desde el asistente.
+function Bitacora({ refresco }) {
+  const [res, setRes] = useState(null);
+  useEffect(() => {
+    let vigente = true;
+    fetch('/api/seguros/admin/nico-onboarding')
+      .then(async (r) => ({ ok: r.ok, j: await r.json().catch(() => null) }))
+      .then(({ ok, j }) => vigente && setRes(ok ? { filas: j.operaciones } : { error: j?.error ?? 'Error.' }))
+      .catch(() => vigente && setRes({ error: 'No hay conexión con el servidor.' }));
+    return () => { vigente = false; };
+  }, [refresco]);
+
+  if (!res) return <p className="text-sm text-[#0f1f2e]/60">Cargando…</p>;
+  if (res.error) return <p role="alert" className="text-sm text-red-700">{res.error}</p>;
+  if (res.filas.length === 0) return <p className="text-sm text-[#0f1f2e]/60">Aún no hay operaciones.</p>;
+  return (
+    <div className="overflow-x-auto rounded-2xl border border-[#0f1f2e]/10 bg-white">
+      <table className="w-full text-sm">
+        <thead><tr className="text-left text-xs uppercase tracking-wider text-[#0f1f2e]/50">{['#', 'Fecha', 'Cliente', 'Riesgo', 'Monto', 'Cuenta', 'Lead', 'Estado'].map((h) => <th key={h} className="px-4 py-3 font-semibold">{h}</th>)}</tr></thead>
+        <tbody>
+          {res.filas.map((o) => (
+            <tr key={o.id} className="border-t border-[#0f1f2e]/10 align-top">
+              <td className="px-4 py-3">{o.id}</td>
+              <td className="px-4 py-3 whitespace-nowrap">{o.creada}</td>
+              <td className="px-4 py-3">{o.empresa}<span className="block text-xs text-[#0f1f2e]/50">{o.rut}</span></td>
+              <td className="px-4 py-3">{RIESGOS[o.riesgo]?.nombre ?? o.riesgo}</td>
+              <td className="px-4 py-3 whitespace-nowrap">{clp(o.monto)}</td>
+              <td className="px-4 py-3">{o.nico_account_id ?? '—'}</td>
+              <td className="px-4 py-3">{o.nico_lead_id ?? '—'}</td>
+              <td className="px-4 py-3"><span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${o.estado === 'ENVIADA' ? 'bg-[#5ce08a]/50' : o.estado === 'ERROR' ? 'bg-red-100 text-red-800' : 'bg-[#0f1f2e]/10'}`}>{o.estado}</span>{o.error && <span className="block text-xs text-red-700 mt-1 max-w-xs">{o.error}</span>}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
 export default function AdminNico({ usuario, polizas }) {
-  const [tab, setTab] = useState('cotizaciones');
+  const [tab, setTab] = useState('nuevo');
+  const [refresco, setRefresco] = useState(0);
   const [catalogo, setCatalogo] = useState('companias');
 
   return (
@@ -318,11 +415,14 @@ export default function AdminNico({ usuario, polizas }) {
         ))}
       </div>
 
+      {tab === 'nuevo' && <NuevoClienteNico onListo={() => setRefresco((n) => n + 1)} />}
+      {tab === 'historial' && <Bitacora refresco={refresco} />}
       {tab === 'cotizaciones' && <Cotizaciones polizas={polizas} />}
       {tab === 'conexion' && <Conexion />}
       {['polizas', 'leads', 'productos', 'cuentas'].includes(tab) && <TablaNico key={tab} recurso={tab} />}
       {tab === 'catalogos' && (
         <div className="flex flex-col gap-4">
+          <BuscadorCatalogo />
           <div className="flex flex-wrap gap-2">
             {CATALOGOS.map(([k, n]) => (
               <button key={k} onClick={() => setCatalogo(k)} className={`px-3 py-1.5 rounded-full text-xs font-semibold border ${catalogo === k ? 'bg-[#5ce08a] border-[#0f1f2e]' : 'border-[#0f1f2e]/15'}`}>{n}</button>

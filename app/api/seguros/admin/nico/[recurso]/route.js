@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { obtenerUsuarioSeguros, esAdmin, obtenerPoliza, marcarPolizaEnviadaANico } from '@/lib/segurosAuth';
 import { nicoFetch, NicoError } from '@/lib/nicoApi';
+import { rutValido } from '@/lib/rut';
 import { RIESGOS, SECTORES, clp } from '@/app/seguros-parametricos/data';
 
 // Lista cerrada de recursos de Nico expuestos al panel admin (no es un proxy abierto).
@@ -63,20 +64,6 @@ export async function GET(request, { params }) {
 }
 
 // ---- Alta de una oportunidad (lead) en Nico a partir de una cotización de SICR3P ----
-
-// Módulo 11 chileno. Acepta con o sin puntos y guion.
-function rutValido(rut) {
-    const limpio = String(rut ?? '').replace(/[.\s-]/g, '').toUpperCase();
-    if (!/^\d{7,8}[\dK]$/.test(limpio)) return false;
-    const cuerpo = limpio.slice(0, -1), dv = limpio.slice(-1);
-    let suma = 0, mult = 2;
-    for (let i = cuerpo.length - 1; i >= 0; i--) {
-        suma += +cuerpo[i] * mult;
-        mult = mult === 7 ? 2 : mult + 1;
-    }
-    const resto = 11 - (suma % 11);
-    return dv === (resto === 11 ? '0' : resto === 10 ? 'K' : String(resto));
-}
 
 // Evita dos envíos simultáneos de la misma cotización (doble clic) antes de que quede marcada.
 const enviando = (globalThis.__nicoLeadsEnCurso ??= new Set());
