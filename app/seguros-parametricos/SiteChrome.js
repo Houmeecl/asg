@@ -8,7 +8,7 @@ export async function SiteHeader() {
   const sesion = await obtenerUsuarioSeguros();
 
   return (
-    <header className="sticky top-0 z-20 backdrop-blur bg-[#f6f5ef]/85 border-b border-[#0b1a12]/10">
+    <header className="sticky top-0 z-20 backdrop-blur bg-[#f4f7fa]/85 border-b border-[#0f1f2e]/10">
       <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between gap-4">
         <Link href={BASE} aria-label="SICR3P — inicio">
           <Wordmark />
@@ -17,11 +17,11 @@ export async function SiteHeader() {
           <div className="relative group">
             <Link href={`${BASE}#sectores`} className="hover:underline">Sectores</Link>
             <div className="absolute left-0 top-full pt-3 hidden group-hover:block group-focus-within:block">
-              <div className="w-64 rounded-2xl bg-white border border-[#0b1a12]/10 shadow-xl p-2">
+              <div className="w-64 rounded-2xl bg-white border border-[#0f1f2e]/10 shadow-xl p-2">
                 {SECTORES.map((s) => {
                   const I = ICONOS[s.icon];
                   return (
-                    <Link key={s.slug} href={`${BASE}/sectores/${s.slug}`} className="flex items-center gap-3 rounded-xl px-3 py-2.5 hover:bg-[#f6f5ef]">
+                    <Link key={s.slug} href={`${BASE}/sectores/${s.slug}`} className="flex items-center gap-3 rounded-xl px-3 py-2.5 hover:bg-[#f4f7fa]">
                       <I size={16} /> {s.nombre}
                     </Link>
                   );
@@ -36,13 +36,13 @@ export async function SiteHeader() {
         <div className="flex items-center gap-2 text-sm">
           {sesion ? (
             <>
-            {sesion.rol === 'ADMIN' && <Link href={`${BASE}/admin`} className="hidden sm:block rounded-full border border-[#0b1a12]/30 font-semibold px-5 py-2.5 hover:bg-white">Admin</Link>}
-            <Link href={`${BASE}/panel`} className="rounded-full bg-[#0b1a12] text-[#d7ff3f] font-semibold px-5 py-2.5 hover:bg-[#16301f]">Mi panel</Link>
+            {sesion.rol === 'ADMIN' && <Link href={`${BASE}/admin`} className="hidden sm:block rounded-full border border-[#0f1f2e]/30 font-semibold px-5 py-2.5 hover:bg-white">Admin</Link>}
+            <Link href={`${BASE}/panel`} className="rounded-full bg-[#0f1f2e] text-[#5ce08a] font-semibold px-5 py-2.5 hover:bg-[#1a3247]">Mi panel</Link>
             </>
           ) : (
             <>
-              <Link href={`${BASE}/ingresar`} className="hidden sm:block rounded-full border border-[#0b1a12]/30 font-semibold px-5 py-2.5 hover:bg-white">Ingresar</Link>
-              <Link href={`${BASE}/onboarding`} className="rounded-full bg-[#0b1a12] text-[#d7ff3f] font-semibold px-5 py-2.5 hover:bg-[#16301f]">Crear cuenta</Link>
+              <Link href={`${BASE}/ingresar`} className="hidden sm:block rounded-full border border-[#0f1f2e]/30 font-semibold px-5 py-2.5 hover:bg-white">Ingresar</Link>
+              <Link href={`${BASE}/onboarding`} className="rounded-full bg-[#0f1f2e] text-[#5ce08a] font-semibold px-5 py-2.5 hover:bg-[#1a3247]">Crear cuenta</Link>
             </>
           )}
         </div>
@@ -53,7 +53,7 @@ export async function SiteHeader() {
 
 export function SiteFooter() {
   return (
-    <footer className="max-w-6xl mx-auto px-6 py-10 text-sm text-[#0b1a12]/60 flex flex-wrap justify-between gap-4">
+    <footer className="max-w-6xl mx-auto px-6 py-10 text-sm text-[#0f1f2e]/60 flex flex-wrap justify-between gap-4">
       <span>© 2026 SICR3P. Producto ilustrativo; sujeto a suscripción del asegurador.</span>
       <span className="flex flex-wrap gap-5">
         {SECTORES.map((s) => (

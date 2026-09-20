@@ -1,278 +1,333 @@
 import Link from 'next/link';
 import {
-  ArrowRight, ArrowUpRight, CloudRain, Snowflake, Wind, Thermometer, Sun, Droplets,
-  Zap, ShieldCheck, Eye, Layers, Cpu, Landmark, MapPin, SlidersHorizontal, BadgeDollarSign,
-  Calculator, FileSignature, Users, Sprout, Flame,
+  ArrowRight, ArrowUpRight, CloudRain, Snowflake, Wind, Thermometer, Droplets, Waves,
+  Zap, ShieldCheck, Eye, Satellite, MapPin, SlidersHorizontal, BadgeDollarSign, FileText, Flame, Headset,
 } from 'lucide-react';
 import Cotizador from './Cotizador';
+import TileGrid from './TileGrid';
+import MapaInteractivo from './MapaInteractivo';
+import EjemploHelada from './EjemploHelada';
+import { EJEMPLO } from './ejemplo';
+import { MotionRoot, Reveal, Stagger, Item, Lift, Parallax, Contador } from './Motion';
 import { SiteHeader, SiteFooter } from './SiteChrome';
 import { ICONOS } from './iconos';
-import { BASE, SECTORES } from './data';
+import { ATRIBUCION } from './satelite';
+import { BASE, PREDIO_EJEMPLO, RIESGOS, SECTORES, clp } from './data';
 
 export const metadata = {
   title: 'SICR3P — Seguros paramétricos contra riesgo climático',
-  description: 'Cotiza y contrata cobertura paramétrica: pagos automáticos cuando el clima cruza el umbral que tú defines.',
+  description: 'Cotiza y contrata cobertura paramétrica en el norte de Chile: el pago se activa automáticamente cuando el clima cruza el umbral acordado.',
 };
 
-const INK = 'text-[#0b1a12]';
-const LIME = 'bg-[#d7ff3f]';
+const INK = 'text-[#0f1f2e]';
+const HERO = SECTORES.find((s) => s.slug === 'agricultura').lugar;
 
-const HERRAMIENTAS = [
-  { icon: Calculator, t: 'Cálculo instantáneo', d: 'Define ubicación, riesgo y monto. Recibe una prima indicativa en segundos.' },
-  { icon: FileSignature, t: 'Solicita cobertura', d: 'Convierte tu cotización en una propuesta formal sin papeleo interminable.' },
-  { icon: Users, t: 'Gestión de clientes', d: 'Corredores y aseguradoras administran carteras, pólizas y renovaciones en un solo lugar.' },
-];
-
-const VENTAJAS = [
-  { icon: Layers, t: 'Cobertura escalable', d: 'Desde un predio hasta una cartera regional con el mismo contrato.' },
-  { icon: Zap, t: 'Pagos ágiles', d: 'Sin peritajes: si el índice cruza el umbral, el pago se dispara.' },
-  { icon: Eye, t: 'Criterios transparentes', d: 'Índice, estación de referencia y tabla de pago quedan escritos en la póliza.' },
-  { icon: ShieldCheck, t: 'Suscripción', d: 'Modelos actuariales calibrados con décadas de datos climáticos.' },
-  { icon: Cpu, t: 'Tecnología', d: 'Monitoreo satelital y de estaciones en tiempo real, auditable por ambas partes.' },
-  { icon: Landmark, t: 'Capital', d: 'Respaldo de reaseguradores y capital alternativo para pagar cuando importa.' },
+const CONFIANZA = [
+  { icon: Satellite, t: 'Datos satelitales y de estaciones', d: 'Índices objetivos y auditables, no opiniones.' },
+  { icon: Zap, t: 'Pago automático', d: 'Si se cruza el umbral, se paga. Sin peritajes.' },
+  { icon: FileText, t: 'Condiciones claras', d: 'Índice, umbral y monto quedan en la póliza.' },
+  { icon: Headset, t: 'Atención en Chile', d: 'Un ejecutivo te acompaña de la cotización al pago.' },
 ];
 
 const PASOS = [
-  { icon: MapPin, n: '01', t: 'Define tu ubicación y riesgo', d: 'Marca el predio, faena o activo y elige el peligro: helada, sequía, lluvia, viento o calor.' },
-  { icon: SlidersHorizontal, n: '02', t: 'Fija los parámetros de pago', d: 'Elige el umbral, el monto y el periodo. Ves de inmediato cuánto cuesta cada decisión.' },
-  { icon: BadgeDollarSign, n: '03', t: 'Deja que el clima ocurra; cobra', d: 'Si el índice oficial cruza tu umbral, el pago llega automáticamente. Sin reclamos.' },
+  { icon: MapPin, n: '01', t: 'Ubica tu operación', d: 'Marcamos tu predio, faena o activo sobre imagen satelital y asignamos la estación de referencia más cercana.' },
+  { icon: SlidersHorizontal, n: '02', t: 'Define el umbral y el monto', d: 'Tú eliges desde qué nivel de riesgo quieres cobrar y cuánto. Ves la prima al instante.' },
+  { icon: BadgeDollarSign, n: '03', t: 'Cobra cuando el clima ocurre', d: 'Monitoreamos el índice. Si cruza tu umbral, el pago se dispara sin trámites ni peritajes.' },
 ];
 
 const COBERTURAS = [
-  { icon: Sprout, t: 'Rendimiento por área' },
-  { icon: Snowflake, t: 'Helada crítica' },
-  { icon: Droplets, t: 'Precipitación acumulada' },
-  { icon: CloudRain, t: 'Lluvia intensa (24 h)' },
-  { icon: Wind, t: 'Viento y ráfagas' },
-  { icon: Thermometer, t: 'Temperatura extrema' },
-  { icon: Sun, t: 'Ola de calor' },
-  { icon: Flame, t: 'Riesgo de incendio' },
+  { icon: Snowflake, k: 'helada' }, { icon: Droplets, k: 'sequia' }, { icon: CloudRain, k: 'lluvia' },
+  { icon: Wind, k: 'viento' }, { icon: Flame, k: 'calor' }, { icon: Waves, k: 'marejada' },
 ];
+const ICONO_RIESGO = { helada: Snowflake, sequia: Droplets, lluvia: CloudRain, viento: Wind, calor: Thermometer, marejada: Waves };
 
 const FAQ = [
-  ['¿Qué es un seguro paramétrico?', 'Es un contrato que paga un monto acordado cuando un índice medible (por ejemplo, la lluvia acumulada) cruza un umbral pactado, en lugar de indemnizar la pérdida evaluada por un perito.'],
-  ['¿Cómo se protegen mis datos?', 'Los datos se cifran en tránsito y en reposo, con acceso por roles y registro de auditoría de cada consulta.'],
-  ['¿De dónde vienen los datos climáticos?', 'De fuentes públicas y reconocidas —estaciones de la Dirección Meteorológica de Chile, NOAA, ECMWF y NASA— definidas en la póliza como estación de referencia.'],
+  ['¿Qué es un seguro paramétrico?', 'Es un contrato que paga un monto acordado cuando un índice medible (por ejemplo, la temperatura mínima o la lluvia acumulada) cruza un umbral pactado, en lugar de indemnizar una pérdida evaluada por un perito.'],
+  ['¿Cómo se mide el evento?', 'Con una estación meteorológica de referencia y datos satelitales definidos en la póliza. Ambas partes pueden auditar el mismo dato.'],
   ['¿Cuánto tarda un pago?', 'Cuando el periodo cierra y el índice se confirma, el pago se libera en días, no en meses.'],
-  ['¿Y si sufro pérdidas pero el índice no se activa?', 'Es el riesgo base del producto: paga el índice, no la pérdida. Por eso calibramos el umbral con tu historial y una estación cercana.'],
+  ['¿Y si sufro pérdidas pero el índice no se activa?', 'Es el riesgo base del producto: paga el índice, no la pérdida. Por eso calibramos el umbral con el historial de tu ubicación.'],
+  ['¿Las cifras de esta página son reales?', 'Las primas y el ejemplo de helada son ilustrativos. Las imágenes satelitales sí son reales (Copernicus Sentinel-2). La prima definitiva depende del análisis de riesgo y de la aceptación del asegurador.'],
 ];
 
 export default function SegurosParametricos() {
   return (
-    <div className={`min-h-screen bg-[#f6f5ef] ${INK} font-sans`}>
-      <SiteHeader />
+    <MotionRoot>
+      <div className={`min-h-screen bg-[#f4f7fa] ${INK} font-sans`}>
+        <SiteHeader />
 
-      {/* Hero */}
-      <section className="bg-[#0b1a12] text-white relative overflow-hidden">
-        <div aria-hidden className="absolute inset-0 opacity-[0.07] [background-image:linear-gradient(#fff_1px,transparent_1px),linear-gradient(90deg,#fff_1px,transparent_1px)] [background-size:56px_56px]" />
-        <div aria-hidden className="absolute -top-40 -right-40 w-[560px] h-[560px] rounded-full bg-[#d7ff3f]/15 blur-3xl" />
-        <div className="relative max-w-6xl mx-auto px-6 pt-20 pb-24 grid lg:grid-cols-[1.1fr_0.9fr] gap-12 items-center">
-          <div className="flex flex-col gap-6">
-            <span className={`self-start ${LIME} text-[#0b1a12] rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wider`}>Seguros paramétricos · norte de Chile</span>
-            <h1 className="text-5xl md:text-7xl font-semibold tracking-tight leading-[1.02]">
-              El futuro <span className="text-[#d7ff3f]">está asegurado.</span>
-            </h1>
-            <p className="text-lg text-white/70 max-w-xl">
-              Tecnología de punta a punta para gestionar el riesgo climático: defines el umbral, monitoreamos el índice y pagamos automáticamente cuando se cruza.
-            </p>
-            <div className="flex flex-wrap gap-3">
-              <a href="#sectores" className="rounded-full bg-[#d7ff3f] text-[#0b1a12] font-semibold px-6 py-3.5 flex items-center gap-2 hover:bg-white">Explorar sectores <ArrowRight size={16} /></a>
-              <Link href={`${BASE}/onboarding`} className="rounded-full border border-white/40 font-semibold px-6 py-3.5 hover:bg-white/10">Probar demo</Link>
+        {/* Hero con imagen satelital real */}
+        <section className="relative bg-[#0f1f2e] text-white overflow-hidden">
+          <Parallax>
+            <TileGrid lat={HERO.lat} lon={HERO.lon} z={HERO.z} cols={6} rows={5} escala={1.1} prioridad atribuir={false} />
+          </Parallax>
+          <div aria-hidden className="absolute inset-0 bg-gradient-to-r from-[#0f1f2e] via-[#0f1f2e]/75 to-[#0f1f2e]/10" />
+          <div aria-hidden className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#0f1f2e] to-transparent" />
+
+          <div className="relative max-w-6xl mx-auto px-6 pt-20 pb-28 grid lg:grid-cols-[1.15fr_0.85fr] gap-12 items-center">
+            <div className="flex flex-col gap-6">
+              <Reveal>
+                <span className="inline-flex items-center gap-2 rounded-full bg-white/10 border border-white/20 backdrop-blur px-3 py-1 text-xs font-semibold uppercase tracking-wider">
+                  <ShieldCheck size={14} className="text-[#5ce08a]" /> Seguros paramétricos · Norte de Chile
+                </span>
+              </Reveal>
+              <Reveal delay={0.08}>
+                <h1 className="text-5xl md:text-6xl font-semibold tracking-tight leading-[1.04]">
+                  Tu operación, <span className="text-[#5ce08a]">protegida del clima.</span>
+                </h1>
+              </Reveal>
+              <Reveal delay={0.16}>
+                <p className="text-lg text-white/75 max-w-xl">
+                  Si el clima supera el umbral que acordamos, el pago se activa solo. Sin peritajes, sin esperas, con la evidencia a la vista de ambas partes.
+                </p>
+              </Reveal>
+              <Reveal delay={0.24} className="flex flex-wrap gap-3">
+                <a href="#cotizar" className="rounded-full bg-[#5ce08a] text-[#0f1f2e] font-semibold px-6 py-3.5 flex items-center gap-2 hover:bg-white transition-colors">Cotizar mi cobertura <ArrowRight size={16} /></a>
+                <a href="#ejemplo" className="rounded-full border border-white/40 font-semibold px-6 py-3.5 hover:bg-white/10 transition-colors">Ver un ejemplo real</a>
+              </Reveal>
             </div>
+
+            <Reveal delay={0.3} y={40}>
+              <div className="rounded-3xl bg-white/10 border border-white/20 backdrop-blur-md p-6 shadow-2xl">
+                <div className="flex items-center justify-between text-xs text-white/70">
+                  <span className="uppercase tracking-wider font-semibold">Cobertura activa</span>
+                  <span className="inline-flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-[#5ce08a] animate-pulse" /> Monitoreando</span>
+                </div>
+                <p className="mt-3 text-2xl font-semibold">Helada · Valle de Azapa</p>
+                <p className="text-sm text-white/65">Arica y Parinacota</p>
+                <dl className="mt-5 grid grid-cols-2 gap-3 text-sm">
+                  <div className="rounded-xl bg-white/10 p-3"><dt className="text-xs text-white/60">Umbral</dt><dd className="mt-0.5 font-semibold">bajo {EJEMPLO.umbral.toFixed(0)} °C</dd></div>
+                  <div className="rounded-xl bg-white/10 p-3"><dt className="text-xs text-white/60">Monto asegurado</dt><dd className="mt-0.5 font-semibold">{clp(EJEMPLO.monto)}</dd></div>
+                  <div className="rounded-xl bg-white/10 p-3"><dt className="text-xs text-white/60">Última mínima</dt><dd className="mt-0.5 font-semibold">6,4 °C</dd></div>
+                  <div className="rounded-xl bg-white/10 p-3"><dt className="text-xs text-white/60">Estado</dt><dd className="mt-0.5 font-semibold text-[#5ce08a]">Sin evento</dd></div>
+                </dl>
+                <p className="mt-4 text-[11px] text-white/45">Ejemplo ilustrativo de un panel de cliente.</p>
+              </div>
+            </Reveal>
+          </div>
+          <p className="relative max-w-6xl mx-auto px-6 pb-3 text-[10px] text-white/50">Imagen: {ATRIBUCION}</p>
+        </section>
+
+        {/* Franja de confianza */}
+        <section className="bg-white border-b border-[#0f1f2e]/10">
+          <Stagger className="max-w-6xl mx-auto px-6 py-10 grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {CONFIANZA.map(({ icon: I, t, d }) => (
+              <Item key={t} className="flex gap-4">
+                <span className="shrink-0 w-11 h-11 rounded-xl bg-[#0f1f2e] text-[#5ce08a] grid place-items-center"><I size={20} /></span>
+                <div><h3 className="font-semibold">{t}</h3><p className="mt-1 text-sm text-[#0f1f2e]/65 leading-relaxed">{d}</p></div>
+              </Item>
+            ))}
+          </Stagger>
+        </section>
+
+        {/* Ejemplo real */}
+        <section id="ejemplo" className="max-w-6xl mx-auto px-6 py-24 scroll-mt-16">
+          <Reveal>
+            <p className="text-xs uppercase tracking-widest text-[#28a745] font-semibold">Un ejemplo</p>
+            <h2 className="mt-3 text-3xl md:text-4xl font-semibold tracking-tight max-w-3xl">Así paga un seguro paramétrico: helada en el Valle de Azapa.</h2>
+            <p className="mt-4 text-[#0f1f2e]/65 max-w-2xl">
+              Un productor asegura su predio de olivos y hortalizas contra heladas. La estación de referencia mide la temperatura mínima cada noche.
+              Cuando baja del umbral, el pago se calcula solo.
+            </p>
+          </Reveal>
+
+          <div className="mt-12 grid lg:grid-cols-[0.9fr_1.1fr] gap-6 items-start">
+            <Reveal className="rounded-3xl overflow-hidden border border-[#0f1f2e]/10 shadow-sm bg-white">
+              <div className="h-[420px]">
+                <MapaInteractivo {...PREDIO_EJEMPLO} etiquetaPredio="Predio asegurado" etiquetaEstacion="Estación de referencia" />
+              </div>
+              <p className="px-5 py-3 text-xs text-[#0f1f2e]/55">Imagen satelital real (Sentinel-2). El polígono del predio es ilustrativo. Arrastra y haz zoom para explorar.</p>
+            </Reveal>
+            <EjemploHelada />
           </div>
 
-          <div className="rounded-3xl bg-white/[0.06] border border-white/10 p-5 backdrop-blur">
-            <div className="flex items-center justify-between text-xs text-white/60">
-              <span>Valle de Azapa · Arica y Parinacota</span><span>-18.52, -70.18</span>
-            </div>
-            <div className="mt-4 h-44 rounded-2xl bg-[radial-gradient(circle_at_30%_40%,#d7ff3f55,transparent_45%),radial-gradient(circle_at_75%_65%,#3ddc9755,transparent_40%)] border border-white/10 relative overflow-hidden">
-              <div className="absolute inset-0 opacity-25 [background-image:linear-gradient(#fff_1px,transparent_1px),linear-gradient(90deg,#fff_1px,transparent_1px)] [background-size:28px_28px]" />
-              <span className="absolute left-[38%] top-[45%] w-4 h-4 rounded-full bg-[#d7ff3f] ring-8 ring-[#d7ff3f]/25" />
-            </div>
-            <div className="mt-4 grid grid-cols-4 gap-2 text-center text-xs">
-              {[[Sun, '28°'], [Snowflake, '-3°'], [CloudRain, '12mm'], [Wind, '34km/h']].map(([I, v]) => (
-                <div key={v} className="rounded-xl bg-white/5 py-3 flex flex-col items-center gap-1"><I size={16} className="text-[#d7ff3f]" />{v}</div>
+          <Stagger className="mt-10 grid md:grid-cols-3 gap-4">
+            {[
+              ['1', 'La helada ocurre', `La mínima cae a ${EJEMPLO.minimo.toFixed(1)} °C, bajo el umbral de ${EJEMPLO.umbral.toFixed(0)} °C.`],
+              ['2', 'El sistema lo detecta', 'La estación de referencia registra el dato y se verifica contra la póliza.'],
+              ['3', 'Se paga automáticamente', `El productor recibe ${clp(Math.round(EJEMPLO.pago / 1000) * 1000)} sin peritajes ni trámites.`],
+            ].map(([n, t, d]) => (
+              <Item key={n} className="rounded-2xl bg-white border border-[#0f1f2e]/10 p-5 flex gap-4">
+                <span className="shrink-0 w-8 h-8 rounded-full bg-[#28a745] text-white grid place-items-center text-sm font-semibold">{n}</span>
+                <div><h3 className="font-semibold">{t}</h3><p className="mt-1 text-sm text-[#0f1f2e]/65">{d}</p></div>
+              </Item>
+            ))}
+          </Stagger>
+        </section>
+
+        {/* Sectores con imágenes satelitales */}
+        <section id="sectores" className="bg-white border-y border-[#0f1f2e]/10 scroll-mt-16">
+          <div className="max-w-6xl mx-auto px-6 py-24">
+            <Reveal>
+              <p className="text-xs uppercase tracking-widest text-[#28a745] font-semibold">Zona norte de Chile</p>
+              <h2 className="mt-3 text-3xl md:text-4xl font-semibold tracking-tight max-w-2xl">Soluciones por sector, de Arica a Coquimbo.</h2>
+            </Reveal>
+            <Stagger className="mt-12 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {SECTORES.map((sec) => {
+                const I = ICONOS[sec.icon];
+                return (
+                  <Item key={sec.slug}>
+                    <Lift className="h-full">
+                      <Link href={`${BASE}/sectores/${sec.slug}`} className="group block h-full rounded-3xl overflow-hidden border border-[#0f1f2e]/10 bg-white shadow-sm hover:shadow-xl transition-shadow">
+                        <div className="relative h-44 overflow-hidden bg-[#0f1f2e]">
+                          <TileGrid lat={sec.lugar.lat} lon={sec.lugar.lon} z={sec.lugar.z} cols={2} rows={1} atribuir={false} className="transition-transform duration-700 group-hover:scale-110" />
+                          <span className="absolute top-3 left-3 w-10 h-10 rounded-xl bg-[#0f1f2e]/85 text-[#5ce08a] grid place-items-center backdrop-blur"><I size={18} /></span>
+                          <span className="absolute bottom-2 left-3 text-[11px] text-white bg-black/45 rounded px-2 py-0.5">{sec.lugar.nombre}</span>
+                        </div>
+                        <div className="p-6">
+                          <h3 className="font-semibold text-lg">{sec.nombre}</h3>
+                          <p className="mt-1 text-sm text-[#0f1f2e]/65">{sec.corto}</p>
+                          <div className="mt-4 flex flex-wrap gap-1.5">
+                            {sec.riesgos.map((k) => <span key={k} className="text-[11px] rounded-full bg-[#0f1f2e]/5 px-2.5 py-1">{RIESGOS[k].corto ?? RIESGOS[k].nombre.split(' ')[0]}</span>)}
+                          </div>
+                          <span className="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-[#28a745] group-hover:gap-2 transition-all">Ver sector <ArrowUpRight size={14} /></span>
+                        </div>
+                      </Link>
+                    </Lift>
+                  </Item>
+                );
+              })}
+              <Item>
+                <Lift className="h-full">
+                  <Link href={`${BASE}/onboarding`} className="group h-full min-h-[300px] rounded-3xl bg-[#0f1f2e] text-white p-8 flex flex-col justify-between hover:shadow-xl transition-shadow">
+                    <ShieldCheck className="text-[#5ce08a]" size={30} />
+                    <div>
+                      <h3 className="text-xl font-semibold">¿Tu operación es distinta?</h3>
+                      <p className="mt-2 text-sm text-white/65">Cuéntanos qué riesgo climático te afecta y armamos una cobertura a tu medida.</p>
+                      <span className="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-[#5ce08a] group-hover:gap-2 transition-all">Empezar <ArrowRight size={14} /></span>
+                    </div>
+                  </Link>
+                </Lift>
+              </Item>
+            </Stagger>
+            <p className="mt-6 text-[11px] text-[#0f1f2e]/45">Imágenes: {ATRIBUCION}.</p>
+          </div>
+        </section>
+
+        {/* Cómo funciona */}
+        <section id="como-funciona" className="bg-[#0f1f2e] text-white scroll-mt-16">
+          <div className="max-w-6xl mx-auto px-6 py-24">
+            <Reveal>
+              <p className="text-xs uppercase tracking-widest text-[#5ce08a] font-semibold">Cómo funciona</p>
+              <h2 className="mt-3 text-3xl md:text-4xl font-semibold tracking-tight max-w-2xl">Tres pasos, sin reclamos.</h2>
+            </Reveal>
+            <Stagger className="mt-12 grid md:grid-cols-3 gap-6" gap={0.12}>
+              {PASOS.map(({ icon: I, n, t, d }) => (
+                <Item key={n} className="rounded-2xl border border-white/10 bg-white/[0.04] p-7">
+                  <div className="flex items-center justify-between"><I className="text-[#5ce08a]" size={26} /><span className="text-white/30 font-mono text-sm">{n}</span></div>
+                  <h3 className="mt-10 text-xl font-semibold">{t}</h3>
+                  <p className="mt-2 text-sm text-white/65 leading-relaxed">{d}</p>
+                </Item>
+              ))}
+            </Stagger>
+            <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-6 border-t border-white/10 pt-10">
+              {[[5, '', 'Sectores del norte'], [6, '', 'Riesgos climáticos'], [0, '', 'Peritajes para cobrar'], [24, '/7', 'Monitoreo del índice']].map(([n, suf, l]) => (
+                <div key={l}>
+                  <p className="text-4xl font-semibold text-[#5ce08a]"><Contador hasta={n} />{suf}</p>
+                  <p className="mt-1 text-sm text-white/60">{l}</p>
+                </div>
               ))}
             </div>
-            <div className="mt-4 rounded-xl bg-[#d7ff3f] text-[#0b1a12] px-4 py-3 flex items-center justify-between text-sm font-semibold">
-              Umbral helada: -2 °C <span>Pago 100% en -6 °C</span>
-            </div>
           </div>
-        </div>
-        <div className="relative border-t border-white/10">
-          <div className="max-w-6xl mx-auto px-6 py-6 grid grid-cols-2 md:grid-cols-4 gap-6">
-            {[['5', 'Riesgos climáticos cubiertos'], ['0', 'Peritajes para cobrar'], ['24/7', 'Monitoreo del índice'], ['100%', 'Criterios escritos en la póliza']].map(([n, l]) => (
-              <div key={l}><p className="text-3xl font-semibold text-[#d7ff3f]">{n}</p><p className="text-xs text-white/60 mt-1">{l}</p></div>
-            ))}
-          </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Problema */}
-      <section className="max-w-5xl mx-auto px-6 py-24 text-center">
-        <p className="text-xs uppercase tracking-widest text-[#0b1a12]/50 font-semibold">El problema</p>
-        <h2 className="mt-4 text-3xl md:text-5xl font-semibold tracking-tight leading-tight">
-          La mayoría de las pérdidas climáticas <span className="underline decoration-[#d7ff3f] decoration-8 underline-offset-4">no está asegurada.</span>
-        </h2>
-        <p className="mt-6 text-[#0b1a12]/65 max-w-2xl mx-auto text-lg">
-          El seguro tradicional llega tarde: peritajes, disputas y meses de espera. Quien más lo necesita —agricultores, pymes, operaciones remotas— suele quedar fuera.
-        </p>
-      </section>
-
-      {/* Solución: paramétrico vs tradicional */}
-      <section id="solucion" className="bg-white border-y border-[#0b1a12]/10 scroll-mt-16">
-        <div className="max-w-6xl mx-auto px-6 py-20">
-          <h2 className="text-3xl md:text-4xl font-semibold tracking-tight">Nuestra solución es paramétrica.</h2>
-          <div className="mt-10 grid md:grid-cols-2 gap-5">
-            <div className="rounded-3xl border border-[#0b1a12]/10 p-7">
-              <p className="text-sm font-semibold text-[#0b1a12]/50 uppercase tracking-wider">Seguro tradicional</p>
-              <ol className="mt-5 flex flex-col gap-3 text-sm">
-                {['Ocurre el evento', 'Denuncias el siniestro', 'Un perito evalúa la pérdida', 'Se negocia y se disputa el monto', 'Recibes el pago, meses después'].map((x, i) => (
-                  <li key={x} className="flex gap-3"><span className="text-[#0b1a12]/35 font-mono">{i + 1}</span>{x}</li>
-                ))}
-              </ol>
-            </div>
-            <div className="rounded-3xl bg-[#0b1a12] text-white p-7">
-              <p className="text-sm font-semibold text-[#d7ff3f] uppercase tracking-wider">Seguro paramétrico SICR3P</p>
-              <ol className="mt-5 flex flex-col gap-3 text-sm">
-                {['Ocurre el evento', 'El índice oficial cruza tu umbral', 'El pago se dispara automáticamente', 'Recibes el pago en días'].map((x, i) => (
-                  <li key={x} className="flex gap-3"><span className="text-[#d7ff3f] font-mono">{i + 1}</span>{x}</li>
-                ))}
-              </ol>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Ecosistema */}
-      <section className="max-w-6xl mx-auto px-6 py-20">
-        <h2 className="text-3xl md:text-4xl font-semibold tracking-tight max-w-2xl">Un ecosistema completo de riesgo.</h2>
-        <div className="mt-10 grid sm:grid-cols-2 lg:grid-cols-5 gap-4">
-          {[[Cpu, 'Infraestructura de datos', 'Satélites y estaciones oficiales.'], [Calculator, 'Suscripción con IA', 'Modelos que fijan prima y umbral.'], [Layers, 'Plataforma SICR3P', 'Cotiza, contrata y administra.'], [Landmark, 'Capital de riesgo', 'Reaseguro y capital alternativo.'], [Users, 'Clientes', 'Productores, pymes y empresas.']].map(([I, t, d], i) => (
-            <div key={t} className="rounded-2xl border border-[#0b1a12]/10 bg-white p-5">
-              <span className="text-xs font-mono text-[#0b1a12]/35">0{i + 1}</span>
-              <I size={22} className="mt-4" />
-              <h3 className="mt-4 font-semibold">{t}</h3>
-              <p className="mt-1 text-sm text-[#0b1a12]/65">{d}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Herramientas */}
-      <section id="plataforma" className="bg-white border-y border-[#0b1a12]/10">
-        <div className="max-w-6xl mx-auto px-6 py-20">
-          <h2 className="text-3xl md:text-4xl font-semibold tracking-tight max-w-2xl">Una plataforma simple para un producto que no lo era.</h2>
-          <div className="mt-10 grid md:grid-cols-3 gap-5">
-            {HERRAMIENTAS.map(({ icon: I, t, d }) => (
-              <a key={t} href="#cotizar" className="group rounded-2xl border border-[#0b1a12]/10 p-6 hover:bg-[#f6f5ef] transition-colors">
-                <I size={22} />
-                <h3 className="mt-5 text-lg font-semibold">{t}</h3>
-                <p className="mt-2 text-sm text-[#0b1a12]/65 leading-relaxed">{d}</p>
-                <span className="mt-5 inline-flex items-center gap-1 text-sm font-medium group-hover:gap-2 transition-all">Probar <ArrowUpRight size={14} /></span>
-              </a>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Ventajas */}
-      <section className="max-w-6xl mx-auto px-6 py-20">
-        <h2 className="text-3xl md:text-4xl font-semibold tracking-tight max-w-2xl">Resolvemos problemas con seguros paramétricos.</h2>
-        <p className="mt-4 text-[#0b1a12]/65 max-w-2xl">Pagos rápidos y sistemas más resilientes: menos fricción para quien asegura y para quien respalda el riesgo.</p>
-        <div className="mt-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-10">
-          {VENTAJAS.map(({ icon: I, t, d }) => (
-            <div key={t} className="flex gap-4">
-              <span className={`shrink-0 w-11 h-11 rounded-xl ${LIME} grid place-items-center`}><I size={20} /></span>
-              <div><h3 className="font-semibold">{t}</h3><p className="mt-1 text-sm text-[#0b1a12]/65 leading-relaxed">{d}</p></div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Cómo funciona */}
-      <section id="como-funciona" className="bg-[#0b1a12] text-white">
-        <div className="max-w-6xl mx-auto px-6 py-20">
-          <p className="text-xs uppercase tracking-widest text-[#d7ff3f]">Cómo funciona</p>
-          <h2 className="mt-3 text-3xl md:text-4xl font-semibold tracking-tight max-w-2xl">Tres pasos, sin reclamos.</h2>
-          <div className="mt-12 grid md:grid-cols-3 gap-6">
-            {PASOS.map(({ icon: I, n, t, d }) => (
-              <div key={n} className="rounded-2xl border border-white/10 bg-white/[0.03] p-6">
-                <div className="flex items-center justify-between"><I className="text-[#d7ff3f]" size={24} /><span className="text-white/30 font-mono text-sm">{n}</span></div>
-                <h3 className="mt-8 text-xl font-semibold">{t}</h3>
-                <p className="mt-2 text-sm text-white/65 leading-relaxed">{d}</p>
+        {/* Póliza de muestra */}
+        <section className="max-w-6xl mx-auto px-6 py-24 grid lg:grid-cols-2 gap-14 items-center">
+          <Reveal>
+            <p className="text-xs uppercase tracking-widest text-[#28a745] font-semibold">Transparencia</p>
+            <h2 className="mt-3 text-3xl md:text-4xl font-semibold tracking-tight">Todo queda escrito en tu póliza.</h2>
+            <p className="mt-4 text-[#0f1f2e]/65 max-w-lg">Qué se mide, dónde, desde qué valor se paga y cuánto. Sin letra chica: el criterio de pago es un número que ambas partes pueden verificar.</p>
+            <ul className="mt-6 flex flex-col gap-3 text-sm">
+              {['Índice y estación de referencia definidos', 'Umbral de activación y tabla de pago', 'Periodo de cobertura y monto asegurado', 'Fuente de datos auditable'].map((x) => (
+                <li key={x} className="flex items-center gap-3"><Eye size={16} className="text-[#28a745]" /> {x}</li>
+              ))}
+            </ul>
+          </Reveal>
+          <Reveal delay={0.1} y={40}>
+            <div className="rounded-3xl bg-white border border-[#0f1f2e]/10 shadow-xl p-7 md:p-8 rotate-1 hover:rotate-0 transition-transform duration-500">
+              <div className="flex items-start justify-between">
+                <div>
+                  <p className="text-xs uppercase tracking-widest text-[#0f1f2e]/50 font-semibold">Póliza paramétrica</p>
+                  <p className="mt-1 text-xl font-semibold">N.º SP-2026-0001 <span className="text-xs font-medium text-[#0f1f2e]/50">(ejemplo)</span></p>
+                </div>
+                <ShieldCheck className="text-[#28a745]" size={28} />
               </div>
+              <dl className="mt-6 grid grid-cols-2 gap-x-6 gap-y-4 text-sm">
+                {[
+                  ['Asegurado', 'Agrícola Azapa Ltda. (ejemplo)'], ['Riesgo', 'Helada'],
+                  ['Índice', 'Temperatura mínima diaria'], ['Ubicación', 'Valle de Azapa, Arica'],
+                  ['Umbral', `bajo ${EJEMPLO.umbral.toFixed(0)} °C`], ['Pago total', 'en −6 °C o menos'],
+                  ['Monto asegurado', clp(EJEMPLO.monto)], ['Vigencia', '3 meses'],
+                ].map(([k, v]) => (
+                  <div key={k}><dt className="text-xs uppercase tracking-wider text-[#0f1f2e]/45 font-semibold">{k}</dt><dd className="mt-0.5">{v}</dd></div>
+                ))}
+              </dl>
+              <div className="mt-6 border-t border-dashed border-[#0f1f2e]/20 pt-4 text-xs text-[#0f1f2e]/50">Documento de muestra sin validez contractual.</div>
+            </div>
+          </Reveal>
+        </section>
+
+        {/* Cotizador */}
+        <section id="cotizar" className="bg-white border-y border-[#0f1f2e]/10 scroll-mt-16">
+          <div className="max-w-6xl mx-auto px-6 py-24">
+            <Reveal>
+              <p className="text-xs uppercase tracking-widest text-[#28a745] font-semibold">Cotizador</p>
+              <h2 className="mt-3 text-3xl md:text-4xl font-semibold tracking-tight max-w-2xl">Cotiza tu cobertura.</h2>
+              <p className="mt-4 mb-10 text-[#0f1f2e]/65 max-w-2xl">Mueve los controles y mira cómo cambian la prima y la curva de pago.</p>
+            </Reveal>
+            <Cotizador />
+          </div>
+        </section>
+
+        {/* Coberturas */}
+        <section id="coberturas" className="max-w-6xl mx-auto px-6 py-24 scroll-mt-16">
+          <Reveal><h2 className="text-3xl md:text-4xl font-semibold tracking-tight max-w-2xl">Riesgos que puedes cubrir.</h2></Reveal>
+          <Stagger className="mt-10 grid grid-cols-2 md:grid-cols-3 gap-4">
+            {COBERTURAS.map(({ k }) => {
+              const I = ICONO_RIESGO[k], r = RIESGOS[k];
+              return (
+                <Item key={k}>
+                  <Lift className="h-full rounded-2xl bg-white border border-[#0f1f2e]/10 p-6 hover:border-[#0f1f2e] transition-colors">
+                    <I size={24} className="text-[#28a745]" />
+                    <h3 className="mt-6 font-semibold">{r.nombre}</h3>
+                    <p className="mt-1 text-sm text-[#0f1f2e]/60">{r.indice} ({r.unidad})</p>
+                  </Lift>
+                </Item>
+              );
+            })}
+          </Stagger>
+        </section>
+
+        {/* FAQ */}
+        <section id="faq" className="max-w-3xl mx-auto px-6 pb-24 scroll-mt-16">
+          <Reveal><h2 className="text-3xl md:text-4xl font-semibold tracking-tight">Preguntas frecuentes</h2></Reveal>
+          <div className="mt-8 divide-y divide-[#0f1f2e]/10 border-y border-[#0f1f2e]/10">
+            {FAQ.map(([q, a]) => (
+              <details key={q} className="group py-5">
+                <summary className="flex justify-between items-center cursor-pointer font-medium list-none">
+                  {q}<span className="text-xl group-open:rotate-45 transition-transform">+</span>
+                </summary>
+                <p className="mt-3 text-sm text-[#0f1f2e]/70 leading-relaxed">{a}</p>
+              </details>
             ))}
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Cotizador */}
-      <section id="cotizar" className="max-w-6xl mx-auto px-6 py-20 scroll-mt-16">
-        <h2 className="text-3xl md:text-4xl font-semibold tracking-tight max-w-2xl">Cotiza tu cobertura.</h2>
-        <p className="mt-4 mb-10 text-[#0b1a12]/65 max-w-2xl">Mueve los controles y mira cómo cambian la prima y la curva de pago.</p>
-        <Cotizador />
-      </section>
+        {/* CTA final */}
+        <section id="contacto" className="px-6 pb-16">
+          <Reveal className="max-w-6xl mx-auto rounded-3xl bg-[#0f1f2e] text-white p-10 md:p-14 flex flex-col md:flex-row md:items-center justify-between gap-8">
+            <div>
+              <h2 className="text-3xl md:text-4xl font-semibold tracking-tight max-w-lg">Protege tu próxima temporada.</h2>
+              <p className="mt-3 text-white/65 max-w-md">Crea tu cuenta, cotiza en minutos y guarda tu cobertura.</p>
+            </div>
+            <div className="flex flex-wrap gap-3">
+              <Link href={`${BASE}/onboarding`} className="rounded-full bg-[#5ce08a] text-[#0f1f2e] font-semibold px-6 py-3.5 hover:bg-white transition-colors">Empezar ahora</Link>
+              <Link href={`${BASE}/ingresar`} className="rounded-full border border-white/40 font-semibold px-6 py-3.5 hover:bg-white/10 transition-colors">Ingresar</Link>
+            </div>
+          </Reveal>
+        </section>
 
-      {/* Sectores del norte */}
-      <section id="sectores" className="max-w-6xl mx-auto px-6 py-20 scroll-mt-16">
-        <p className="text-xs uppercase tracking-widest text-[#0b1a12]/50 font-semibold">Zona norte de Chile</p>
-        <h2 className="mt-3 text-3xl md:text-4xl font-semibold tracking-tight max-w-2xl">Soluciones por sector, de Arica a Coquimbo.</h2>
-        <div className="mt-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {SECTORES.map((sec) => {
-            const I = ICONOS[sec.icon];
-            return (
-              <Link key={sec.slug} href={`${BASE}/sectores/${sec.slug}`} className={`group rounded-2xl ${LIME} p-6 flex flex-col gap-2 hover:-translate-y-0.5 transition-transform`}>
-                <I size={22} />
-                <h3 className="mt-6 font-semibold text-lg">{sec.nombre}</h3>
-                <p className="text-sm">{sec.corto}</p>
-                <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold group-hover:gap-2 transition-all">Ver sector <ArrowUpRight size={14} /></span>
-              </Link>
-            );
-          })}
-        </div>
-      </section>
-
-      {/* Coberturas */}
-      <section id="coberturas" className="bg-white border-y border-[#0b1a12]/10 scroll-mt-16">
-        <div className="max-w-6xl mx-auto px-6 py-20">
-          <h2 className="text-3xl md:text-4xl font-semibold tracking-tight max-w-2xl">Cobertura a tu medida.</h2>
-          <div className="mt-10 grid grid-cols-2 md:grid-cols-4 gap-4">
-            {COBERTURAS.map(({ icon: I, t }) => (
-              <div key={t} className="rounded-2xl border border-[#0b1a12]/10 p-5 flex flex-col gap-6 hover:border-[#0b1a12] transition-colors">
-                <I size={22} /><span className="font-medium text-sm">{t}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* FAQ */}
-      <section id="faq" className="max-w-3xl mx-auto px-6 py-20 scroll-mt-16">
-        <h2 className="text-3xl md:text-4xl font-semibold tracking-tight">Preguntas frecuentes</h2>
-        <div className="mt-8 divide-y divide-[#0b1a12]/10 border-y border-[#0b1a12]/10">
-          {FAQ.map(([q, a]) => (
-            <details key={q} className="group py-5">
-              <summary className="flex justify-between items-center cursor-pointer font-medium list-none">
-                {q}<span className="text-xl group-open:rotate-45 transition-transform">+</span>
-              </summary>
-              <p className="mt-3 text-sm text-[#0b1a12]/70 leading-relaxed">{a}</p>
-            </details>
-          ))}
-        </div>
-      </section>
-
-      {/* CTA / Footer */}
-      <section id="contacto" className="px-6 pb-10">
-        <div className={`max-w-6xl mx-auto rounded-3xl ${LIME} p-10 md:p-14 flex flex-col md:flex-row md:items-center justify-between gap-6`}>
-          <h2 className="text-3xl md:text-4xl font-semibold tracking-tight max-w-lg">Recibe novedades e ideas sobre riesgo climático.</h2>
-          <form className="flex gap-2 w-full md:w-auto">
-            <input type="email" required placeholder="tu@correo.cl" className="flex-1 md:w-64 rounded-full px-5 py-3 text-sm bg-white/70 placeholder:text-[#0b1a12]/50" />
-            <button className="rounded-full bg-[#0b1a12] text-[#d7ff3f] font-semibold px-6 py-3 text-sm">Suscribirme</button>
-          </form>
-        </div>
-      </section>
-      <SiteFooter />
-    </div>
+        <SiteFooter />
+      </div>
+    </MotionRoot>
   );
 }

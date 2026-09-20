@@ -13,7 +13,7 @@ export default async function Ingresar({ searchParams }) {
   if (await obtenerUsuarioSeguros()) redirect(destino);
 
   return (
-    <div className="min-h-screen bg-[#f6f5ef] text-[#0b1a12] flex flex-col">
+    <div className="min-h-screen bg-[#f4f7fa] text-[#0f1f2e] flex flex-col">
       <SiteHeader />
       <main className="flex-1 max-w-md w-full mx-auto px-6 py-16">
         <LoginForm destino={destino} />

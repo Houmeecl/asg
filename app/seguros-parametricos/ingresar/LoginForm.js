@@ -3,8 +3,8 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-const input = 'rounded-xl border border-[#0b1a12]/15 bg-white px-4 py-3 text-sm normal-case tracking-normal font-normal text-[#0b1a12]';
-const label = 'flex flex-col gap-2 text-xs font-semibold uppercase tracking-wider text-[#0b1a12]/60';
+const input = 'rounded-xl border border-[#0f1f2e]/15 bg-white px-4 py-3 text-sm normal-case tracking-normal font-normal text-[#0f1f2e]';
+const label = 'flex flex-col gap-2 text-xs font-semibold uppercase tracking-wider text-[#0f1f2e]/60';
 
 export default function LoginForm({ destino }) {
   const router = useRouter();
@@ -41,7 +41,7 @@ export default function LoginForm({ destino }) {
   return (
     <>
       <h1 className="text-3xl font-semibold tracking-tight">{registro ? 'Crear cuenta' : 'Ingresar'}</h1>
-      <p className="mt-2 text-sm text-[#0b1a12]/65">
+      <p className="mt-2 text-sm text-[#0f1f2e]/65">
         {registro ? 'Crea tu cuenta para cotizar y guardar tus coberturas.' : 'Accede a tu panel de coberturas paramétricas.'}
       </p>
 
@@ -56,24 +56,24 @@ export default function LoginForm({ destino }) {
         </label>
         <label className={label}>Contraseña
           <input required type="password" minLength={registro ? 8 : undefined} value={clave} onChange={(e) => setClave(e.target.value)} autoComplete={registro ? 'new-password' : 'current-password'} className={input} />
-          {registro && <span className="normal-case tracking-normal font-normal text-[#0b1a12]/50">Mínimo 8 caracteres.</span>}
+          {registro && <span className="normal-case tracking-normal font-normal text-[#0f1f2e]/50">Mínimo 8 caracteres.</span>}
         </label>
 
         {error && <p role="alert" className="text-sm text-red-700">{error}</p>}
 
-        <button disabled={enviando} className="rounded-full bg-[#0b1a12] text-[#d7ff3f] font-semibold py-3.5 hover:bg-[#16301f] disabled:opacity-50">
+        <button disabled={enviando} className="rounded-full bg-[#0f1f2e] text-[#5ce08a] font-semibold py-3.5 hover:bg-[#1a3247] disabled:opacity-50">
           {enviando ? 'Un momento…' : registro ? 'Crear cuenta' : 'Ingresar'}
         </button>
       </form>
 
-      <p className="mt-6 text-sm text-[#0b1a12]/70">
+      <p className="mt-6 text-sm text-[#0f1f2e]/70">
         {registro ? '¿Ya tienes cuenta?' : '¿Aún no tienes cuenta?'}{' '}
         <button type="button" onClick={() => { setModo(registro ? 'ingresar' : 'registro'); setError(''); }} className="font-semibold underline">
           {registro ? 'Ingresar' : 'Crear una'}
         </button>
       </p>
 
-      <p className="mt-8 text-xs text-[#0b1a12]/50 leading-relaxed rounded-xl bg-[#d7ff3f]/40 px-4 py-3">
+      <p className="mt-8 text-xs text-[#0f1f2e]/50 leading-relaxed rounded-xl bg-[#5ce08a]/40 px-4 py-3">
         Las pólizas de este sitio son una demostración: no tienen validez contractual ni respaldo de un asegurador.
       </p>
     </>

@@ -15,8 +15,8 @@ const PESTANAS = [
 
 const CATALOGOS = [['companias', 'Compañías'], ['ramos', 'Ramos'], ['rubros', 'Rubros'], ['regiones', 'Regiones'], ['comunas', 'Comunas'], ['planes_pago', 'Planes de pago']];
 
-const inputCls = 'rounded-xl border border-[#0b1a12]/15 bg-white px-3 py-2.5 text-sm w-full';
-const btn = 'rounded-full bg-[#0b1a12] text-[#d7ff3f] px-5 py-2.5 text-sm font-semibold hover:bg-[#16301f] disabled:opacity-40';
+const inputCls = 'rounded-xl border border-[#0f1f2e]/15 bg-white px-3 py-2.5 text-sm w-full';
+const btn = 'rounded-full bg-[#0f1f2e] text-[#5ce08a] px-5 py-2.5 text-sm font-semibold hover:bg-[#1a3247] disabled:opacity-40';
 
 // La API de Nico devuelve { data: [...] }; algunos recursos usan { id, attributes }.
 function filas(json) {
@@ -68,21 +68,21 @@ function TablaNico({ recurso }) {
         <button className={btn}>Buscar</button>
       </form>
 
-      {cargando && <p className="text-sm text-[#0b1a12]/60">Consultando Nico…</p>}
+      {cargando && <p className="text-sm text-[#0f1f2e]/60">Consultando Nico…</p>}
       {!cargando && resultado.error && <p role="alert" className="text-sm text-red-700 rounded-xl bg-red-50 px-4 py-3">{resultado.error}</p>}
-      {!cargando && !resultado.error && rows.length === 0 && <p className="text-sm text-[#0b1a12]/60">Sin resultados.</p>}
+      {!cargando && !resultado.error && rows.length === 0 && <p className="text-sm text-[#0f1f2e]/60">Sin resultados.</p>}
 
       {rows.length > 0 && (
-        <div className="overflow-x-auto rounded-2xl border border-[#0b1a12]/10 bg-white">
+        <div className="overflow-x-auto rounded-2xl border border-[#0f1f2e]/10 bg-white">
           <table className="w-full text-sm">
             <thead>
-              <tr className="text-left text-xs uppercase tracking-wider text-[#0b1a12]/50">
+              <tr className="text-left text-xs uppercase tracking-wider text-[#0f1f2e]/50">
                 {cols.map((c) => <th key={c} className="px-4 py-3 font-semibold">{c.replaceAll('_', ' ')}</th>)}
               </tr>
             </thead>
             <tbody>
               {rows.map((r, i) => (
-                <tr key={r.id ?? i} onClick={() => setAbierta(abierta === i ? null : i)} className="border-t border-[#0b1a12]/10 hover:bg-[#f6f5ef] cursor-pointer align-top">
+                <tr key={r.id ?? i} onClick={() => setAbierta(abierta === i ? null : i)} className="border-t border-[#0f1f2e]/10 hover:bg-[#f4f7fa] cursor-pointer align-top">
                   {cols.map((c) => <td key={c} className="px-4 py-3">{celda(r[c])}</td>)}
                 </tr>
               ))}
@@ -91,13 +91,13 @@ function TablaNico({ recurso }) {
         </div>
       )}
       {abierta !== null && rows[abierta] && (
-        <pre className="text-xs bg-[#0b1a12] text-[#d7ff3f] rounded-2xl p-4 overflow-x-auto max-h-80">{JSON.stringify(rows[abierta], null, 2)}</pre>
+        <pre className="text-xs bg-[#0f1f2e] text-[#5ce08a] rounded-2xl p-4 overflow-x-auto max-h-80">{JSON.stringify(rows[abierta], null, 2)}</pre>
       )}
 
       <div className="flex items-center gap-3 text-sm">
-        <button className="rounded-full border border-[#0b1a12]/30 px-4 py-2 disabled:opacity-30" disabled={pagina <= 1 || cargando} onClick={() => { setPagina((p) => p - 1); setAbierta(null); }}>Anterior</button>
-        <span className="text-[#0b1a12]/60">Página {pagina}</span>
-        <button className="rounded-full border border-[#0b1a12]/30 px-4 py-2 disabled:opacity-30" disabled={cargando || rows.length < 20} onClick={() => { setPagina((p) => p + 1); setAbierta(null); }}>Siguiente</button>
+        <button className="rounded-full border border-[#0f1f2e]/30 px-4 py-2 disabled:opacity-30" disabled={pagina <= 1 || cargando} onClick={() => { setPagina((p) => p - 1); setAbierta(null); }}>Anterior</button>
+        <span className="text-[#0f1f2e]/60">Página {pagina}</span>
+        <button className="rounded-full border border-[#0f1f2e]/30 px-4 py-2 disabled:opacity-30" disabled={cargando || rows.length < 20} onClick={() => { setPagina((p) => p + 1); setAbierta(null); }}>Siguiente</button>
       </div>
     </div>
   );
@@ -121,13 +121,13 @@ function Conexion() {
 
   return (
     <div className="max-w-xl flex flex-col gap-4">
-      <p className="text-sm text-[#0b1a12]/70 leading-relaxed">
+      <p className="text-sm text-[#0f1f2e]/70 leading-relaxed">
         SICR3P se conecta a la API de Nico desde el servidor, con las variables de entorno <code className="font-mono">NICO_API_EMAIL</code> y{' '}
         <code className="font-mono">NICO_API_PASSWORD</code>. Las credenciales nunca llegan al navegador.
       </p>
       <button onClick={probar} disabled={probando} className={`${btn} self-start`}>{probando ? 'Probando…' : 'Probar conexión'}</button>
       {estado && (
-        <div role="status" className={`rounded-2xl px-5 py-4 text-sm ${estado.ok ? 'bg-[#d7ff3f]/50' : 'bg-red-50 text-red-800'}`}>
+        <div role="status" className={`rounded-2xl px-5 py-4 text-sm ${estado.ok ? 'bg-[#5ce08a]/50' : 'bg-red-50 text-red-800'}`}>
           <p className="font-semibold">{estado.ok ? 'Conectado a Nico' : !estado.configurado && estado.configurado !== undefined ? 'Sin configurar' : 'No se pudo conectar'}</p>
           <p className="mt-1 break-all">{estado.base}</p>
           {estado.error && <p className="mt-1">{estado.error}</p>}
@@ -193,53 +193,53 @@ function FormularioLead({ poliza, onListo, onCancelar }) {
     }
   }
 
-  if (!opciones) return <p className="text-sm text-[#0b1a12]/60 p-4">Cargando cuentas y ramos de Nico…</p>;
+  if (!opciones) return <p className="text-sm text-[#0f1f2e]/60 p-4">Cargando cuentas y ramos de Nico…</p>;
   if (opciones.error) return <p role="alert" className="text-sm text-red-700 p-4">{opciones.error}</p>;
 
   return (
-    <form onSubmit={enviar} className="grid sm:grid-cols-2 gap-3 p-4 bg-[#f6f5ef]">
-      <label className="text-xs font-semibold uppercase tracking-wider text-[#0b1a12]/60 flex flex-col gap-1.5">Cuenta en Nico
+    <form onSubmit={enviar} className="grid sm:grid-cols-2 gap-3 p-4 bg-[#f4f7fa]">
+      <label className="text-xs font-semibold uppercase tracking-wider text-[#0f1f2e]/60 flex flex-col gap-1.5">Cuenta en Nico
         <select required className={inputCls} value={f.account_id} onChange={(e) => set('account_id', e.target.value)}>
           <option value="">Elegir…</option>
           {opciones.cuentas.map((c) => <option key={c.id} value={c.id}>{etiqueta(c)}</option>)}
         </select>
       </label>
-      <label className="text-xs font-semibold uppercase tracking-wider text-[#0b1a12]/60 flex flex-col gap-1.5">Ramo
+      <label className="text-xs font-semibold uppercase tracking-wider text-[#0f1f2e]/60 flex flex-col gap-1.5">Ramo
         <select required className={inputCls} value={f.insurance_category_id} onChange={(e) => set('insurance_category_id', e.target.value)}>
           <option value="">Elegir…</option>
           {opciones.ramos.map((c) => <option key={c.id} value={c.id}>{etiqueta(c)}</option>)}
         </select>
       </label>
-      <label className="text-xs font-semibold uppercase tracking-wider text-[#0b1a12]/60 flex flex-col gap-1.5">Contratante
+      <label className="text-xs font-semibold uppercase tracking-wider text-[#0f1f2e]/60 flex flex-col gap-1.5">Contratante
         <input required className={inputCls} value={f.hiring_person_name} onChange={(e) => set('hiring_person_name', e.target.value)} />
       </label>
-      <label className="text-xs font-semibold uppercase tracking-wider text-[#0b1a12]/60 flex flex-col gap-1.5">RUT contratante
+      <label className="text-xs font-semibold uppercase tracking-wider text-[#0f1f2e]/60 flex flex-col gap-1.5">RUT contratante
         <input required className={inputCls} placeholder="12.345.678-5" value={f.hiring_person_national_identification} onChange={(e) => set('hiring_person_national_identification', e.target.value)} />
       </label>
-      <label className="sm:col-span-2 text-xs font-semibold uppercase tracking-wider text-[#0b1a12]/60 flex flex-col gap-1.5">Dirección (dirección, comuna y ciudad)
+      <label className="sm:col-span-2 text-xs font-semibold uppercase tracking-wider text-[#0f1f2e]/60 flex flex-col gap-1.5">Dirección (dirección, comuna y ciudad)
         <input required className={inputCls} value={f.hiring_person_address} onChange={(e) => set('hiring_person_address', e.target.value)} />
       </label>
-      <label className="text-xs font-semibold uppercase tracking-wider text-[#0b1a12]/60 flex flex-col gap-1.5">Correo del encargado
+      <label className="text-xs font-semibold uppercase tracking-wider text-[#0f1f2e]/60 flex flex-col gap-1.5">Correo del encargado
         <input required type="email" className={inputCls} value={f.responsible_email} onChange={(e) => set('responsible_email', e.target.value)} />
       </label>
       <div className="grid grid-cols-2 gap-3">
-        <label className="text-xs font-semibold uppercase tracking-wider text-[#0b1a12]/60 flex flex-col gap-1.5">Moneda
+        <label className="text-xs font-semibold uppercase tracking-wider text-[#0f1f2e]/60 flex flex-col gap-1.5">Moneda
           <select className={inputCls} value={f.currency} onChange={(e) => set('currency', e.target.value)}>
             <option value="uf">UF</option><option value="usd">USD</option>
           </select>
         </label>
-        <label className="text-xs font-semibold uppercase tracking-wider text-[#0b1a12]/60 flex flex-col gap-1.5">Prima neta (opc.)
+        <label className="text-xs font-semibold uppercase tracking-wider text-[#0f1f2e]/60 flex flex-col gap-1.5">Prima neta (opc.)
           <input type="number" min="0" step="any" className={inputCls} value={f.estimated_net_prime} onChange={(e) => set('estimated_net_prime', e.target.value)} />
         </label>
       </div>
       <label className="sm:col-span-2 flex items-start gap-2 text-sm">
-        <input type="checkbox" checked={f.requested} onChange={(e) => set('requested', e.target.checked)} className="mt-1 accent-[#0b1a12]" />
-        <span>Solicitar cotización a las aseguradoras ahora. <span className="text-[#0b1a12]/55">Si no, solo se guarda como oportunidad en Nico.</span></span>
+        <input type="checkbox" checked={f.requested} onChange={(e) => set('requested', e.target.checked)} className="mt-1 accent-[#0f1f2e]" />
+        <span>Solicitar cotización a las aseguradoras ahora. <span className="text-[#0f1f2e]/55">Si no, solo se guarda como oportunidad en Nico.</span></span>
       </label>
       {error && <p role="alert" className="sm:col-span-2 text-sm text-red-700">{error}</p>}
       <div className="sm:col-span-2 flex gap-2">
         <button disabled={enviando} className={btn}>{enviando ? 'Enviando…' : 'Enviar a Nico'}</button>
-        <button type="button" onClick={onCancelar} className="rounded-full border border-[#0b1a12]/30 px-5 py-2.5 text-sm font-semibold">Cancelar</button>
+        <button type="button" onClick={onCancelar} className="rounded-full border border-[#0f1f2e]/30 px-5 py-2.5 text-sm font-semibold">Cancelar</button>
       </div>
     </form>
   );
@@ -254,15 +254,15 @@ function Cotizaciones({ polizas: iniciales }) {
     setAbierta(null);
   }
 
-  if (polizas.length === 0) return <p className="text-sm text-[#0b1a12]/60">Todavía no hay cotizaciones de clientes.</p>;
+  if (polizas.length === 0) return <p className="text-sm text-[#0f1f2e]/60">Todavía no hay cotizaciones de clientes.</p>;
 
   return (
     <div className="flex flex-col gap-3">
-      <p className="text-sm text-[#0b1a12]/65 max-w-2xl">Cotizaciones creadas por los clientes en el sitio. Envíalas como oportunidad (lead) a Nico; la acción escribe en el sistema de Nico, por eso es manual y única por cotización.</p>
-      <div className="overflow-x-auto rounded-2xl border border-[#0b1a12]/10 bg-white">
+      <p className="text-sm text-[#0f1f2e]/65 max-w-2xl">Cotizaciones creadas por los clientes en el sitio. Envíalas como oportunidad (lead) a Nico; la acción escribe en el sistema de Nico, por eso es manual y única por cotización.</p>
+      <div className="overflow-x-auto rounded-2xl border border-[#0f1f2e]/10 bg-white">
         <table className="w-full text-sm">
           <thead>
-            <tr className="text-left text-xs uppercase tracking-wider text-[#0b1a12]/50">
+            <tr className="text-left text-xs uppercase tracking-wider text-[#0f1f2e]/50">
               {['#', 'Cliente', 'Empresa', 'Sector', 'Riesgo', 'Monto', 'Nico', ''].map((h) => <th key={h} className="px-4 py-3 font-semibold">{h}</th>)}
             </tr>
           </thead>
@@ -280,18 +280,18 @@ function Cotizaciones({ polizas: iniciales }) {
 function FilaCotizacion({ p, abierta, onAbrir, onListo }) {
   return (
     <>
-      <tr className="border-t border-[#0b1a12]/10 align-top">
+      <tr className="border-t border-[#0f1f2e]/10 align-top">
         <td className="px-4 py-3">{p.id}</td>
-        <td className="px-4 py-3">{p.usuario_nombre}<span className="block text-xs text-[#0b1a12]/50">{p.usuario_email}</span></td>
-        <td className="px-4 py-3">{p.empresa}<span className="block text-xs text-[#0b1a12]/50">{p.localidad}, {p.zona}</span></td>
+        <td className="px-4 py-3">{p.usuario_nombre}<span className="block text-xs text-[#0f1f2e]/50">{p.usuario_email}</span></td>
+        <td className="px-4 py-3">{p.empresa}<span className="block text-xs text-[#0f1f2e]/50">{p.localidad}, {p.zona}</span></td>
         <td className="px-4 py-3">{SECTORES.find((s) => s.slug === p.sector)?.nombre ?? p.sector}</td>
         <td className="px-4 py-3">{RIESGOS[p.riesgo]?.nombre ?? p.riesgo}</td>
         <td className="px-4 py-3 whitespace-nowrap">{clp(p.monto)}</td>
-        <td className="px-4 py-3">{p.nico_lead_id ? <span className="rounded-full bg-[#d7ff3f] px-3 py-1 text-xs font-semibold">Lead {p.nico_lead_id}</span> : <span className="text-[#0b1a12]/40">—</span>}</td>
-        <td className="px-4 py-3 text-right">{!p.nico_lead_id && <button onClick={onAbrir} className="rounded-full border border-[#0b1a12] px-4 py-1.5 text-xs font-semibold hover:bg-[#f6f5ef]">{abierta ? 'Cerrar' : 'Enviar a Nico'}</button>}</td>
+        <td className="px-4 py-3">{p.nico_lead_id ? <span className="rounded-full bg-[#5ce08a] px-3 py-1 text-xs font-semibold">Lead {p.nico_lead_id}</span> : <span className="text-[#0f1f2e]/40">—</span>}</td>
+        <td className="px-4 py-3 text-right">{!p.nico_lead_id && <button onClick={onAbrir} className="rounded-full border border-[#0f1f2e] px-4 py-1.5 text-xs font-semibold hover:bg-[#f4f7fa]">{abierta ? 'Cerrar' : 'Enviar a Nico'}</button>}</td>
       </tr>
       {abierta && (
-        <tr className="border-t border-[#0b1a12]/10"><td colSpan={8} className="p-0"><FormularioLead poliza={p} onListo={onListo} onCancelar={onAbrir} /></td></tr>
+        <tr className="border-t border-[#0f1f2e]/10"><td colSpan={8} className="p-0"><FormularioLead poliza={p} onListo={onListo} onCancelar={onAbrir} /></td></tr>
       )}
     </>
   );
@@ -304,15 +304,15 @@ export default function AdminNico({ usuario, polizas }) {
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <p className="text-xs uppercase tracking-widest font-semibold text-[#0b1a12]/50">Administración</p>
+        <p className="text-xs uppercase tracking-widest font-semibold text-[#0f1f2e]/50">Administración</p>
         <h1 className="mt-1 text-3xl font-semibold tracking-tight">Integración con Nico Seguros</h1>
-        <p className="text-sm text-[#0b1a12]/60">{usuario.email} · rol administrador</p>
+        <p className="text-sm text-[#0f1f2e]/60">{usuario.email} · rol administrador</p>
       </div>
 
       <div className="flex flex-wrap gap-2" role="tablist">
         {PESTANAS.map(([k, n]) => (
           <button key={k} role="tab" aria-selected={tab === k} onClick={() => setTab(k)}
-            className={`px-4 py-2 rounded-full text-sm font-medium border ${tab === k ? 'bg-[#0b1a12] text-[#d7ff3f] border-[#0b1a12]' : 'border-[#0b1a12]/15 hover:border-[#0b1a12]'}`}>
+            className={`px-4 py-2 rounded-full text-sm font-medium border ${tab === k ? 'bg-[#0f1f2e] text-[#5ce08a] border-[#0f1f2e]' : 'border-[#0f1f2e]/15 hover:border-[#0f1f2e]'}`}>
             {n}
           </button>
         ))}
@@ -325,7 +325,7 @@ export default function AdminNico({ usuario, polizas }) {
         <div className="flex flex-col gap-4">
           <div className="flex flex-wrap gap-2">
             {CATALOGOS.map(([k, n]) => (
-              <button key={k} onClick={() => setCatalogo(k)} className={`px-3 py-1.5 rounded-full text-xs font-semibold border ${catalogo === k ? 'bg-[#d7ff3f] border-[#0b1a12]' : 'border-[#0b1a12]/15'}`}>{n}</button>
+              <button key={k} onClick={() => setCatalogo(k)} className={`px-3 py-1.5 rounded-full text-xs font-semibold border ${catalogo === k ? 'bg-[#5ce08a] border-[#0f1f2e]' : 'border-[#0f1f2e]/15'}`}>{n}</button>
             ))}
           </div>
           <TablaNico key={catalogo} recurso={catalogo} />

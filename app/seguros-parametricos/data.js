@@ -8,7 +8,7 @@ export const RIESGOS = {
   sequia: { nombre: 'Sequía', indice: 'Precipitación acumulada', unidad: 'mm', dir: 'menor', umbral: 120, salida: 40, base: 0.12 },
   lluvia: { nombre: 'Lluvia intensa / aluvión', indice: 'Precipitación en 24 h', unidad: 'mm', dir: 'mayor', umbral: 40, salida: 90, base: 0.07 },
   viento: { nombre: 'Viento', indice: 'Ráfaga máxima', unidad: 'km/h', dir: 'mayor', umbral: 70, salida: 130, base: 0.06 },
-  calor: { nombre: 'Ola de calor', indice: 'Días sobre 35 °C', unidad: 'días', dir: 'mayor', umbral: 5, salida: 20, base: 0.1 },
+  calor: { nombre: 'Ola de calor', corto: 'Calor', indice: 'Días sobre 35 °C', unidad: 'días', dir: 'mayor', umbral: 5, salida: 20, base: 0.1 },
   marejada: { nombre: 'Marejada', indice: 'Altura significativa de ola', unidad: 'm', dir: 'mayor', umbral: 3, salida: 6, base: 0.08 },
 };
 
@@ -17,6 +17,7 @@ export const ZONAS_NORTE = ['Arica y Parinacota', 'Tarapacá', 'Antofagasta', 'A
 export const SECTORES = [
   {
     slug: 'mineria',
+    lugar: { lat: -22.295, lon: -68.9, z: 13, nombre: 'Zona minera de Calama, Antofagasta' },
     nombre: 'Minería y faenas',
     corto: 'Faenas, campamentos y rutas de acceso',
     icon: 'Mountain',
@@ -39,6 +40,7 @@ export const SECTORES = [
   },
   {
     slug: 'agricultura',
+    lugar: { lat: -18.5295, lon: -70.166, z: 14, nombre: 'Valle de Azapa, Arica y Parinacota' },
     nombre: 'Agricultura de valles',
     corto: 'Olivos, hortalizas, uva de mesa y frutales',
     icon: 'Sprout',
@@ -61,6 +63,7 @@ export const SECTORES = [
   },
   {
     slug: 'energia',
+    lugar: { lat: -22.77, lon: -69.47, z: 13, nombre: 'Desierto de Atacama, María Elena' },
     nombre: 'Energía solar y eólica',
     corto: 'Parques fotovoltaicos y eólicos',
     icon: 'Sun',
@@ -83,6 +86,7 @@ export const SECTORES = [
   },
   {
     slug: 'turismo',
+    lugar: { lat: -22.95, lon: -68.2, z: 12, nombre: 'San Pedro de Atacama, Antofagasta' },
     nombre: 'Turismo y altiplano',
     corto: 'Tour operadores, hoteles y eventos',
     icon: 'Plane',
@@ -105,6 +109,7 @@ export const SECTORES = [
   },
   {
     slug: 'pesca',
+    lugar: { lat: -20.22, lon: -70.15, z: 13, nombre: 'Borde costero de Iquique, Tarapacá' },
     nombre: 'Pesca y acuicultura',
     corto: 'Caletas, pesca artesanal y centros de cultivo',
     icon: 'Waves',
@@ -147,3 +152,11 @@ export function pagoFraccion(riesgoKey, umbral, valor) {
   const f = (valor - umbral) / (r.salida - umbral);
   return Math.max(0, Math.min(1, f));
 }
+
+// Predio de ejemplo (Valle de Azapa) para el caso de helada de la portada. Polígono ilustrativo.
+export const PREDIO_EJEMPLO = {
+  centro: [-18.5295, -70.166],
+  zoom: 14,
+  poligono: [[-18.5277, -70.1713], [-18.5277, -70.1645], [-18.5333, -70.1645], [-18.5333, -70.1713]],
+  estacion: [-18.5268, -70.1632],
+};
