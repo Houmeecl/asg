@@ -1,0 +1,65 @@
+'use client';
+
+import Link from 'next/link';
+import Wordmark from './Wordmark';
+import { BASE, SECTORES } from './data';
+import { useDemoSession } from './demoSession';
+import { ICONOS } from './iconos';
+
+export function SiteHeader() {
+  const { sesion } = useDemoSession();
+
+  return (
+    <header className="sticky top-0 z-20 backdrop-blur bg-[#f6f5ef]/85 border-b border-[#0b1a12]/10">
+      <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between gap-4">
+        <Link href={BASE} aria-label="SICR3P — inicio">
+          <Wordmark />
+        </Link>
+        <nav className="hidden md:flex items-center gap-7 text-sm">
+          <div className="relative group">
+            <Link href={`${BASE}#sectores`} className="hover:underline">Sectores</Link>
+            <div className="absolute left-0 top-full pt-3 hidden group-hover:block group-focus-within:block">
+              <div className="w-64 rounded-2xl bg-white border border-[#0b1a12]/10 shadow-xl p-2">
+                {SECTORES.map((s) => {
+                  const I = ICONOS[s.icon];
+                  return (
+                    <Link key={s.slug} href={`${BASE}/sectores/${s.slug}`} className="flex items-center gap-3 rounded-xl px-3 py-2.5 hover:bg-[#f6f5ef]">
+                      <I size={16} /> {s.nombre}
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+          <Link href={`${BASE}#como-funciona`} className="hover:underline">Cómo funciona</Link>
+          <Link href={`${BASE}#cotizar`} className="hover:underline">Cotizar</Link>
+          <Link href={`${BASE}#faq`} className="hover:underline">Preguntas</Link>
+        </nav>
+        <div className="flex items-center gap-2 text-sm">
+          {sesion ? (
+            <Link href={`${BASE}/panel`} className="rounded-full bg-[#0b1a12] text-[#d7ff3f] font-semibold px-5 py-2.5 hover:bg-[#16301f]">Mi panel</Link>
+          ) : (
+            <>
+              <Link href={`${BASE}/ingresar`} className="hidden sm:block rounded-full border border-[#0b1a12]/30 font-semibold px-5 py-2.5 hover:bg-white">Ingresar</Link>
+              <Link href={`${BASE}/onboarding`} className="rounded-full bg-[#0b1a12] text-[#d7ff3f] font-semibold px-5 py-2.5 hover:bg-[#16301f]">Probar demo</Link>
+            </>
+          )}
+        </div>
+      </div>
+    </header>
+  );
+}
+
+export function SiteFooter() {
+  return (
+    <footer className="max-w-6xl mx-auto px-6 py-10 text-sm text-[#0b1a12]/60 flex flex-wrap justify-between gap-4">
+      <span>© 2026 SICR3P. Producto ilustrativo; sujeto a suscripción del asegurador.</span>
+      <span className="flex flex-wrap gap-5">
+        {SECTORES.map((s) => (
+          <Link key={s.slug} href={`${BASE}/sectores/${s.slug}`} className="hover:underline">{s.nombre}</Link>
+        ))}
+        <Link href={`${BASE}/ingresar`} className="hover:underline">Ingresar</Link>
+      </span>
+    </footer>
+  );
+}

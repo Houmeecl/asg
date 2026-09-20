@@ -2,10 +2,12 @@ import Link from 'next/link';
 import {
   ArrowRight, ArrowUpRight, CloudRain, Snowflake, Wind, Thermometer, Sun, Droplets,
   Zap, ShieldCheck, Eye, Layers, Cpu, Landmark, MapPin, SlidersHorizontal, BadgeDollarSign,
-  Calculator, FileSignature, Users, Sprout, Mountain, Plane, Flame,
+  Calculator, FileSignature, Users, Sprout, Flame,
 } from 'lucide-react';
 import Cotizador from './Cotizador';
-import Wordmark from './Wordmark';
+import { SiteHeader, SiteFooter } from './SiteChrome';
+import { ICONOS } from './iconos';
+import { BASE, SECTORES } from './data';
 
 export const metadata = {
   title: 'SICR3P — Seguros paramétricos contra riesgo climático',
@@ -47,12 +49,6 @@ const COBERTURAS = [
   { icon: Flame, t: 'Riesgo de incendio' },
 ];
 
-const SECTORES = [
-  { icon: Sprout, t: 'Agricultura', d: 'Heladas en fruta, sequía en secano, lluvia en cosecha.' },
-  { icon: Mountain, t: 'Minería y energía', d: 'Lluvias altiplánicas y viento que detienen faenas y parques solares.' },
-  { icon: Plane, t: 'Turismo y eventos', d: 'Protege temporadas y eventos ante clima adverso.' },
-];
-
 const FAQ = [
   ['¿Qué es un seguro paramétrico?', 'Es un contrato que paga un monto acordado cuando un índice medible (por ejemplo, la lluvia acumulada) cruza un umbral pactado, en lugar de indemnizar la pérdida evaluada por un perito.'],
   ['¿Cómo se protegen mis datos?', 'Los datos se cifran en tránsito y en reposo, con acceso por roles y registro de auditoría de cada consulta.'],
@@ -64,20 +60,7 @@ const FAQ = [
 export default function SegurosParametricos() {
   return (
     <div className={`min-h-screen bg-[#f6f5ef] ${INK} font-sans`}>
-      <header className="sticky top-0 z-20 backdrop-blur bg-[#f6f5ef]/85 border-b border-[#0b1a12]/10">
-        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-          <Link href="/seguros-parametricos" aria-label="SICR3P — inicio">
-            <Wordmark />
-          </Link>
-          <nav className="hidden md:flex items-center gap-7 text-sm">
-            <a href="#plataforma" className="hover:underline">Plataforma</a>
-            <a href="#como-funciona" className="hover:underline">Cómo funciona</a>
-            <a href="#coberturas" className="hover:underline">Coberturas</a>
-            <a href="#faq" className="hover:underline">Preguntas</a>
-          </nav>
-          <a href="#cotizar" className="rounded-full bg-[#0b1a12] text-[#d7ff3f] text-sm font-semibold px-5 py-2.5 hover:bg-[#16301f]">Cotizar</a>
-        </div>
-      </header>
+      <SiteHeader />
 
       {/* Hero */}
       <section className="bg-[#0b1a12] text-white relative overflow-hidden">
@@ -85,7 +68,7 @@ export default function SegurosParametricos() {
         <div aria-hidden className="absolute -top-40 -right-40 w-[560px] h-[560px] rounded-full bg-[#d7ff3f]/15 blur-3xl" />
         <div className="relative max-w-6xl mx-auto px-6 pt-20 pb-24 grid lg:grid-cols-[1.1fr_0.9fr] gap-12 items-center">
           <div className="flex flex-col gap-6">
-            <span className={`self-start ${LIME} text-[#0b1a12] rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wider`}>Seguros paramétricos</span>
+            <span className={`self-start ${LIME} text-[#0b1a12] rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wider`}>Seguros paramétricos · norte de Chile</span>
             <h1 className="text-5xl md:text-7xl font-semibold tracking-tight leading-[1.02]">
               El futuro <span className="text-[#d7ff3f]">está asegurado.</span>
             </h1>
@@ -93,14 +76,14 @@ export default function SegurosParametricos() {
               Tecnología de punta a punta para gestionar el riesgo climático: defines el umbral, monitoreamos el índice y pagamos automáticamente cuando se cruza.
             </p>
             <div className="flex flex-wrap gap-3">
-              <a href="#solucion" className="rounded-full bg-[#d7ff3f] text-[#0b1a12] font-semibold px-6 py-3.5 flex items-center gap-2 hover:bg-white">Explorar soluciones <ArrowRight size={16} /></a>
-              <a href="#cotizar" className="rounded-full border border-white/40 font-semibold px-6 py-3.5 hover:bg-white/10">Cotizar ahora</a>
+              <a href="#sectores" className="rounded-full bg-[#d7ff3f] text-[#0b1a12] font-semibold px-6 py-3.5 flex items-center gap-2 hover:bg-white">Explorar sectores <ArrowRight size={16} /></a>
+              <Link href={`${BASE}/onboarding`} className="rounded-full border border-white/40 font-semibold px-6 py-3.5 hover:bg-white/10">Probar demo</Link>
             </div>
           </div>
 
           <div className="rounded-3xl bg-white/[0.06] border border-white/10 p-5 backdrop-blur">
             <div className="flex items-center justify-between text-xs text-white/60">
-              <span>Predio Los Olivos · Maule</span><span>-35.43, -71.66</span>
+              <span>Valle de Azapa · Arica y Parinacota</span><span>-18.52, -70.18</span>
             </div>
             <div className="mt-4 h-44 rounded-2xl bg-[radial-gradient(circle_at_30%_40%,#d7ff3f55,transparent_45%),radial-gradient(circle_at_75%_65%,#3ddc9755,transparent_40%)] border border-white/10 relative overflow-hidden">
               <div className="absolute inset-0 opacity-25 [background-image:linear-gradient(#fff_1px,transparent_1px),linear-gradient(90deg,#fff_1px,transparent_1px)] [background-size:28px_28px]" />
@@ -231,6 +214,25 @@ export default function SegurosParametricos() {
         <Cotizador />
       </section>
 
+      {/* Sectores del norte */}
+      <section id="sectores" className="max-w-6xl mx-auto px-6 py-20 scroll-mt-16">
+        <p className="text-xs uppercase tracking-widest text-[#0b1a12]/50 font-semibold">Zona norte de Chile</p>
+        <h2 className="mt-3 text-3xl md:text-4xl font-semibold tracking-tight max-w-2xl">Soluciones por sector, de Arica a Coquimbo.</h2>
+        <div className="mt-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {SECTORES.map((sec) => {
+            const I = ICONOS[sec.icon];
+            return (
+              <Link key={sec.slug} href={`${BASE}/sectores/${sec.slug}`} className={`group rounded-2xl ${LIME} p-6 flex flex-col gap-2 hover:-translate-y-0.5 transition-transform`}>
+                <I size={22} />
+                <h3 className="mt-6 font-semibold text-lg">{sec.nombre}</h3>
+                <p className="text-sm">{sec.corto}</p>
+                <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold group-hover:gap-2 transition-all">Ver sector <ArrowUpRight size={14} /></span>
+              </Link>
+            );
+          })}
+        </div>
+      </section>
+
       {/* Coberturas */}
       <section id="coberturas" className="bg-white border-y border-[#0b1a12]/10 scroll-mt-16">
         <div className="max-w-6xl mx-auto px-6 py-20">
@@ -239,13 +241,6 @@ export default function SegurosParametricos() {
             {COBERTURAS.map(({ icon: I, t }) => (
               <div key={t} className="rounded-2xl border border-[#0b1a12]/10 p-5 flex flex-col gap-6 hover:border-[#0b1a12] transition-colors">
                 <I size={22} /><span className="font-medium text-sm">{t}</span>
-              </div>
-            ))}
-          </div>
-          <div className="mt-14 grid md:grid-cols-3 gap-5">
-            {SECTORES.map(({ icon: I, t, d }) => (
-              <div key={t} className={`rounded-2xl ${LIME} p-6`}>
-                <I size={22} /><h3 className="mt-6 font-semibold text-lg">{t}</h3><p className="mt-1 text-sm">{d}</p>
               </div>
             ))}
           </div>
@@ -277,10 +272,7 @@ export default function SegurosParametricos() {
           </form>
         </div>
       </section>
-      <footer className="max-w-6xl mx-auto px-6 py-10 text-sm text-[#0b1a12]/60 flex flex-wrap justify-between gap-4">
-        <span>© 2026 SICR3P. Producto ilustrativo; sujeto a suscripción del asegurador.</span>
-        <span className="flex gap-5"><a href="#faq">Preguntas</a><a href="#cotizar">Cotizar</a><a href="#contacto">Contacto</a></span>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }
