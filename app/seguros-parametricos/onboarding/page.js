@@ -1,9 +1,14 @@
+import { redirect } from 'next/navigation';
 import { SiteHeader, SiteFooter } from '../SiteChrome';
 import Onboarding from './Onboarding';
+import { BASE } from '../data';
+import { obtenerUsuarioSeguros } from '@/lib/segurosAuth';
 
 export const metadata = { title: 'Onboarding demo — SICR3P Seguros' };
 
-export default function Page() {
+export default async function Page() {
+  if (!(await obtenerUsuarioSeguros())) redirect(`${BASE}/ingresar?desde=onboarding`);
+
   return (
     <div className="min-h-screen bg-[#f6f5ef] text-[#0b1a12] flex flex-col">
       <SiteHeader />

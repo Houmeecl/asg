@@ -2,48 +2,80 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { guardarSesion } from '../demoSession';
-import { BASE } from '../data';
 
-export default function LoginForm() {
+const input = 'rounded-xl border border-[#0b1a12]/15 bg-white px-4 py-3 text-sm normal-case tracking-normal font-normal text-[#0b1a12]';
+const label = 'flex flex-col gap-2 text-xs font-semibold uppercase tracking-wider text-[#0b1a12]/60';
+
+export default function LoginForm({ destino }) {
   const router = useRouter();
+  const [modo, setModo] = useState('ingresar');
+  const [nombre, setNombre] = useState('');
   const [email, setEmail] = useState('');
   const [clave, setClave] = useState('');
+  const [error, setError] = useState('');
+  const [enviando, setEnviando] = useState(false);
 
-  function entrar(datos) {
-    guardarSesion(datos);
-    router.push(`${BASE}/onboarding`);
+  const registro = modo === 'registro';
+
+  async function enviar(e) {
+    e.preventDefault();
+    setEnviando(true);
+    setError('');
+    try {
+      const res = await fetch(`/api/seguros/${registro ? 'registro' : 'login'}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nombre, email, password: clave }),
+      });
+      const data = await res.json();
+      if (!res.ok) return setError(data.error ?? 'No se pudo completar la solicitud.');
+      router.push(destino);
+      router.refresh();
+    } catch {
+      setError('No hay conexión con el servidor.');
+    } finally {
+      setEnviando(false);
+    }
   }
 
   return (
-    <div className="mt-8 flex flex-col gap-4">
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          entrar({ email, nombre: email.split('@')[0], poliza: null });
-        }}
-        className="flex flex-col gap-4"
-      >
-        <label className="flex flex-col gap-2 text-xs font-semibold uppercase tracking-wider text-[#0b1a12]/60">
-          Correo
-          <input required type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="tu@empresa.cl" className="rounded-xl border border-[#0b1a12]/15 bg-white px-4 py-3 text-sm normal-case tracking-normal font-normal text-[#0b1a12]" />
+    <>
+      <h1 className="text-3xl font-semibold tracking-tight">{registro ? 'Crear cuenta' : 'Ingresar'}</h1>
+      <p className="mt-2 text-sm text-[#0b1a12]/65">
+        {registro ? 'Crea tu cuenta para cotizar y guardar tus coberturas.' : 'Accede a tu panel de coberturas paramétricas.'}
+      </p>
+
+      <form onSubmit={enviar} className="mt-8 flex flex-col gap-4">
+        {registro && (
+          <label className={label}>Nombre
+            <input required minLength={2} value={nombre} onChange={(e) => setNombre(e.target.value)} autoComplete="name" className={input} />
+          </label>
+        )}
+        <label className={label}>Correo
+          <input required type="email" value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" placeholder="tu@empresa.cl" className={input} />
         </label>
-        <label className="flex flex-col gap-2 text-xs font-semibold uppercase tracking-wider text-[#0b1a12]/60">
-          Contraseña
-          <input required type="password" value={clave} onChange={(e) => setClave(e.target.value)} placeholder="••••••••" className="rounded-xl border border-[#0b1a12]/15 bg-white px-4 py-3 text-sm normal-case tracking-normal font-normal text-[#0b1a12]" />
+        <label className={label}>Contraseña
+          <input required type="password" minLength={registro ? 8 : undefined} value={clave} onChange={(e) => setClave(e.target.value)} autoComplete={registro ? 'new-password' : 'current-password'} className={input} />
+          {registro && <span className="normal-case tracking-normal font-normal text-[#0b1a12]/50">Mínimo 8 caracteres.</span>}
         </label>
-        <button className="rounded-full bg-[#0b1a12] text-[#d7ff3f] font-semibold py-3.5 hover:bg-[#16301f]">Ingresar</button>
+
+        {error && <p role="alert" className="text-sm text-red-700">{error}</p>}
+
+        <button disabled={enviando} className="rounded-full bg-[#0b1a12] text-[#d7ff3f] font-semibold py-3.5 hover:bg-[#16301f] disabled:opacity-50">
+          {enviando ? 'Un momento…' : registro ? 'Crear cuenta' : 'Ingresar'}
+        </button>
       </form>
 
-      <div className="flex items-center gap-3 text-xs text-[#0b1a12]/40"><span className="h-px flex-1 bg-[#0b1a12]/10" />o<span className="h-px flex-1 bg-[#0b1a12]/10" /></div>
-
-      <button onClick={() => entrar({ email: 'invitado@demo.cl', nombre: 'Invitado', poliza: null })} className="rounded-full border border-[#0b1a12] font-semibold py-3.5 hover:bg-white">
-        Entrar como invitado
-      </button>
-
-      <p className="text-xs text-[#0b1a12]/50 leading-relaxed rounded-xl bg-[#d7ff3f]/40 px-4 py-3">
-        Modo demo: no hay autenticación real. Cualquier correo y contraseña funcionan, y los datos se guardan solo en este navegador.
+      <p className="mt-6 text-sm text-[#0b1a12]/70">
+        {registro ? '¿Ya tienes cuenta?' : '¿Aún no tienes cuenta?'}{' '}
+        <button type="button" onClick={() => { setModo(registro ? 'ingresar' : 'registro'); setError(''); }} className="font-semibold underline">
+          {registro ? 'Ingresar' : 'Crear una'}
+        </button>
       </p>
-    </div>
+
+      <p className="mt-8 text-xs text-[#0b1a12]/50 leading-relaxed rounded-xl bg-[#d7ff3f]/40 px-4 py-3">
+        Las pólizas de este sitio son una demostración: no tienen validez contractual ni respaldo de un asegurador.
+      </p>
+    </>
   );
 }

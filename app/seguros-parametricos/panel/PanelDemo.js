@@ -1,29 +1,45 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { BASE, RIESGOS, clp, pagoFraccion, sectorPorSlug } from '../data';
-import { cerrarSesion, useDemoSession } from '../demoSession';
 
-export default function PanelDemo() {
+export default function PanelDemo({ usuario, polizas }) {
   const router = useRouter();
-  const { cargando, sesion } = useDemoSession();
+  const [idSel, setIdSel] = useState(polizas[0]?.id);
   const [valor, setValor] = useState(null);
 
-  useEffect(() => {
-    if (!cargando && !sesion) router.replace(`${BASE}/ingresar`);
-  }, [cargando, sesion, router]);
+  async function salir() {
+    await fetch('/api/seguros/logout', { method: 'POST' });
+    router.push(BASE);
+    router.refresh();
+  }
 
-  if (cargando || !sesion) return <p className="text-sm text-[#0b1a12]/60">Cargando…</p>;
+  const cabecera = (
+    <div className="flex flex-wrap items-end justify-between gap-4">
+      <div>
+        <p className="text-xs uppercase tracking-widest font-semibold text-[#0b1a12]/50">Mi panel</p>
+        <h1 className="mt-1 text-3xl font-semibold tracking-tight">Hola, {usuario.nombre}</h1>
+        <p className="text-sm text-[#0b1a12]/60">{usuario.email}</p>
+      </div>
+      <div className="flex gap-2">
+        <Link href={`${BASE}/onboarding`} className="rounded-full bg-[#0b1a12] text-[#d7ff3f] px-5 py-2.5 text-sm font-semibold hover:bg-[#16301f]">Nueva cobertura</Link>
+        <button onClick={salir} className="rounded-full border border-[#0b1a12]/30 px-5 py-2.5 text-sm font-semibold hover:bg-white">Cerrar sesión</button>
+      </div>
+    </div>
+  );
 
-  const p = sesion.poliza;
+  const p = polizas.find((x) => x.id === idSel);
   if (!p) {
     return (
-      <div className="rounded-3xl bg-white border border-[#0b1a12]/10 p-10 text-center">
-        <h1 className="text-2xl font-semibold">Aún no tienes pólizas</h1>
-        <p className="mt-2 text-sm text-[#0b1a12]/65">Completa el onboarding demo para cotizar y activar tu primera cobertura.</p>
-        <Link href={`${BASE}/onboarding`} className="inline-block mt-6 rounded-full bg-[#0b1a12] text-[#d7ff3f] font-semibold px-6 py-3">Iniciar onboarding</Link>
+      <div className="flex flex-col gap-6">
+        {cabecera}
+        <div className="rounded-3xl bg-white border border-[#0b1a12]/10 p-10 text-center">
+          <h2 className="text-2xl font-semibold">Aún no tienes coberturas</h2>
+          <p className="mt-2 text-sm text-[#0b1a12]/65">Cotiza y guarda tu primera cobertura con el onboarding.</p>
+          <Link href={`${BASE}/onboarding`} className="inline-block mt-6 rounded-full bg-[#0b1a12] text-[#d7ff3f] font-semibold px-6 py-3">Iniciar onboarding</Link>
+        </div>
       </div>
     );
   }
@@ -41,14 +57,23 @@ export default function PanelDemo() {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <p className="text-xs uppercase tracking-widest font-semibold text-[#0b1a12]/50">Panel demo</p>
-          <h1 className="mt-1 text-3xl font-semibold tracking-tight">{p.empresa}</h1>
-          <p className="text-sm text-[#0b1a12]/60">{sesion.email} · {sector.nombre} · {p.localidad}, {p.zona}</p>
+      {cabecera}
+
+      {polizas.length > 1 && (
+        <div className="flex flex-wrap gap-2" role="tablist" aria-label="Mis coberturas">
+          {polizas.map((x) => (
+            <button
+              key={x.id} role="tab" aria-selected={x.id === p.id}
+              onClick={() => { setIdSel(x.id); setValor(null); }}
+              className={`px-4 py-2 rounded-full text-sm font-medium border ${x.id === p.id ? 'bg-[#0b1a12] text-[#d7ff3f] border-[#0b1a12]' : 'border-[#0b1a12]/15 hover:border-[#0b1a12]'}`}
+            >
+              {x.empresa} · {RIESGOS[x.riesgo].nombre}
+            </button>
+          ))}
         </div>
-        <button onClick={() => { cerrarSesion(); router.push(BASE); }} className="rounded-full border border-[#0b1a12]/30 px-5 py-2.5 text-sm font-semibold hover:bg-white">Cerrar sesión</button>
-      </div>
+      )}
+
+      <p className="text-sm text-[#0b1a12]/60">{p.empresa} · {sector.nombre} · {p.localidad}, {p.zona}</p>
 
       <div className="grid md:grid-cols-3 gap-4">
         {[['Monto asegurado', clp(p.monto)], ['Prima (indicativa)', clp(p.prima)], ['Periodo', `${p.meses} meses`]].map(([k, v]) => (
@@ -62,7 +87,7 @@ export default function PanelDemo() {
       <div className="rounded-3xl bg-[#0b1a12] text-white p-6 md:p-8">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <h2 className="text-xl font-semibold">Simula un evento: {r.nombre.toLowerCase()}</h2>
-          <span className="text-xs rounded-full bg-[#d7ff3f] text-[#0b1a12] px-3 py-1 font-semibold">Póliza activa (demo)</span>
+          <span className="text-xs rounded-full bg-[#d7ff3f] text-[#0b1a12] px-3 py-1 font-semibold">Póliza demo</span>
         </div>
         <p className="mt-1 text-sm text-white/60">Mueve el valor observado ({r.indice.toLowerCase()}) y mira cuándo se dispara el pago.</p>
 

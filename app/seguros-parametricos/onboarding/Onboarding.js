@@ -4,7 +4,6 @@ import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft, ArrowRight, Check } from 'lucide-react';
 import { BASE, RIESGOS, SECTORES, ZONAS_NORTE, clp, cotizar, sectorPorSlug } from '../data';
-import { guardarSesion, useDemoSession } from '../demoSession';
 import { CurvaPago } from '../Cotizador';
 
 const PASOS = ['Tu empresa', 'Ubicación', 'Cobertura', 'Resultado'];
@@ -14,7 +13,8 @@ const label = 'flex flex-col gap-2 text-xs font-semibold uppercase tracking-wide
 
 export default function Onboarding() {
   const router = useRouter();
-  const { sesion } = useDemoSession();
+  const [error, setError] = useState('');
+  const [guardando, setGuardando] = useState(false);
   const [paso, setPaso] = useState(0);
   const [f, setF] = useState({
     empresa: '', sector: 'mineria', zona: 'Antofagasta', localidad: '',
@@ -33,12 +33,24 @@ export default function Onboarding() {
 
   const puedeAvanzar = paso === 0 ? f.empresa.trim().length > 1 : paso === 1 ? f.localidad.trim().length > 1 : true;
 
-  function activar() {
-    guardarSesion({
-      ...(sesion ?? { email: 'invitado@demo.cl', nombre: 'Invitado' }),
-      poliza: { ...f, prima: cot.prima, umbral: cot.umbral, creada: new Date().toISOString() },
-    });
-    router.push(`${BASE}/panel`);
+  async function activar() {
+    setGuardando(true);
+    setError('');
+    try {
+      const res = await fetch('/api/seguros/polizas', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(f),
+      });
+      if (res.status === 401) return router.push(`${BASE}/ingresar?desde=onboarding`);
+      const data = await res.json();
+      if (!res.ok) return setError(data.error ?? 'No se pudo guardar la póliza.');
+      router.push(`${BASE}/panel`);
+    } catch {
+      setError('No hay conexión con el servidor.');
+    } finally {
+      setGuardando(false);
+    }
   }
 
   return (
@@ -127,6 +139,8 @@ export default function Onboarding() {
         )}
       </div>
 
+      {error && <p role="alert" className="mt-4 text-sm text-red-700">{error}</p>}
+
       <div className="mt-6 flex justify-between">
         <button type="button" onClick={() => setPaso((p) => p - 1)} disabled={paso === 0} className="flex items-center gap-2 rounded-full border border-[#0b1a12]/30 px-5 py-3 text-sm font-semibold disabled:opacity-30">
           <ArrowLeft size={16} /> Atrás
@@ -136,8 +150,8 @@ export default function Onboarding() {
             Siguiente <ArrowRight size={16} />
           </button>
         ) : (
-          <button type="button" onClick={activar} className="flex items-center gap-2 rounded-full bg-[#d7ff3f] text-[#0b1a12] px-6 py-3 text-sm font-semibold border border-[#0b1a12]">
-            <Check size={16} /> Activar póliza demo
+          <button type="button" onClick={activar} disabled={guardando} className="flex items-center gap-2 disabled:opacity-50 rounded-full bg-[#d7ff3f] text-[#0b1a12] px-6 py-3 text-sm font-semibold border border-[#0b1a12]">
+            <Check size={16} /> {guardando ? 'Guardando…' : 'Activar póliza demo'}
           </button>
         )}
       </div>

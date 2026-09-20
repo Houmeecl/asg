@@ -1,13 +1,11 @@
-'use client';
-
 import Link from 'next/link';
 import Wordmark from './Wordmark';
 import { BASE, SECTORES } from './data';
-import { useDemoSession } from './demoSession';
+import { obtenerUsuarioSeguros } from '@/lib/segurosAuth';
 import { ICONOS } from './iconos';
 
-export function SiteHeader() {
-  const { sesion } = useDemoSession();
+export async function SiteHeader() {
+  const sesion = await obtenerUsuarioSeguros();
 
   return (
     <header className="sticky top-0 z-20 backdrop-blur bg-[#f6f5ef]/85 border-b border-[#0b1a12]/10">
@@ -41,7 +39,7 @@ export function SiteHeader() {
           ) : (
             <>
               <Link href={`${BASE}/ingresar`} className="hidden sm:block rounded-full border border-[#0b1a12]/30 font-semibold px-5 py-2.5 hover:bg-white">Ingresar</Link>
-              <Link href={`${BASE}/onboarding`} className="rounded-full bg-[#0b1a12] text-[#d7ff3f] font-semibold px-5 py-2.5 hover:bg-[#16301f]">Probar demo</Link>
+              <Link href={`${BASE}/onboarding`} className="rounded-full bg-[#0b1a12] text-[#d7ff3f] font-semibold px-5 py-2.5 hover:bg-[#16301f]">Crear cuenta</Link>
             </>
           )}
         </div>
