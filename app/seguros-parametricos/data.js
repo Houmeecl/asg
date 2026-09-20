@@ -148,10 +148,14 @@ export function cotizar(riesgoKey, monto, meses, sensPct) {
 }
 
 // Fracción (0–1) del monto asegurado que paga el índice observado: lineal entre umbral y salida.
+// Sirve en ambos sentidos: si salida > umbral paga al subir; si salida < umbral paga al bajar.
+export function fraccionLineal(umbral, salida, valor) {
+  if (!Number.isFinite(valor) || umbral === salida) return 0;
+  return Math.max(0, Math.min(1, (valor - umbral) / (salida - umbral)));
+}
+
 export function pagoFraccion(riesgoKey, umbral, valor) {
-  const r = RIESGOS[riesgoKey];
-  const f = (valor - umbral) / (r.salida - umbral);
-  return Math.max(0, Math.min(1, f));
+  return fraccionLineal(umbral, RIESGOS[riesgoKey].salida, valor);
 }
 
 // Predio de ejemplo (Valle de Azapa) para el caso de helada de la portada. Polígono ilustrativo.

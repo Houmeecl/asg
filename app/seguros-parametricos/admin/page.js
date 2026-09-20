@@ -18,7 +18,7 @@ export default async function Page() {
     <div className="min-h-screen bg-[#f4f7fa] text-[#0f1f2e] flex flex-col">
       <SiteHeader />
       <main className="flex-1 max-w-6xl w-full mx-auto px-6 py-12">
-        <AdminNico usuario={usuario} polizas={polizas} />
+        <AdminNico usuario={usuario} polizas={polizas} nico={process.env.NICO_HABILITADO === '1'} />
       </main>
       <SiteFooter />
     </div>

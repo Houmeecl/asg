@@ -3,8 +3,10 @@
 import { useEffect, useState } from 'react';
 import { RIESGOS, SECTORES, clp } from '../data';
 import NuevoClienteNico from './NuevoClienteNico';
+import ContratosPiloto from './ContratosPiloto';
 
 const PESTANAS = [
+  ['contratos', 'Contratos piloto'],
   ['nuevo', 'Nuevo cliente'],
   ['historial', 'Bitácora'],
   ['cotizaciones', 'Cotizaciones SICR3P'],
@@ -463,8 +465,8 @@ function Bitacora({ refresco }) {
   );
 }
 
-export default function AdminNico({ usuario, polizas }) {
-  const [tab, setTab] = useState('nuevo');
+export default function AdminNico({ usuario, polizas, nico = false }) {
+  const [tab, setTab] = useState('contratos');
   const [refresco, setRefresco] = useState(0);
   const [catalogo, setCatalogo] = useState('companias');
 
@@ -472,12 +474,12 @@ export default function AdminNico({ usuario, polizas }) {
     <div className="flex flex-col gap-6">
       <div>
         <p className="text-xs uppercase tracking-widest font-semibold text-[#0f1f2e]/50">Administración</p>
-        <h1 className="mt-1 text-3xl font-semibold tracking-tight">Integración con Nico Seguros</h1>
+        <h1 className="mt-1 text-3xl font-semibold tracking-tight">{nico ? 'Piloto e integración con Nico Seguros' : 'Administración del piloto'}</h1>
         <p className="text-sm text-[#0f1f2e]/60">{usuario.email} · rol administrador</p>
       </div>
 
       <div className="flex flex-wrap gap-2" role="tablist">
-        {PESTANAS.map(([k, n]) => (
+        {(nico ? PESTANAS : PESTANAS.filter(([k]) => k === 'contratos')).map(([k, n]) => (
           <button key={k} role="tab" aria-selected={tab === k} onClick={() => setTab(k)}
             className={`px-4 py-2 rounded-full text-sm font-medium border ${tab === k ? 'bg-[#0f1f2e] text-[#5ce08a] border-[#0f1f2e]' : 'border-[#0f1f2e]/15 hover:border-[#0f1f2e]'}`}>
             {n}
@@ -485,7 +487,8 @@ export default function AdminNico({ usuario, polizas }) {
         ))}
       </div>
 
-      {tab === 'nuevo' && <NuevoClienteNico onListo={() => setRefresco((n) => n + 1)} />}
+      {tab === 'contratos' && <ContratosPiloto />}
+      {nico && tab === 'nuevo' && <NuevoClienteNico onListo={() => setRefresco((n) => n + 1)} />}
       {tab === 'historial' && <Bitacora refresco={refresco} />}
       {tab === 'cotizaciones' && <Cotizaciones polizas={polizas} />}
       {tab === 'conexion' && <Conexion />}

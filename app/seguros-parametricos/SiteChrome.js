@@ -3,12 +3,16 @@ import Wordmark from './Wordmark';
 import { BASE, SECTORES } from './data';
 import { obtenerUsuarioSeguros } from '@/lib/segurosAuth';
 import { ICONOS } from './iconos';
+import { AVISO_SITIO } from './producto';
 
 export async function SiteHeader() {
   const sesion = await obtenerUsuarioSeguros();
 
   return (
     <header className="sticky top-0 z-20 backdrop-blur bg-[#f4f7fa]/85 border-b border-[#0f1f2e]/10">
+      {!process.env.OPINION_LEGAL_REF && (
+        <p className="bg-[#0f1f2e] text-white/85 text-[11px] text-center px-4 py-1.5">{AVISO_SITIO}</p>
+      )}
       <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between gap-4">
         <Link href={BASE} aria-label="SICR3P — inicio">
           <Wordmark />
