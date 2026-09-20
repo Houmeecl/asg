@@ -8,6 +8,7 @@ const PESTANAS = [
   ['nuevo', 'Nuevo cliente'],
   ['historial', 'Bitácora'],
   ['cotizaciones', 'Cotizaciones SICR3P'],
+  ['aseguradoras', 'Aseguradoras y pólizas'],
   ['polizas', 'Pólizas Nico'],
   ['leads', 'Leads Nico'],
   ['productos', 'Productos'],
@@ -27,7 +28,7 @@ function filas(json) {
   return lista.map((it) => (it && typeof it === 'object' ? { ...(it.attributes ?? {}), ...it } : { valor: it }));
 }
 
-const PRIORIDAD = ['id', 'policy_number', 'name', 'label', 'account_name', 'business_name', 'status', 'step', 'insurance_company', 'insurance_category', 'created_at'];
+const PRIORIDAD = ['id', 'policy_number', 'name', 'full_name', 'account_name', 'insurance_company_name', 'insurance_category_name', 'validity_end', 'total_net_premium', 'executive_full_name', 'label', 'account_name', 'business_name', 'status', 'step', 'insurance_company', 'insurance_category', 'created_at'];
 
 function columnas(rows) {
   const claves = new Set();
@@ -40,25 +41,27 @@ function columnas(rows) {
 
 const celda = (v) => (v === null || v === undefined ? '—' : String(v).length > 60 ? `${String(v).slice(0, 57)}…` : String(v));
 
-function TablaNico({ recurso }) {
+function TablaNico({ recurso, filtros = {} }) {
   const [q, setQ] = useState('');
   const [busqueda, setBusqueda] = useState('');
   const [pagina, setPagina] = useState(1);
   const [resultado, setResultado] = useState(null); // { clave, json?, error? }
   const [abierta, setAbierta] = useState(null);
 
-  const clave = `${recurso}|${busqueda}|${pagina}`;
+  const claveFiltros = JSON.stringify(filtros);
+  const clave = `${recurso}|${busqueda}|${pagina}|${claveFiltros}`;
 
   useEffect(() => {
     let vigente = true;
     const p = new URLSearchParams({ display_length: '20', display_start: String(pagina) });
     if (busqueda) p.set('query', busqueda);
+    for (const [k, v] of Object.entries(JSON.parse(claveFiltros))) p.set(k, String(v));
     fetch(`/api/seguros/admin/nico/${recurso}?${p}`)
       .then(async (r) => ({ ok: r.ok, json: await r.json().catch(() => null) }))
       .then(({ ok, json }) => vigente && setResultado(ok ? { clave, json } : { clave, error: json?.error ?? 'Error al consultar Nico.' }))
       .catch(() => vigente && setResultado({ clave, error: 'No hay conexión con el servidor.' }));
     return () => { vigente = false; };
-  }, [clave, recurso, busqueda, pagina]);
+  }, [clave, recurso, busqueda, pagina, claveFiltros]);
 
   const cargando = resultado?.clave !== clave;
   const rows = cargando || resultado.error ? [] : filas(resultado.json);
@@ -71,6 +74,9 @@ function TablaNico({ recurso }) {
         <button className={btn}>Buscar</button>
       </form>
 
+      {!cargando && !resultado.error && typeof resultado.json?.metadata?.amount === 'number' && (
+        <p className="text-sm text-[#0f1f2e]/60">{resultado.json.metadata.amount} resultado(s)</p>
+      )}
       {cargando && <p className="text-sm text-[#0f1f2e]/60">Consultando Nico…</p>}
       {!cargando && resultado.error && <p role="alert" className="text-sm text-red-700 rounded-xl bg-red-50 px-4 py-3">{resultado.error}</p>}
       {!cargando && !resultado.error && rows.length === 0 && <p className="text-sm text-[#0f1f2e]/60">Sin resultados.</p>}
@@ -301,6 +307,70 @@ function FilaCotizacion({ p, abierta, onAbrir, onListo }) {
 }
 
 
+const nombreCompania = (c) => c.label ?? c.full_name ?? c.name ?? `#${c.id}`;
+
+// Aseguradoras con las que trabaja el corredor, y sus pólizas (filtradas por compañía, vigencia y ramo).
+function Aseguradoras() {
+  const [datos, setDatos] = useState(null); // { companias, ramos } | { error }
+  const [sel, setSel] = useState(null);
+  const [vigentes, setVigentes] = useState(true);
+  const [ramo, setRamo] = useState('');
+
+  useEffect(() => {
+    let vigente = true;
+    Promise.all(['companias', 'ramos'].map(async (r) => {
+      const x = await fetch(`/api/seguros/admin/nico/${r}?display_length=100`);
+      const j = await x.json().catch(() => null);
+      if (!x.ok) throw new Error(j?.error ?? 'Error al consultar Nico.');
+      return filas(j);
+    }))
+      .then(([companias, ramos]) => vigente && setDatos({ companias, ramos }))
+      .catch((e) => vigente && setDatos({ error: e.message }));
+    return () => { vigente = false; };
+  }, []);
+
+  if (!datos) return <p className="text-sm text-[#0f1f2e]/60">Cargando aseguradoras de Nico…</p>;
+  if (datos.error) return <p role="alert" className="text-sm text-red-700 rounded-xl bg-red-50 px-4 py-3">{datos.error}</p>;
+
+  const filtros = {
+    ...(sel ? { insurance_company_id: sel.id } : {}),
+    ...(vigentes ? { is_valid: 'true' } : {}),
+    ...(ramo ? { insurance_category_id: ramo } : {}),
+  };
+  const contacto = sel && [['Ejecutivo', sel.executive_full_name], ['Correo', sel.executive_email], ['Teléfono', sel.executive_phone_number]].filter(([, v]) => v);
+
+  return (
+    <div className="grid lg:grid-cols-[280px_1fr] gap-6 items-start">
+      <div className="rounded-2xl border border-[#0f1f2e]/10 bg-white p-3 flex flex-col gap-1 max-h-[560px] overflow-y-auto">
+        <p className="px-3 py-2 text-xs uppercase tracking-wider font-semibold text-[#0f1f2e]/50">Aseguradoras ({datos.companias.length})</p>
+        <button onClick={() => setSel(null)} className={`text-left rounded-xl px-3 py-2 text-sm ${!sel ? 'bg-[#0f1f2e] text-[#5ce08a] font-semibold' : 'hover:bg-[#f4f7fa]'}`}>Todas</button>
+        {datos.companias.map((c) => (
+          <button key={c.id} onClick={() => setSel(c)} className={`text-left rounded-xl px-3 py-2 text-sm ${sel?.id === c.id ? 'bg-[#0f1f2e] text-[#5ce08a] font-semibold' : 'hover:bg-[#f4f7fa]'}`}>
+            {nombreCompania(c)}{c.active === false && <span className="ml-2 text-[10px] opacity-60">inactiva</span>}
+          </button>
+        ))}
+        {datos.companias.length === 0 && <p className="px-3 py-2 text-sm text-[#0f1f2e]/50">Nico no devolvió aseguradoras.</p>}
+      </div>
+
+      <div className="flex flex-col gap-4 min-w-0">
+        <div>
+          <h2 className="text-xl font-semibold">{sel ? nombreCompania(sel) : 'Pólizas de todas las aseguradoras'}</h2>
+          {contacto && contacto.length > 0 && <p className="mt-1 text-sm text-[#0f1f2e]/65">{contacto.map(([k, v]) => `${k}: ${v}`).join(' · ')}</p>}
+        </div>
+        <div className="flex flex-wrap items-center gap-4 text-sm">
+          <label className="flex items-center gap-2"><input type="checkbox" checked={vigentes} onChange={(e) => setVigentes(e.target.checked)} className="accent-[#0f1f2e]" /> Solo vigentes</label>
+          <label className="flex items-center gap-2">Ramo
+            <select value={ramo} onChange={(e) => setRamo(e.target.value)} className={`${inputCls} !w-auto`}>
+              <option value="">Todos</option>{datos.ramos.map((r) => <option key={r.id} value={r.id}>{etiqueta(r)}</option>)}
+            </select>
+          </label>
+        </div>
+        <TablaNico key={JSON.stringify(filtros)} recurso="polizas" filtros={filtros} />
+      </div>
+    </div>
+  );
+}
+
 const SUGERENCIAS = ['paramétrico', 'clima', 'agrícola', 'cosecha', 'catastrófico', 'riesgos'];
 
 // Busca una palabra clave en ramos, compañías y productos a la vez (para ver si algo sirve como paramétrico).
@@ -419,6 +489,7 @@ export default function AdminNico({ usuario, polizas }) {
       {tab === 'historial' && <Bitacora refresco={refresco} />}
       {tab === 'cotizaciones' && <Cotizaciones polizas={polizas} />}
       {tab === 'conexion' && <Conexion />}
+      {tab === 'aseguradoras' && <Aseguradoras />}
       {['polizas', 'leads', 'productos', 'cuentas'].includes(tab) && <TablaNico key={tab} recurso={tab} />}
       {tab === 'catalogos' && (
         <div className="flex flex-col gap-4">
