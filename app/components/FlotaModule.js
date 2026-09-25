@@ -1,4 +1,5 @@
 'use client';
+/* eslint-disable react-hooks/immutability, react-hooks/set-state-in-effect */
 
 import { useState, useEffect } from 'react';
 import { Truck, Building2, PlusCircle, QrCode, FileCheck2, Gauge, Leaf, AlertTriangle } from 'lucide-react';

@@ -2,14 +2,16 @@
 // punto verde sobre la "i", y la "3" con el grafismo de red/molécula de 3 nodos
 // verdes conectados. Colores de marca: navy #0f1f2e / green #28a745, adaptado
 // a texto claro para el tema oscuro interno.
-export default function SicrLogo({ size = 'md' }) {
+export default function SicrLogo({ size = 'md', contrast = 'light' }) {
   const textSize = size === 'lg' ? 'text-6xl' : size === 'sm' ? 'text-2xl' : 'text-3xl';
   const dotOffset = size === 'lg' ? '-top-3' : '-top-2';
   const dotSize = size === 'lg' ? 'w-2 h-2' : 'w-[5px] h-[5px]';
+  const textColor = contrast === 'dark' ? 'text-[#0f1f2e]' : 'text-white';
+  const subtextColor = contrast === 'dark' ? 'text-slate-600' : 'text-slate-400';
 
   return (
     <div className="flex flex-col gap-1 leading-none">
-      <div className={`${textSize} font-bold tracking-tight text-white flex items-baseline`}>
+      <div className={`${textSize} font-bold tracking-tight ${textColor} flex items-baseline`}>
         <span>s</span>
         <span className="relative inline-block">
           i
@@ -30,10 +32,10 @@ export default function SicrLogo({ size = 'md' }) {
       </div>
       <div className="flex items-center gap-2">
         <span className="h-px w-3" style={{ background: '#28a745' }} />
-        <span className="text-[10px] font-bold tracking-widest text-white uppercase">triple impacto</span>
+        <span className={`text-[10px] font-bold tracking-widest ${textColor} uppercase`}>triple impacto</span>
         <span className="h-px w-3" style={{ background: '#28a745' }} />
       </div>
-      <div className="text-[9px] text-slate-400 flex items-center gap-1">
+      <div className={`text-[9px] ${subtextColor} flex items-center gap-1`}>
         <span>social</span><span style={{ color: '#28a745' }}>·</span>
         <span>ambiental</span><span style={{ color: '#28a745' }}>·</span>
         <span>económico</span>

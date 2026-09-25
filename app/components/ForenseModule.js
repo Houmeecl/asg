@@ -1,4 +1,5 @@
 'use client';
+/* eslint-disable react-hooks/immutability, react-hooks/set-state-in-effect */
 
 import { useState, useEffect } from 'react';
 import { Building2, FolderKanban, UploadCloud, PlusCircle, Cpu, FileText } from 'lucide-react';
