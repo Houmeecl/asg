@@ -1,28 +1,32 @@
-import { Geist, Geist_Mono } from "next/font/google";
+import { Lexend, Source_Sans_3 } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const display = Lexend({
+  variable: "--font-display",
   subsets: ["latin"],
+  weight: ["500", "600", "700"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const body = Source_Sans_3({
+  variable: "--font-body",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
 });
 
 export const metadata = {
-  title: "SICR3P — Assurance, Forensic & Sustainable Finance",
-  description: "Plataforma independiente de aseguramiento, contabilidad forense y ASG para PYMEs proveedoras de la gran minería.",
+  title: "SICR3P — Evidencia industrial, CBAM y Corredor + EUDR",
+  description: "Infraestructura de evidencia industrial para proveedores de la gran minería: expedientes, custodia SHA-256, CBAM preverificado y Corredor Bioceánico + EUDR.",
 };
 
 export default function RootLayout({ children }) {
   return (
     <html
       lang="es"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${display.variable} ${body.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-slate-950 text-slate-100">{children}</body>
+      <body className="min-h-full flex flex-col bg-background text-foreground font-sans">
+        {children}
+      </body>
     </html>
   );
 }
