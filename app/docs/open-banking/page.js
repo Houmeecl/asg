@@ -10,13 +10,27 @@ export default function OpenBankingDocsPage() {
   return (
     <LegalShell
       eyebrow="API partner"
-      title="Open Banking BaaS"
-      updated="AIS (cuentas/movimientos) + PIS (iniciación de pagos) sobre TUU → lote → dLocal Go"
+      title="Open Banking — infraestructura abierta"
+      updated="OAuth 2.0 · OpenAPI 3 · AIS/PIS sobre TUU → lote → dLocal Go"
     >
       <p className="legal-lead">
-        API de software para empresas/partners. No es un banco ni billetera pública: expone saldo
-        merchant operativo, wallets virtuales y pagos instruidos vía el rail BaaS.
+        Infraestructura para partners sobre estándares abiertos (RFC 6749, RFC 7662, OpenAPI). No es
+        un banco ni billetera pública: expone saldo merchant operativo y pagos instruidos vía el
+        rail BaaS.
       </p>
+
+      <h2 className="legal-block-title">0. Descubrimiento</h2>
+      <ul className="legal-prose">
+        <li>
+          <code>GET /api/open-banking/v1/discovery</code>
+        </li>
+        <li>
+          <code>GET /api/open-banking/v1/openapi.json</code>
+        </li>
+        <li>
+          <code>POST /api/open-banking/v1/auth/introspect</code> con <code>token</code>
+        </li>
+      </ul>
 
       <h2 className="legal-block-title">1. Flujo</h2>
       <ol className="legal-prose">
@@ -64,8 +78,9 @@ export default function OpenBankingDocsPage() {
       <h2 className="legal-block-title">4. Ejemplo token</h2>
       <pre className="legal-note" style={{ whiteSpace: 'pre-wrap' }}>
         {`curl -sS -X POST http://127.0.0.1:3001/api/open-banking/v1/auth/token \\
-  -H 'content-type: application/json' \\
-  -d '{"client_id":"obc_…","client_secret":"obs_…"}'`}
+  -H 'content-type: application/x-www-form-urlencoded' \\
+  -u 'obc_…:obs_…' \\
+  -d 'grant_type=client_credentials'`}
       </pre>
 
       <p className="legal-lead" style={{ marginTop: 28 }}>
