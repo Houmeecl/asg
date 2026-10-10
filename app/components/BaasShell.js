@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
+import SicrLogo from './SicrLogo';
 import '../baas.css';
 
 export default function BaasShell({ title, subtitle, nav, children, user }) {
@@ -19,7 +20,9 @@ export default function BaasShell({ title, subtitle, nav, children, user }) {
       <div className="baas-shell">
         <aside className="baas-side">
           <div className="brand">
-            sicr<span>3</span>p/
+            <Link href="/" aria-label="sicr3p inicio">
+              <SicrLogo size="sm" contrast="light" compact />
+            </Link>
           </div>
           <nav>
             {nav.map((item) => {

@@ -1,8 +1,13 @@
-// Wordmark real de sicr3p (versión "triple impacto"): "sicr3p" en minúsculas,
+// Wordmark oficial de sicr3p (versión "triple impacto"): "sicr3p" en minúsculas,
 // punto verde sobre la "i", y la "3" con el grafismo de red/molécula de 3 nodos
 // verdes conectados. Colores de marca: navy #0f1f2e / green #28a745, adaptado
 // a texto claro para el tema oscuro interno.
-export default function SicrLogo({ size = 'md', contrast = 'light' }) {
+export default function SicrLogo({
+  size = 'md',
+  contrast = 'light',
+  compact = false,
+  className = '',
+}) {
   const textSize = size === 'lg' ? 'text-6xl' : size === 'sm' ? 'text-2xl' : 'text-3xl';
   const dotOffset = size === 'lg' ? '-top-3' : '-top-2';
   const dotSize = size === 'lg' ? 'w-2 h-2' : 'w-[5px] h-[5px]';
@@ -10,7 +15,7 @@ export default function SicrLogo({ size = 'md', contrast = 'light' }) {
   const subtextColor = contrast === 'dark' ? 'text-slate-600' : 'text-slate-400';
 
   return (
-    <div className="flex flex-col gap-1 leading-none">
+    <div className={`sicr-logo flex flex-col gap-1 leading-none ${className}`.trim()}>
       <div className={`${textSize} font-bold tracking-tight ${textColor} flex items-baseline`}>
         <span>s</span>
         <span className="relative inline-block">
@@ -35,11 +40,13 @@ export default function SicrLogo({ size = 'md', contrast = 'light' }) {
         <span className={`text-[10px] font-bold tracking-widest ${textColor} uppercase`}>triple impacto</span>
         <span className="h-px w-3" style={{ background: '#28a745' }} />
       </div>
-      <div className={`text-[9px] ${subtextColor} flex items-center gap-1`}>
-        <span>social</span><span style={{ color: '#28a745' }}>·</span>
-        <span>ambiental</span><span style={{ color: '#28a745' }}>·</span>
-        <span>económico</span>
-      </div>
+      {!compact ? (
+        <div className={`text-[9px] ${subtextColor} flex items-center gap-1`}>
+          <span>social</span><span style={{ color: '#28a745' }}>·</span>
+          <span>ambiental</span><span style={{ color: '#28a745' }}>·</span>
+          <span>económico</span>
+        </div>
+      ) : null}
     </div>
   );
 }

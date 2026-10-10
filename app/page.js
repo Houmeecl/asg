@@ -11,6 +11,7 @@ import {
   Users,
 } from 'lucide-react';
 import LandingContactForm from './components/LandingContactForm';
+import SicrLogo from './components/SicrLogo';
 import { obtenerUsuarioSesion, destinoTrasLogin } from '@/lib/auth';
 import { BAAS_LEGAL } from '@/lib/baas/config';
 import './sicr-landing.css';
@@ -76,11 +77,20 @@ const SECTORES = [
   'Energía y minería (proveedores)',
 ];
 
-const PHONE_DISPLAY = '+56 9 1234 5678';
+const SOCIAL_LINKS = [
+  BAAS_LEGAL.social.linkedin
+    ? { key: 'linkedin', href: BAAS_LEGAL.social.linkedin, label: 'LinkedIn', className: 'soc-li', mark: 'in' }
+    : null,
+  BAAS_LEGAL.social.instagram
+    ? { key: 'instagram', href: BAAS_LEGAL.social.instagram, label: 'Instagram', className: 'soc-ig', mark: '○' }
+    : null,
+].filter(Boolean);
 
 export default async function LandingPage() {
   const usuario = await obtenerUsuarioSesion();
   const destino = usuario ? destinoTrasLogin(usuario) : '/ingresar';
+  const telefono = BAAS_LEGAL.telefono;
+  const telefonoHref = telefono.replace(/\s/g, '');
 
   return (
     <div className="sicr-lp framer brand-v2 min-h-screen">
@@ -88,10 +98,8 @@ export default async function LandingPage() {
 
       <header className="top">
         <div className="c">
-          <Link href="/" className="brand-lockup" aria-label="sicr3p/ inicio">
-            <span className="brand-word">
-              sicr<span>3</span>p<span className="slash">/</span>
-            </span>
+          <Link href="/" className="brand-lockup" aria-label="sicr3p inicio">
+            <SicrLogo size="sm" contrast="dark" compact />
             <span className="brand-tag">Soluciones que impulsan empresas</span>
           </Link>
           <nav className="menu" aria-label="Secciones">
@@ -151,15 +159,25 @@ export default async function LandingPage() {
             </ul>
           </div>
           <div className="hero-visual">
-            <div className="hero-photo-wrap mock-photo">
+            <div className="hero-photo-wrap">
               <img
                 src="/brand/hero-emprendedora.jpg"
-                alt="Empresaria en su taller — sicr3p/"
-                width={1200}
-                height={1400}
+                alt="Empresaria en su espacio de trabajo — sicr3p"
+                width={1600}
+                height={2397}
                 fetchPriority="high"
               />
             </div>
+            <p className="hero-script">Empresas que transforman su entorno</p>
+            <aside className="hero-float" aria-label="Finanzas sostenibles">
+              <span className="hero-float-icon" aria-hidden="true">
+                <Leaf size={20} />
+              </span>
+              <p>
+                Finanzas sostenibles para un crecimiento real
+                <span>Impulsamos oportunidades. Construimos futuro.</span>
+              </p>
+            </aside>
           </div>
         </div>
       </section>
@@ -221,7 +239,13 @@ export default async function LandingPage() {
       </section>
 
       <section className="impacto" id="impacto" aria-label="Impacto">
-        <img src="/brand/impact-andes.jpg" alt="" aria-hidden="true" />
+        <img
+          src="/brand/impact-andes.jpg"
+          alt=""
+          aria-hidden="true"
+          width={2000}
+          height={1333}
+        />
         <div className="impacto-ov" aria-hidden="true" />
         <div className="c impacto-inner split-impact">
           <div className="impacto-copy">
@@ -298,15 +322,13 @@ export default async function LandingPage() {
           <div className="contacto-visual">
             <img
               src="/brand/contact-costa.jpg"
-              alt="Territorio costero — Antofagasta y norte de Chile"
-              width={900}
-              height={1100}
+              alt="Costa y territorio — norte de Chile"
+              width={1600}
+              height={1064}
             />
             <div className="contacto-visual-copy">
               <h2>Construyamos el próximo paso de tu empresa</h2>
-              <p className="brand-word light">
-                sicr<span>3</span>p<span className="slash">/</span>
-              </p>
+              <SicrLogo size="sm" contrast="light" compact className="contacto-brand" />
               <span className="contacto-tag">Soluciones que impulsan empresas</span>
             </div>
           </div>
@@ -316,41 +338,28 @@ export default async function LandingPage() {
             <p>
               <a href={`mailto:${BAAS_LEGAL.email}`}>{BAAS_LEGAL.email}</a>
               <br />
-              <a href={`tel:${PHONE_DISPLAY.replace(/\s/g, '')}`}>{PHONE_DISPLAY}</a>
+              <a href={`tel:${telefonoHref}`}>{telefono}</a>
               <br />
-              Antofagasta, Chile.
+              {BAAS_LEGAL.direccion}
               <br />
               <span className="aside-soft">Con presencia en todo el país.</span>
             </p>
-            <div className="social-row" aria-label="Redes">
-              <a
-                href={BAAS_LEGAL.social.linkedin || 'https://www.linkedin.com/'}
-                target="_blank"
-                rel="noreferrer"
-                aria-label="LinkedIn"
-                className="soc-li"
-              >
-                in
-              </a>
-              <a
-                href="https://www.youtube.com/"
-                target="_blank"
-                rel="noreferrer"
-                aria-label="YouTube"
-                className="soc-yt"
-              >
-                ▶
-              </a>
-              <a
-                href={BAAS_LEGAL.social.instagram || 'https://www.instagram.com/'}
-                target="_blank"
-                rel="noreferrer"
-                aria-label="Instagram"
-                className="soc-ig"
-              >
-                ○
-              </a>
-            </div>
+            {SOCIAL_LINKS.length > 0 ? (
+              <div className="social-row" aria-label="Redes">
+                {SOCIAL_LINKS.map((s) => (
+                  <a
+                    key={s.key}
+                    href={s.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label={s.label}
+                    className={s.className}
+                  >
+                    {s.mark}
+                  </a>
+                ))}
+              </div>
+            ) : null}
             <p className="aside-note">
               Dueña: {BAAS_LEGAL.fundacion.razonSocial}
               <br />
@@ -363,7 +372,7 @@ export default async function LandingPage() {
       <footer className="site-foot mock-foot">
         <div className="c foot-bar">
           <div className="foot-brand">
-            sicr<span>3</span>p<span className="slash">/</span>
+            <SicrLogo size="sm" contrast="dark" compact />
           </div>
           <nav className="foot-inline" aria-label="Legal">
             <Link href="/terminos">Términos y Condiciones</Link>
@@ -372,7 +381,8 @@ export default async function LandingPage() {
             <a href="#contacto">Contacto</a>
           </nav>
           <p className="foot-copy-inline">
-            © {new Date().getFullYear()} SICR3P. Una iniciativa de Proveedor Regional.
+            © {new Date().getFullYear()} sicr3p · Dueña {BAAS_LEGAL.fundacion.razonSocial} ·
+            Operadora {BAAS_LEGAL.razonSocial}
           </p>
           <a href="#inicio" className="to-top" aria-label="Volver arriba">
             <ArrowUp size={18} />

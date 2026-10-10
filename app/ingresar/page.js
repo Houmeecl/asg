@@ -66,9 +66,8 @@ export default function IngresarPage() {
           aria-hidden="true"
         />
         <div className="relative z-10 max-w-md">
-          <div className="text-5xl font-bold tracking-tight mb-4" style={{ fontFamily: 'var(--fd)' }}>
-            sicr<span style={{ color: 'var(--lime)' }}>3</span>p
-            <span style={{ color: 'var(--lime)' }}>/</span>
+          <div className="mb-4">
+            <SicrLogo size="lg" contrast="light" compact />
           </div>
           <p className="text-lg leading-relaxed" style={{ color: 'rgba(241,245,242,.88)' }}>
             Acceso unificado: portal empresas, operaciones POS/lotes y administración.

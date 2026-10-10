@@ -92,29 +92,19 @@
 .sicr-lp .brand-lockup {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 4px;
   min-width: 150px;
 }
 
-.sicr-lp .brand-word {
-  font-family: var(--fd);
-  font-size: 28px;
-  font-weight: 800;
-  letter-spacing: -0.045em;
-  color: var(--navy);
-  line-height: 1;
+.sicr-lp .brand-lockup .sicr-logo {
+  gap: 2px;
 }
-.sicr-lp .brand-word span { color: var(--brand); }
-.sicr-lp .brand-word .slash { color: var(--brand); }
-.sicr-lp .brand-word.light { color: #fff; }
-.sicr-lp .brand-word.light span,
-.sicr-lp .brand-word.light .slash { color: #c8d0ff; }
 
 .sicr-lp .brand-tag {
   font-size: 11px;
   color: var(--ink-soft);
   letter-spacing: 0.01em;
-  max-width: 18ch;
+  max-width: 22ch;
   line-height: 1.25;
 }
 
@@ -306,16 +296,14 @@
   inset: 8px 0 20px 0;
   border-radius: 28px;
   overflow: hidden;
-  background: transparent;
-}
-.sicr-lp .hero-photo-wrap.mock-photo {
-  box-shadow: none;
+  background: #1a2740;
+  box-shadow: 0 28px 60px -28px rgba(13, 39, 72, 0.55);
 }
 .sicr-lp .hero-photo-wrap img {
   width: 100%;
   height: 100%;
-  object-fit: contain;
-  object-position: right center;
+  object-fit: cover;
+  object-position: center top;
   animation: sicr-hero-ken 20s ease-in-out infinite alternate;
 }
 
@@ -704,8 +692,11 @@
 .sicr-lp .contacto-visual-copy h2 {
   color: #fff;
   font-size: clamp(24px, 2.4vw, 30px);
-  margin: 12px 0 0;
+  margin: 0 0 16px;
   max-width: 14ch;
+}
+.sicr-lp .contacto-visual-copy .contacto-brand {
+  margin: 4px 0 8px;
 }
 
 .sicr-lp .hablamos-form {
@@ -835,11 +826,6 @@
   font-size: 13px;
 }
 .sicr-lp .site-foot .foot-inline a:hover { color: var(--navy); }
-.sicr-lp .site-foot .foot-copy-inline {
-  margin: 0;
-  font-size: 12px;
-  white-space: nowrap;
-}
 .sicr-lp .site-foot .to-top {
   width: 40px;
   height: 40px;
@@ -858,15 +844,21 @@
   padding-bottom: 28px;
 }
 .sicr-lp .site-foot .foot-brand {
-  font-family: var(--fd);
-  font-size: 28px;
-  font-weight: 700;
-  color: var(--navy);
-  letter-spacing: -0.04em;
   margin: 0;
+  display: flex;
+  align-items: center;
 }
-.sicr-lp .site-foot .foot-brand span { color: var(--brand); }
-.sicr-lp .site-foot .foot-brand .slash { color: var(--brand); }
+.sicr-lp .site-foot .foot-brand .sicr-logo {
+  gap: 2px;
+}
+.sicr-lp .site-foot .foot-copy-inline {
+  margin: 0;
+  font-size: 12px;
+  white-space: normal;
+  max-width: 34ch;
+  text-align: right;
+  line-height: 1.4;
+}
 .sicr-lp .site-foot h4 {
   font-family: var(--fd);
   font-size: 12px;

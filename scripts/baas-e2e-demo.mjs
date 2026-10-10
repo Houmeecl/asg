@@ -19,7 +19,8 @@ function assert(cond, msg) {
   if (!cond) throw new Error(msg);
 }
 
-const rutNuevo = `22.222.222-${Math.floor(Math.random() * 9)}`;
+const stamp = String(Date.now()).slice(-7);
+const rutNuevo = `${stamp.slice(0, 2)}.${stamp.slice(2, 5)}.${stamp.slice(5)}-${Math.floor(Math.random() * 9)}`;
 
 console.log('1) Operación con RUT nuevo → PENDIENTE_REGISTRO');
 const { operacion: op1, registro } = crearOperacionEnvio({

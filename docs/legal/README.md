@@ -21,5 +21,6 @@ Copy web en `/legal`: dueña = Fundación; operadora = SpA.
 | `/privacidad` | Idem |
 | `/legal` | Dueña Fundación + operadora SpA |
 | `/contacto` | Formulario activo |
+| `/docs/legal/checklist` | Checklist del sitio (logo, dueña/operadora, teléfono, CRM, dLocal) |
 
-Copy: `lib/baas/legal-copy.js` · PJ: `lib/baas/config.js`.
+Copy: `lib/baas/legal-copy.js` · PJ: `lib/baas/config.js` · Env: `.env.example`.
