@@ -17,7 +17,7 @@ APP_DOMAIN=${APP_DOMAIN:-$DOMAIN}
 PUBLIC_IP=${PUBLIC_IP:-149.50.155.61}
 APP_DIR=${APP_DIR:-/var/www/sicr3p}
 REPO_URL=${REPO_URL:-https://github.com/Houmeecl/asg.git}
-BRANCH=${BRANCH:-cursor/supabase-connect-775f}
+BRANCH=${BRANCH:-cursor/autorizar-soporte-775f}
 APP_PORT=${APP_PORT:-3000}
 # Puerto interno de Kong/Studio del stack DonWeb (solo localhost).
 KONG_HTTP=${KONG_HTTP:-8000}

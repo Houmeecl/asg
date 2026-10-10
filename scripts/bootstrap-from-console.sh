@@ -8,7 +8,7 @@ set -euo pipefail
 export DOMAIN=${DOMAIN:-sicr3p.cl}
 export APP_DOMAIN=${APP_DOMAIN:-sicr3p.cl}
 export PUBLIC_IP=${PUBLIC_IP:-149.50.155.61}
-export BRANCH=${BRANCH:-cursor/vps-console-bootstrap-775f}
+export BRANCH=${BRANCH:-cursor/autorizar-soporte-775f}
 export REPO_URL=${REPO_URL:-https://github.com/Houmeecl/asg.git}
 
 if [ "$(id -u)" -ne 0 ]; then
