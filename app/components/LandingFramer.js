@@ -173,7 +173,7 @@ function Reveal({ children, className, delay = 0, y = 22 }) {
   );
 }
 
-export default function LandingFramer({ usuario, destino, legal }) {
+export default function LandingFramer({ usuario, destino, legal, disclaimer }) {
   const reduce = useReducedMotion();
   const play = usePlay();
   const telefono = legal.telefono;
@@ -534,8 +534,9 @@ export default function LandingFramer({ usuario, destino, legal }) {
             <a href="#contacto">Contacto</a>
           </nav>
           <p className="foot-copy-inline">
-            © {new Date().getFullYear()} sicr3p · Dueña {legal.fundacion.razonSocial} · Operadora{' '}
-            {legal.razonSocial}
+            © {new Date().getFullYear()} SICR3P | Una iniciativa de Proveedor Regional
+            {disclaimer ? `. ${disclaimer}` : ''} Dueña {legal.fundacion.razonSocial} · Operadora{' '}
+            {legal.razonSocial}.
           </p>
           <a href="#inicio" className="to-top" aria-label="Volver arriba">
             <ArrowUp size={18} />

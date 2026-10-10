@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { BAAS_LEGAL } from '@/lib/baas/config';
+import { FOOTER_DISCLAIMER } from '@/lib/baas/legal-copy';
 import SicrLogo from './SicrLogo';
 
 export default function SiteFooter() {
@@ -11,6 +12,8 @@ export default function SiteFooter() {
           <div className="foot-brand">
             <SicrLogo size="sm" contrast="dark" compact />
           </div>
+          <p className="foot-tagline">SICR3P | Una iniciativa de Proveedor Regional</p>
+          <p className="foot-legal">{FOOTER_DISCLAIMER}</p>
           <p className="foot-legal">
             Dueña: {BAAS_LEGAL.fundacion.razonSocial} · RUT {BAAS_LEGAL.fundacion.rut}
             <br />
@@ -54,7 +57,8 @@ export default function SiteFooter() {
         </div>
       </div>
       <div className="c foot-copy">
-        © {new Date().getFullYear()} sicr3p/ · Dueña Fundación Entretodos · Operadora SICR3P SpA
+        © {new Date().getFullYear()} SICR3P · Una iniciativa de Proveedor Regional · Dueña{' '}
+        {BAAS_LEGAL.fundacion.razonSocial} · Operadora {razonSocial}
       </div>
     </footer>
   );

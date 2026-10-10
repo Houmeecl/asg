@@ -27,7 +27,8 @@ const ITEMS = [
   {
     ok: true,
     label: 'Términos y condiciones propios (servicios)',
-    detail: 'Solo nombran sicr3p/ / SICR3P SpA; describen POS, lotes y liquidación.',
+    detail:
+      'Integración y desarrollo empresarial; no banco / crédito / prestamista. SpA + Fundación + Proveedor Regional.',
     href: '/terminos',
   },
   {
