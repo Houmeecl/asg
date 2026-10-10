@@ -49,7 +49,7 @@ export default function LandingContactForm() {
         />
       </label>
       <label>
-        Email
+        Correo electrónico
         <input
           type="email"
           value={email}
@@ -73,7 +73,7 @@ export default function LandingContactForm() {
         <textarea
           value={mensaje}
           onChange={(e) => setMensaje(e.target.value)}
-          placeholder="Cuéntanos en qué podemos acompañarte"
+          placeholder="Cuéntanos en qué podemos apoyarte"
           rows={4}
           required
         />
