@@ -50,6 +50,12 @@ const ITEMS = [
     detail: 'Sin iconos placeholder muertos en footer.',
     href: '/',
   },
+  {
+    ok: Boolean(process.env.HUBSPOT_PRIVATE_APP_TOKEN || process.env.HUBSPOT_ACCESS_TOKEN),
+    label: 'HubSpot CRM (opcional comercial)',
+    detail: 'Token Private App → upsert lead desde /contacto. Ver docs/hubspot.md.',
+    href: '/contacto',
+  },
 ];
 
 export default function DlocalChecklistPage() {

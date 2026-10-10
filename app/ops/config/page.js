@@ -29,6 +29,12 @@ export default function ConfigPage() {
               <tr><td>Saldo merchant sim</td><td>{formatClp(data?.dlocal?.balance)}</td></tr>
               <tr><td>Webhook</td><td className="mono">POST /api/baas/webhooks/dlocal</td></tr>
               <tr><td>TUU</td><td className="mono">mock InterApp</td></tr>
+              <tr>
+                <td>HubSpot</td>
+                <td className="mono">
+                  {data?.hubspot?.configured ? `live · ${data.hubspot.mode}` : 'simulator (sin token)'}
+                </td>
+              </tr>
             </tbody>
           </table>
         </div>

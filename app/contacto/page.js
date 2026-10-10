@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import SicrLogo from '../components/SicrLogo';
 import SiteFooter from '../components/SiteFooter';
@@ -12,6 +12,14 @@ export default function ContactoPage() {
   const [mensaje, setMensaje] = useState('');
   const [estado, setEstado] = useState(null);
   const [cargando, setCargando] = useState(false);
+  const [hubspot, setHubspot] = useState(null);
+
+  useEffect(() => {
+    fetch('/api/baas/contacto')
+      .then((r) => r.json())
+      .then((d) => setHubspot(d.hubspot))
+      .catch(() => null);
+  }, []);
 
   async function onSubmit(e) {
     e.preventDefault();
@@ -25,7 +33,13 @@ export default function ContactoPage() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'No se pudo enviar');
-      setEstado({ ok: true, msg: 'Mensaje recibido. Te contactaremos a la brevedad.' });
+      const hs =
+        data.hubspot?.mode === 'live'
+          ? ' Lead registrado en HubSpot.'
+          : data.hubspot?.mode === 'simulator'
+            ? ' (CRM en modo simulador hasta configurar token).'
+            : '';
+      setEstado({ ok: true, msg: `Mensaje recibido. Te contactaremos a la brevedad.${hs}` });
       setNombre('');
       setEmail('');
       setMensaje('');
@@ -59,6 +73,9 @@ export default function ContactoPage() {
           <p className="legal-updated">
             Nombre, email y mensaje. También{' '}
             <a href="mailto:contacto@sicr3p.cl">contacto@sicr3p.cl</a>.
+            {hubspot?.configured
+              ? ' Los leads se sincronizan con HubSpot.'
+              : ' HubSpot pendiente de token (modo simulador).'}
           </p>
         </div>
       </section>
