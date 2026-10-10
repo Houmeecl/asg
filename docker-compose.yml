@@ -1,0 +1,40 @@
+# Coolify / VPS: New resource → Docker Compose (este archivo).
+# Dominio SSL vía SERVICE_FQDN_* o proxy Nginx externo.
+services:
+  sicr3p:
+    build: .
+    container_name: sicr3p-baas
+    restart: unless-stopped
+    ports:
+      - "${HOST_PORT:-3000}:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - HOSTNAME=0.0.0.0
+      - SESSION_SECRET=${SESSION_SECRET:-cambiar-en-produccion}
+      - DLOCAL_MODE=${DLOCAL_MODE:-simulator}
+      - DLOCAL_API_KEY=${DLOCAL_API_KEY:-}
+      - DLOCAL_SECRET_KEY=${DLOCAL_SECRET_KEY:-}
+      - DLOCAL_BASE_URL=${DLOCAL_BASE_URL:-}
+      - HUBSPOT_PRIVATE_APP_TOKEN=${HUBSPOT_PRIVATE_APP_TOKEN:-}
+      - HUBSPOT_ACCESS_TOKEN=${HUBSPOT_ACCESS_TOKEN:-}
+      - SICR3P_RAZON_SOCIAL=${SICR3P_RAZON_SOCIAL:-SICR3P SpA}
+      - SICR3P_RUT=${SICR3P_RUT:-78.529.455-6}
+      - SICR3P_CONTACT_EMAIL=${SICR3P_CONTACT_EMAIL:-contacto@sicr3p.cl}
+      - SICR3P_CONTACT_PHONE=${SICR3P_CONTACT_PHONE:-}
+    volumes:
+      - sicr3p-data:/app/data
+    healthcheck:
+      test:
+        [
+          'CMD',
+          'node',
+          '-e',
+          "fetch('http://127.0.0.1:3000/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))",
+        ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+volumes:
+  sicr3p-data:

@@ -381,8 +381,9 @@ export default async function LandingPage() {
             <a href="#contacto">Contacto</a>
           </nav>
           <p className="foot-copy-inline">
-            © {new Date().getFullYear()} sicr3p · Dueña {BAAS_LEGAL.fundacion.razonSocial} ·
-            Operadora {BAAS_LEGAL.razonSocial}
+            © {new Date().getFullYear()} SICR3P | Una iniciativa de Proveedor Regional. Integra
+            desarrollo empresarial y acerca soluciones; las financieras de terceros están sujetas a
+            su evaluación. SICR3P no garantiza su aprobación.
           </p>
           <a href="#inicio" className="to-top" aria-label="Volver arriba">
             <ArrowUp size={18} />
