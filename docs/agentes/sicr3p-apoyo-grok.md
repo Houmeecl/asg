@@ -32,6 +32,8 @@ Dueña de la iniciativa: Fundación Entretodos (RUT 65.279.032-1).
    `149.50.155.61` (ver docs/dns-vps-correo.md).
 3. Marcas de pagos (dLocal, TUU, etc.) solo en contexto técnico interno, no en
    copy legal público.
+4. Entorno de prueba = sandbox (`DLOCAL_MODE=sandbox` / `prueba`). Producción = live.
+   Autorización en `/autorizar` permite elegir Prueba o Producción; no es “solo dLocal”.
 
 ## Agentes de apoyo sugeridos
 

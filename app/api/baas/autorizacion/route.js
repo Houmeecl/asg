@@ -16,6 +16,7 @@ export async function GET(request) {
         email: row.email,
         empresa: row.empresa,
         terminos_version: row.terminos_version,
+        entorno: row.entorno || 'prueba',
         creado_en: row.creado_en,
       },
       version: TERMINOS_VERSION,
@@ -40,6 +41,7 @@ export async function POST(request) {
       aceptaTerminos: Boolean(body.aceptaTerminos),
       aceptaPrivacidad: Boolean(body.aceptaPrivacidad),
       aceptaIntegracion: Boolean(body.aceptaIntegracion),
+      entorno: body.entorno || 'prueba',
       ip,
       userAgent,
     });
@@ -47,8 +49,12 @@ export async function POST(request) {
       ok: true,
       codigo: row.codigo,
       terminos_version: row.terminos_version,
+      entorno: row.entorno,
       creado_en: row.creado_en,
-      mensaje: 'Autorización registrada. Guardá el código como constancia.',
+      mensaje:
+        row.entorno === 'produccion'
+          ? 'Autorización de producción registrada. Guardá el código como constancia.'
+          : 'Autorización de entorno de prueba registrada. Guardá el código como constancia.',
     });
   } catch (err) {
     return NextResponse.json({ error: err.message }, { status: 400 });

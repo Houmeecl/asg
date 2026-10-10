@@ -29,6 +29,11 @@ export default function ConfigPage() {
   const modeTone = mode === 'live' ? 'ok' : mode === 'sandbox' ? 'info' : 'warn';
   const platMode = data?.platforms?.mode || 'simulator';
   const platTone = platMode === 'live' ? 'ok' : platMode === 'sandbox' ? 'info' : 'warn';
+  const env = data?.entornos;
+  const pruebaGoOk = env?.prueba?.go?.configured;
+  const pruebaPlatOk = env?.prueba?.platforms?.configured;
+  const liveGoOk = env?.produccion?.go?.configured;
+  const livePlatOk = env?.produccion?.platforms?.configured;
   let supaTone = 'info';
   let supaLabel = '…';
   if (supabase) {
@@ -46,22 +51,24 @@ export default function ConfigPage() {
   const apiText = supabase == null ? '…' : supabase.reachable ? `Responde ${supabase.status}` : 'Sin respuesta desde este servidor';
 
   return (
-    <BaasShell title="Configuración" subtitle="Rail SICR3P → TUU → lote → dLocal Go + Platforms. Sin Global66." nav={NAV} user={data?.usuario}>
+    <BaasShell title="Configuración" subtitle="Rail SICR3P → TUU → lote → dLocal Go + Platforms. Entorno prueba (sandbox) y producción separados." nav={NAV} user={data?.usuario}>
       <div className="baas-status-grid">
         <article className="baas-panel">
           <div className="baas-panel-head">
             <div>
-              <p className="eyebrow">Entorno</p>
+              <p className="eyebrow">Activo ahora</p>
               <h2>dLocal Go</h2>
             </div>
-            <span className={`baas-pill ${modeTone}`}>{mode}</span>
+            <span className={`baas-pill ${modeTone}`}>{data?.dlocal?.label || mode}</span>
           </div>
           <div className="baas-figure">
             <span className="lbl">Saldo merchant sim</span>
             <strong>{formatClp(data?.dlocal?.balance)}</strong>
           </div>
           <dl className="baas-kv">
-            <div><dt>Credenciales</dt><dd>{data?.dlocal?.configured ? 'Listas' : 'Faltan'}</dd></div>
+            <div><dt>Modo</dt><dd className="mono">{mode}</dd></div>
+            <div><dt>Base URL</dt><dd className="mono">{data?.dlocal?.base || '— (simulator)'}</dd></div>
+            <div><dt>Credenciales activas</dt><dd>{data?.dlocal?.configured ? 'Listas' : 'Faltan'}</dd></div>
             <div><dt>Webhook</dt><dd className="mono">POST /api/baas/webhooks/dlocal</dd></div>
             <div><dt>TUU</dt><dd className="mono">mock InterApp</dd></div>
             <div>
@@ -73,18 +80,59 @@ export default function ConfigPage() {
         <article className="baas-panel">
           <div className="baas-panel-head">
             <div>
-              <p className="eyebrow">Onboarding</p>
+              <p className="eyebrow">Activo ahora</p>
               <h2>dLocal Platforms</h2>
             </div>
-            <span className={`baas-pill ${platTone}`}>{platMode}</span>
+            <span className={`baas-pill ${platTone}`}>{data?.platforms?.label || platMode}</span>
           </div>
           <dl className="baas-kv">
+            <div><dt>Modo</dt><dd className="mono">{platMode}</dd></div>
+            <div><dt>Base URL</dt><dd className="mono">{data?.platforms?.base || '— (simulator)'}</dd></div>
             <div><dt>Credenciales</dt><dd>{data?.platforms?.configured ? 'Listas' : 'Simulator / faltan'}</dd></div>
             <div><dt>UI</dt><dd className="mono"><Link href="/ops/onboarding">/ops/onboarding</Link></dd></div>
             <div><dt>Webhook</dt><dd className="mono">POST /api/baas/webhooks/dlocal-platforms</dd></div>
           </dl>
         </article>
       </div>
+      <div className="baas-status-grid">
+        <article className="baas-panel">
+          <div className="baas-panel-head">
+            <div>
+              <p className="eyebrow">Slot</p>
+              <h2>Entorno prueba</h2>
+            </div>
+            <span className={`baas-pill ${pruebaGoOk || pruebaPlatOk ? 'info' : 'warn'}`}>sandbox</span>
+          </div>
+          <p className="sub">API sandbox dLocal. Validá aquí antes de live. Vars: DLOCAL_SANDBOX_* y DLOCAL_PLATFORMS_SANDBOX_*.</p>
+          <dl className="baas-kv">
+            <div><dt>Go</dt><dd>{pruebaGoOk ? 'Credenciales listas' : 'Faltan DLOCAL_SANDBOX_*'}</dd></div>
+            <div><dt>Go URL</dt><dd className="mono">{env?.prueba?.go?.base || 'https://api-sbx.dlocalgo.com'}</dd></div>
+            <div><dt>Platforms</dt><dd>{pruebaPlatOk ? 'Credenciales listas' : 'Faltan DLOCAL_PLATFORMS_SANDBOX_*'}</dd></div>
+            <div><dt>Platforms URL</dt><dd className="mono">{env?.prueba?.platforms?.base || 'https://marketplace-api.dlocal-sbox.com'}</dd></div>
+            <div><dt>Activar</dt><dd className="mono">DLOCAL_MODE=sandbox · DLOCAL_PLATFORMS_MODE=sandbox</dd></div>
+          </dl>
+        </article>
+        <article className="baas-panel">
+          <div className="baas-panel-head">
+            <div>
+              <p className="eyebrow">Slot</p>
+              <h2>Producción</h2>
+            </div>
+            <span className={`baas-pill ${liveGoOk || livePlatOk ? 'ok' : 'warn'}`}>live</span>
+          </div>
+          <p className="sub">Solo después de validar sandbox. Vars: DLOCAL_LIVE_* y DLOCAL_PLATFORMS_LIVE_*.</p>
+          <dl className="baas-kv">
+            <div><dt>Go</dt><dd>{liveGoOk ? 'Credenciales listas' : 'Faltan DLOCAL_LIVE_*'}</dd></div>
+            <div><dt>Go URL</dt><dd className="mono">{env?.produccion?.go?.base || 'https://api.dlocalgo.com'}</dd></div>
+            <div><dt>Platforms</dt><dd>{livePlatOk ? 'Credenciales listas' : 'Faltan DLOCAL_PLATFORMS_LIVE_*'}</dd></div>
+            <div><dt>Platforms URL</dt><dd className="mono">{env?.produccion?.platforms?.base || 'https://marketplace-api.dlocal.com'}</dd></div>
+            <div><dt>Activar</dt><dd className="mono">DLOCAL_MODE=live · DLOCAL_PLATFORMS_MODE=live</dd></div>
+          </dl>
+        </article>
+      </div>
+      {env?.recomendacion ? (
+        <p className="baas-alert info" style={{ marginBottom: 16 }}>{env.recomendacion}</p>
+      ) : null}
       <div className="baas-status-grid">
         <article className="baas-panel">
           <div className="baas-panel-head">

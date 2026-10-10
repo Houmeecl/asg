@@ -12,6 +12,7 @@ export default function AutorizarPage() {
     email: '',
     rut: '',
     empresa: '',
+    entorno: 'prueba',
     aceptaTerminos: false,
     aceptaPrivacidad: false,
     aceptaIntegracion: false,
@@ -53,6 +54,7 @@ export default function AutorizarPage() {
         email: '',
         rut: '',
         empresa: '',
+        entorno: 'prueba',
         aceptaTerminos: false,
         aceptaPrivacidad: false,
         aceptaIntegracion: false,
@@ -87,8 +89,9 @@ export default function AutorizarPage() {
           <span className="eyebrow">Autorización</span>
           <h1>Autorizar con términos</h1>
           <p className="legal-updated">
-            Constancia de aceptación de Términos, Privacidad e integración empresarial.
-            SICR3P no es banco ni portal de crédito.
+            Constancia de aceptación de Términos, Privacidad e integración empresarial SICR3P
+            (rail completo: ops, POS, Open Banking y pagos — no solo dLocal).
+            Elegí entorno de prueba o producción. SICR3P no es banco ni portal de crédito.
           </p>
         </div>
       </section>
@@ -117,6 +120,9 @@ export default function AutorizarPage() {
                 <h2>Código {resultado.codigo}</h2>
                 <p>{resultado.mensaje}</p>
                 <p className="mono">Versión términos: {resultado.terminos_version}</p>
+                <p className="mono">
+                  Entorno: {resultado.entorno === 'produccion' ? 'Producción' : 'Prueba (sandbox)'}
+                </p>
                 <div className="authz-actions">
                   <Link className="btn green" href="/soporte">Hablar con soporte</Link>
                   <button type="button" className="btn dark" onClick={() => setResultado(null)}>
@@ -144,6 +150,33 @@ export default function AutorizarPage() {
                     <input value={form.empresa} onChange={(e) => set('empresa', e.target.value)} />
                   </label>
                 </div>
+
+                <fieldset className="authz-checks">
+                  <legend>Entorno de integración</legend>
+                  <label className="authz-check">
+                    <input
+                      type="radio"
+                      name="entorno"
+                      checked={form.entorno === 'prueba'}
+                      onChange={() => set('entorno', 'prueba')}
+                    />
+                    <span>
+                      <strong>Prueba (sandbox)</strong> — credenciales y webhooks de test dLocal /
+                      integración sin dinero real.
+                    </span>
+                  </label>
+                  <label className="authz-check">
+                    <input
+                      type="radio"
+                      name="entorno"
+                      checked={form.entorno === 'produccion'}
+                      onChange={() => set('entorno', 'produccion')}
+                    />
+                    <span>
+                      <strong>Producción</strong> — live, solo cuando el entorno de prueba ya validó.
+                    </span>
+                  </label>
+                </fieldset>
 
                 <fieldset className="authz-checks">
                   <legend>Aceptaciones obligatorias</legend>

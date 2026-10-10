@@ -41,10 +41,11 @@ Ver también `docs/open-banking.md` y `docs/dns-vps-correo.md`.
 
 Ver plantilla en `.env.example`.
 
-- `DLOCAL_MODE=simulator|sandbox|live`
-- `DLOCAL_API_KEY` / `DLOCAL_SECRET_KEY` / `DLOCAL_BASE_URL` / `DLOCAL_WEBHOOK_SECRET`
-- `DLOCAL_PLATFORMS_MODE` / `DLOCAL_PLATFORMS_LOGIN` / `DLOCAL_PLATFORMS_TRANS_KEY` / `DLOCAL_PLATFORMS_SECRET`
+- `DLOCAL_MODE=simulator|sandbox|prueba|live` — ver `docs/dlocal-entornos.md`
+- Slots: `DLOCAL_SANDBOX_*` + `DLOCAL_LIVE_*` (legacy `DLOCAL_API_KEY` / `SECRET` sigue válido)
+- `DLOCAL_PLATFORMS_MODE` + `DLOCAL_PLATFORMS_SANDBOX_*` / `DLOCAL_PLATFORMS_LIVE_*`
 - `DLOCAL_PLATFORMS_NOTIFICATION_URL` (default `https://sicr3p.cl/api/baas/webhooks/dlocal-platforms`)
+- Estado: `GET /api/baas/dlocal/entorno` · UI `/ops/config`
 - `SICR3P_RAZON_SOCIAL` / `SICR3P_RUT` / `SICR3P_CONTACT_EMAIL` / `SICR3P_CONTACT_PHONE`
 - `SICR3P_FUNDACION_*` (dueña Fundación Entretodos)
 - `HUBSPOT_PRIVATE_APP_TOKEN` (opcional; sin token = simulador)
@@ -58,7 +59,7 @@ Pay-in ops: `POST /api/baas/operaciones` con `{ action: "payin_dlocal", operacio
 1. Restaurar MX Ferozo en Zona DNS (sin borrar A del VPS) — ver `docs/dns-vps-correo.md`.
 2. Confirmar teléfono real (`SICR3P_CONTACT_PHONE`) y casilla `contacto@` o usar `edward@sicr3p.cl`.
 3. Token HubSpot Private App para leads live.
-4. Credenciales dLocal Go + Platforms sandbox → live.
+4. Credenciales dLocal Go + Platforms en slots sandbox (`DLOCAL_SANDBOX_*`) y luego live.
 5. Firewall TCP 5757 + SSL `sicr3p.cl` en Cloud Server / consola bootstrap.
 6. Registro partner TUU + APK InterApp (ver `docs/tuu-partner-checklist.md`).
 7. Cesión societaria formal dueña/operadora si aún no está inscrita.
