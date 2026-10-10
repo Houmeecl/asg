@@ -1,6 +1,15 @@
-# Open Banking API — SICR3P BaaS
+# Open Banking — infraestructura abierta
 
-Capa partner **AIS / PIS** sobre el rail existente (TUU → lote → dLocal Go).
+AIS / PIS sobre estándares publicados, no un protocolo cerrado:
+
+- OAuth 2.0 client credentials (RFC 6749), `client_secret_post` y `client_secret_basic`
+- Introspección de token (RFC 7662)
+- OpenAPI 3.0 en `/api/open-banking/v1/openapi.json`
+- Descubrimiento en `/api/open-banking/v1/discovery`
+- Sobre de recursos `Data` (estilo UK Open Banking) para consentimientos, cuentas y pagos
+- `Idempotency-Key` en `POST /payments`
+
+El rail de liquidación sigue siendo TUU → lote → dLocal Go.
 
 ## Base
 
@@ -8,7 +17,10 @@ Capa partner **AIS / PIS** sobre el rail existente (TUU → lote → dLocal Go).
 
 | Método | Ruta | Auth | Scope |
 |--------|------|------|-------|
-| POST | `/auth/token` | client_id + secret | — |
+| GET | `/discovery` | — | — |
+| GET | `/openapi.json` | — | — |
+| POST | `/auth/token` | client_id + secret o Basic | — |
+| POST | `/auth/introspect` | client + `token` | — |
 | POST | `/consents` | client o bearer | — |
 | POST | `/consents/:id/authorise` | sesión empresa/ops o client | — |
 | GET | `/consents` | bearer | — |
