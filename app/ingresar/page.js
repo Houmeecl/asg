@@ -2,8 +2,10 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { LogIn } from 'lucide-react';
+import Link from 'next/link';
+import { ArrowRight, LogIn } from 'lucide-react';
 import SicrLogo from '../components/SicrLogo';
+import '../sicr-landing.css';
 
 export default function IngresarPage() {
   const [email, setEmail] = useState('admin@sicr3p.cl');
@@ -29,7 +31,7 @@ export default function IngresarPage() {
       } else {
         setError(data.error || 'No se pudo iniciar sesión.');
       }
-    } catch (err) {
+    } catch {
       setError('Error de conexión con el servidor.');
     } finally {
       setCargando(false);
@@ -37,38 +39,103 @@ export default function IngresarPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col items-center justify-center p-6 gap-8">
-      <SicrLogo size="lg" />
-
-      <form onSubmit={handleSubmit} className="w-full max-w-sm bg-slate-900 border border-slate-800 rounded-xl p-6 flex flex-col gap-4">
-        <div>
-          <h1 className="text-lg font-semibold text-slate-100">Ingresar al panel</h1>
-          <p className="text-xs text-slate-400">Acceso exclusivo para auditores habilitados de sicr3p.</p>
+    <div className="sicr-lp min-h-screen grid lg:grid-cols-2">
+      <aside
+        className="relative hidden lg:flex flex-col justify-end p-10 text-white overflow-hidden"
+        style={{ background: 'var(--navy)' }}
+      >
+        <img
+          src="/brand/hero-industrial.jpg"
+          alt=""
+          className="absolute inset-0 w-full h-full object-cover opacity-45"
+          aria-hidden="true"
+        />
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              'linear-gradient(180deg, rgba(15,31,46,.35) 0%, rgba(15,31,46,.92) 70%)',
+          }}
+          aria-hidden="true"
+        />
+        <div className="relative z-10 max-w-md">
+          <div className="text-5xl font-bold tracking-tight mb-4" style={{ fontFamily: 'var(--fd)' }}>
+            sicr<span style={{ color: 'var(--lime)' }}>3</span>p
+          </div>
+          <p className="text-lg leading-relaxed" style={{ color: 'rgba(241,245,242,.88)' }}>
+            Expedientes industriales con custodia SHA-256. CBAM y Corredor/EUDR, cada uno en su carril.
+          </p>
         </div>
+      </aside>
 
-        <div className="flex flex-col gap-1">
-          <label htmlFor="email" className="text-xs text-slate-400">Email</label>
-          <input id="email" type="email" value={email} onChange={e => setEmail(e.target.value)}
-            className="bg-slate-950 border border-slate-700 rounded p-2.5 text-sm text-slate-200 focus:outline-none focus:border-emerald-500" required />
+      <main className="flex flex-col justify-center px-6 py-12 sm:px-12 bg-[var(--bg)]">
+        <div className="w-full max-w-md mx-auto flex flex-col gap-8">
+          <div>
+            <Link href="/" className="inline-block mb-6">
+              <SicrLogo size="sm" contrast="dark" />
+            </Link>
+            <h1
+              className="text-2xl font-semibold text-[var(--navy)]"
+              style={{ fontFamily: 'var(--fd)' }}
+            >
+              Ingresar al panel
+            </h1>
+            <p className="text-sm mt-2 text-[var(--ink-soft)]">
+              Acceso para operadores habilitados de SICR3P.
+            </p>
+          </div>
+
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4 bg-white border border-[var(--line)] rounded-2xl p-6 shadow-sm">
+            <div className="flex flex-col gap-1.5">
+              <label htmlFor="email" className="text-xs font-semibold text-[var(--ink-soft)]">
+                Email
+              </label>
+              <input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="border border-[var(--line)] rounded-xl px-3 py-2.5 text-sm text-[var(--ink)] outline-none focus:border-[var(--accent)] focus:ring-2 focus:ring-[rgba(40,167,69,0.15)]"
+                required
+              />
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <label htmlFor="password" className="text-xs font-semibold text-[var(--ink-soft)]">
+                Contraseña
+              </label>
+              <input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="border border-[var(--line)] rounded-xl px-3 py-2.5 text-sm text-[var(--ink)] outline-none focus:border-[var(--accent)] focus:ring-2 focus:ring-[rgba(40,167,69,0.15)]"
+                required
+              />
+            </div>
+
+            {error && (
+              <div className="text-xs text-red-700 bg-red-50 border border-red-200 rounded-xl p-2.5">
+                {error}
+              </div>
+            )}
+
+            <button
+              type="submit"
+              disabled={cargando}
+              className="btn lime w-full disabled:opacity-50"
+            >
+              <LogIn className="w-4 h-4" />
+              {cargando ? 'Ingresando...' : 'Ingresar'}
+              <ArrowRight className="w-4 h-4" />
+            </button>
+
+            <p className="text-[11px] text-center text-[var(--ink-soft)]">
+              Demo: admin@sicr3p.cl / sicr3p2026
+            </p>
+          </form>
         </div>
-
-        <div className="flex flex-col gap-1">
-          <label htmlFor="password" className="text-xs text-slate-400">Contraseña</label>
-          <input id="password" type="password" value={password} onChange={e => setPassword(e.target.value)}
-            className="bg-slate-950 border border-slate-700 rounded p-2.5 text-sm text-slate-200 focus:outline-none focus:border-emerald-500" required />
-        </div>
-
-        {error && <div className="text-xs text-red-400 bg-red-950/40 border border-red-500/40 rounded p-2">{error}</div>}
-
-        <button type="submit" disabled={cargando}
-          className="bg-emerald-600 hover:bg-emerald-500 text-white py-2.5 rounded-lg text-sm font-medium flex items-center justify-center gap-2 disabled:opacity-50">
-          <LogIn className="w-4 h-4" /> {cargando ? 'Ingresando...' : 'Ingresar'}
-        </button>
-
-        <p className="text-[10px] text-slate-500 text-center">
-          Demo: admin@sicr3p.cl / sicr3p2026
-        </p>
-      </form>
+      </main>
     </div>
   );
 }
