@@ -2,9 +2,9 @@ import LegalShell from '../components/LegalShell';
 import { TERMINOS_SECTIONS, fillLegal, legalMeta } from '@/lib/baas/legal-copy';
 
 export const metadata = {
-  title: 'Términos y condiciones — sicr3p/',
+  title: 'Términos y Condiciones — sicr3p/',
   description:
-    'Términos del servicio tecnológico sicr3p/ operado por SICR3P SpA. Software y mandato, no banco.',
+    'Términos de SICR3P: integración y desarrollo empresarial. No es banco, portal de crédito ni prestamista.',
 };
 
 export default function TerminosPage() {
@@ -12,12 +12,13 @@ export default function TerminosPage() {
   return (
     <LegalShell
       eyebrow="Legal"
-      title="Términos y condiciones"
+      title="Términos y Condiciones"
       updated={`Última actualización: ${meta.updated} · ${meta.razonSocial} · RUT ${meta.rut}`}
     >
       <p className="legal-lead">
-        Condiciones del servicio <strong>sicr3p/</strong>: portal, cobro, lotes e instrucción de liquidación.
-        Operado exclusivamente por {meta.razonSocial}. No es una plantilla genérica de ecommerce de productos físicos.
+        SICR3P presta <strong>servicios de integración y desarrollo empresarial</strong> bajo la
+        marca sicr3p/, operada por {meta.razonSocial}. No es un portal de crédito, banco ni
+        prestamista. Dueña de la iniciativa: {meta.fundacionRazon}.
       </p>
       <article className="legal-prose">
         {TERMINOS_SECTIONS.map((s) => (
@@ -28,8 +29,10 @@ export default function TerminosPage() {
         ))}
       </article>
       <aside className="legal-note">
-        Este texto orienta la operación comercial de sicr3p/. No sustituye asesoría legal ni el contrato
-        firmado con cada cliente. Estatuto societario: CVE CRFgy53XBVxc (Registro de Empresas y Sociedades).
+        Completar y publicar solo con los datos de la persona jurídica que contrata y factura.
+        Este texto no sustituye asesoría legal ni el contrato firmado con cada cliente. La operación
+        efectiva debe mantenerse coherente con el alcance descrito (Ley Fintec 21.521 / NCG 502
+        cuando aplique). Estatuto SpA: CVE CRFgy53XBVxc.
       </aside>
     </LegalShell>
   );
