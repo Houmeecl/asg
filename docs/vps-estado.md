@@ -22,3 +22,5 @@ Branch tip recomendado: `cursor/autorizar-soporte-775f`.
 ## Bloqueo actual
 
 Sin TCP 5757 abierto a Internet ni sesión DonWeb en el agente, SSL/Supabase/app en el VPS solo se completan desde la SSH/consola del operador con los scripts de arriba.
+
+El operador omitió la acción externa de abrir 5757 / pegar configure desde su dispositivo. El Cloud Agent deja scripts y docs listos; no reintenta el acceso remoto hasta nueva instrucción.
