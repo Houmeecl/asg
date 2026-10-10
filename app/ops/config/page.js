@@ -12,6 +12,7 @@ const NAV = [
   { href: '/ops/terminales', label: 'Conexión y KYC' },
   { href: '/ops/mapa', label: 'Capas y mapa' },
   { href: '/ops/open-banking', label: 'Open Banking' },
+  { href: '/ops/onboarding', label: 'Onboarding' },
   { href: '/ops/config', label: 'Config' },
 ];
 
@@ -32,6 +33,7 @@ export default function ConfigPage() {
               <tr><td>DLOCAL_MODE</td><td className="mono">{data?.dlocal?.mode || 'simulator'}</td></tr>
               <tr><td>Saldo merchant sim</td><td>{formatClp(data?.dlocal?.balance)}</td></tr>
               <tr><td>Webhook</td><td className="mono">POST /api/baas/webhooks/dlocal</td></tr>
+              <tr><td>Onboarding Platforms</td><td className="mono">/ops/onboarding · POST /api/baas/webhooks/dlocal-platforms</td></tr>
               <tr><td>TUU</td><td className="mono">mock InterApp</td></tr>
               <tr>
                 <td>HubSpot</td>

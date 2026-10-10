@@ -11,6 +11,7 @@ const NAV = [
   { href: '/ops/terminales', label: 'Conexión y KYC' },
   { href: '/ops/mapa', label: 'Capas y mapa' },
   { href: '/ops/open-banking', label: 'Open Banking' },
+  { href: '/ops/onboarding', label: 'Onboarding' },
   { href: '/ops/config', label: 'Config' },
 ];
 

@@ -173,6 +173,12 @@
   padding: 7px 0;
   cursor: pointer;
 }
+.baas-steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-bottom: 16px; }
+.baas-step { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; min-height: 72px; }
+.baas-step b { display: block; font-size: 13px; color: var(--navy); margin-bottom: 4px; }
+.baas-step span { font-size: 12px; color: var(--ink-soft); line-height: 1.35; }
+.baas-checks { display: flex; flex-direction: column; gap: 6px; margin: 8px 0 12px; font-size: 13px; }
+.baas-checks li { display: flex; justify-content: space-between; gap: 8px; }
 .baas-msg { font-size: 12px; padding: 8px 0; border-bottom: 1px solid var(--line); }
 .baas-msg .sub { margin: 0; }
 
@@ -182,11 +188,11 @@
   .baas-side nav { flex-direction: row; flex-wrap: wrap; gap: 6px; }
   .baas-side .meta { display: none; }
   .baas-main { padding: 20px 16px 40px; }
-  .baas-kpis, .baas-grid-2, .baas-grid-pos, .baas-grid-analisis { grid-template-columns: 1fr 1fr; }
+  .baas-kpis, .baas-grid-2, .baas-grid-pos, .baas-grid-analisis, .baas-steps { grid-template-columns: 1fr 1fr; }
   .baas-capas { grid-template-columns: 1fr; }
   .baas-map svg { max-height: 420px; }
 }
 @media (max-width: 640px) {
-  .baas-kpis, .baas-grid-2, .baas-grid-pos, .baas-grid-analisis { grid-template-columns: 1fr; }
+  .baas-kpis, .baas-grid-2, .baas-grid-pos, .baas-grid-analisis, .baas-steps { grid-template-columns: 1fr; }
   .baas-tbl { display: block; overflow-x: auto; }
 }
