@@ -70,6 +70,8 @@
 }
 .baas-panel h2 { font-family: var(--fd); font-size: 17px; color: var(--navy); margin: 0 0 12px; }
 .baas-grid-2 { display: grid; grid-template-columns: 1.4fr .8fr; gap: 16px; }
+.baas-grid-pos { display: grid; grid-template-columns: minmax(280px, 420px) minmax(0, 1fr); gap: 16px; }
+.baas-grid-analisis { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(260px, .85fr); gap: 16px; }
 
 .baas-tbl { width: 100%; border-collapse: collapse; font-size: 13px; }
 .baas-tbl th { text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-soft); padding: 8px 6px; border-bottom: 1px solid var(--line); }
@@ -154,9 +156,9 @@
   .baas-side nav { flex-direction: row; flex-wrap: wrap; gap: 6px; }
   .baas-side .meta { display: none; }
   .baas-main { padding: 20px 16px 40px; }
-  .baas-kpis, .baas-grid-2 { grid-template-columns: 1fr 1fr; }
+  .baas-kpis, .baas-grid-2, .baas-grid-pos, .baas-grid-analisis { grid-template-columns: 1fr 1fr; }
 }
 @media (max-width: 640px) {
-  .baas-kpis, .baas-grid-2 { grid-template-columns: 1fr; }
+  .baas-kpis, .baas-grid-2, .baas-grid-pos, .baas-grid-analisis { grid-template-columns: 1fr; }
   .baas-tbl { display: block; overflow-x: auto; }
 }

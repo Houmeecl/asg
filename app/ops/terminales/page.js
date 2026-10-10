@@ -93,7 +93,7 @@ export default function TerminalesPage() {
       {msg ? <p className="sub" style={{ color: msg.ok ? '#067647' : '#b42318' }}>{msg.text}</p> : null}
 
       {tab === 'conexion' ? (
-        <div className="baas-grid-2">
+        <div className="baas-grid-pos">
           <form
             className="baas-panel baas-form"
             onSubmit={(e) => {
@@ -133,9 +133,9 @@ export default function TerminalesPage() {
                 {(data?.terminales || []).map((t) => (
                   <tr key={t.id}>
                     <td>{t.alias}<div className="sub">{t.modelo}</div></td>
-                    <td className="mono">{t.serial}</td>
+                    <td className="mono" style={{ whiteSpace: 'nowrap' }}>{t.serial}</td>
                     <td><StatusPill estado={t.estado} /></td>
-                    <td>
+                    <td style={{ whiteSpace: 'nowrap' }}>
                       <span style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
                         {t.estado === 'CONECTADO' ? (
                           <button type="button" className="baas-btn ghost sm" onClick={() => act({ action: 'desconectar', id: t.id })}>Desconectar</button>
@@ -164,7 +164,24 @@ export default function TerminalesPage() {
             <div className="baas-kpi"><div className="lbl">Aprobados</div><div className="val">{kycMap.APROBADO || 0}</div></div>
             <div className="baas-kpi"><div className="lbl">Rechazados</div><div className="val">{kycMap.RECHAZADO || 0}</div></div>
           </div>
-          <div className="baas-grid-2">
+          <div className="baas-grid-analisis">
+            <div className="baas-panel">
+              <h2>Actividad reciente</h2>
+              <table className="baas-tbl">
+                <thead><tr><th>Código</th><th>Usuario</th><th>KYC</th><th>Monto</th></tr></thead>
+                <tbody>
+                  {(analisis.recientes || []).map((r) => (
+                    <tr key={r.codigo}>
+                      <td className="mono" style={{ whiteSpace: 'nowrap' }}>{r.codigo}</td>
+                      <td>{r.nombre || '—'}<div className="sub">{r.rut}</div></td>
+                      <td>{r.kyc_estado || '—'}</td>
+                      <td style={{ whiteSpace: 'nowrap' }}>{formatClp(r.monto_clp)}</td>
+                    </tr>
+                  ))}
+                  {!analisis.recientes?.length ? <tr><td colSpan={4}>Sin cobros todavía.</td></tr> : null}
+                </tbody>
+              </table>
+            </div>
             <div className="baas-panel">
               <h2>Cobros por estado</h2>
               <table className="baas-tbl">
@@ -173,22 +190,7 @@ export default function TerminalesPage() {
                   {(analisis.operaciones || []).map((r) => (
                     <tr key={r.estado}><td>{r.estado}</td><td>{r.n}</td><td>{formatClp(r.monto)}</td></tr>
                   ))}
-                </tbody>
-              </table>
-            </div>
-            <div className="baas-panel">
-              <h2>Actividad reciente</h2>
-              <table className="baas-tbl">
-                <thead><tr><th>Código</th><th>Usuario</th><th>KYC</th><th>Monto</th></tr></thead>
-                <tbody>
-                  {(analisis.recientes || []).map((r) => (
-                    <tr key={r.codigo}>
-                      <td className="mono">{r.codigo}</td>
-                      <td>{r.nombre || '—'}<div className="sub">{r.rut}</div></td>
-                      <td>{r.kyc_estado || '—'}</td>
-                      <td>{formatClp(r.monto_clp)}</td>
-                    </tr>
-                  ))}
+                  {!analisis.operaciones?.length ? <tr><td colSpan={3}>Sin cobros todavía.</td></tr> : null}
                 </tbody>
               </table>
             </div>
@@ -240,7 +242,7 @@ export default function TerminalesPage() {
                     <td>
                       {p.kyc_estado === 'PENDIENTE' || p.kyc_estado === 'EN_REVISION' ? (
                         <span style={{ display: 'flex', gap: 6, flexWrap: 'wrap', alignItems: 'center' }}>
-                          {p.registro_token ? <span className="mono sub">/registro/{p.registro_token.slice(0, 10)}…</span> : null}
+                          {p.registro_token ? <span className="mono sub" style={{ wordBreak: 'break-all' }}>/registro/{p.registro_token}</span> : null}
                           <button type="button" className="baas-btn sm" onClick={() => act({ action: 'aprobar', personaId: p.id })}>Aprobar</button>
                           <button type="button" className="baas-btn ghost sm" onClick={() => act({ action: 'rechazar', personaId: p.id })}>Rechazar</button>
                         </span>
