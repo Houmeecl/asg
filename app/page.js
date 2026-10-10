@@ -13,6 +13,15 @@ import {
   Users,
 } from 'lucide-react';
 import LandingContactForm from './components/LandingContactForm';
+import {
+  Floating,
+  HeroVisualMotion,
+  Metric,
+  MotionHeader,
+  Reveal,
+  Stagger,
+  StaggerItem,
+} from './components/LandingMotion';
 import SicrLogo from './components/SicrLogo';
 import { obtenerUsuarioSesion, destinoTrasLogin } from '@/lib/auth';
 import { BAAS_LEGAL } from '@/lib/baas/config';
@@ -92,7 +101,7 @@ export default async function LandingPage() {
 
   return (
     <div className="sicr-lp lm min-h-screen">
-      <header className="lm-top">
+      <MotionHeader className="lm-top">
         <div className="lm-c lm-top-in">
           <Link href="/" className="lm-brand" aria-label="sicr3p inicio">
             <SicrLogo size="md" contrast="dark" compact />
@@ -118,11 +127,11 @@ export default async function LandingPage() {
             Hablemos <ArrowRight size={16} />
           </a>
         </div>
-      </header>
+      </MotionHeader>
 
       <section className="lm-hero" id="inicio" aria-label="Inicio">
         <div className="lm-c lm-hero-in">
-          <div className="lm-hero-copy">
+          <Reveal className="lm-hero-copy">
             <p className="lm-eyebrow">Desarrollamos empresas. Acercamos soluciones.</p>
             <h1>
               Hoy más empresas
@@ -141,9 +150,9 @@ export default async function LandingPage() {
                 Contáctanos
               </a>
             </div>
-          </div>
+          </Reveal>
 
-          <div className="lm-hero-visual">
+          <HeroVisualMotion className="lm-hero-visual">
             <div className="lm-hero-shape" aria-hidden="true" />
             <img
               className="lm-hero-photo"
@@ -175,23 +184,25 @@ export default async function LandingPage() {
               <br />
               construye aquí
             </p>
-            <aside className="lm-hero-pill">
-              <span className="ico" aria-hidden="true">
-                <Leaf size={20} />
-              </span>
-              <p>
-                Finanzas sostenibles
-                <br />
-                <span>para un crecimiento real</span>
-              </p>
-            </aside>
-          </div>
+            <Floating className="lm-hero-pill-motion">
+              <aside className="lm-hero-pill">
+                <span className="ico" aria-hidden="true">
+                  <Leaf size={20} />
+                </span>
+                <p>
+                  Finanzas sostenibles
+                  <br />
+                  <span>para un crecimiento real</span>
+                </p>
+              </aside>
+            </Floating>
+          </HeroVisualMotion>
         </div>
       </section>
 
       <section className="lm-cards-sec" id="soluciones" aria-label="Soluciones">
         <div className="lm-c">
-          <div className="lm-cards">
+          <Stagger className="lm-cards">
             {SOLUCIONES.map((s) => {
               const Icon = s.icon;
               const body = (
@@ -208,31 +219,35 @@ export default async function LandingPage() {
                   </span>
                 </>
               );
-              return s.href ? (
-                <Link key={s.key} href={s.href} className={`lm-card tono-${s.tono}`}>
-                  {body}
-                </Link>
-              ) : (
-                <a key={s.key} href="#formulario" className={`lm-card tono-${s.tono}`}>
-                  {body}
-                </a>
+              return (
+                <StaggerItem key={s.key} className="lm-card-motion">
+                  {s.href ? (
+                    <Link href={s.href} className={`lm-card tono-${s.tono}`}>
+                      {body}
+                    </Link>
+                  ) : (
+                    <a href="#formulario" className={`lm-card tono-${s.tono}`}>
+                      {body}
+                    </a>
+                  )}
+                </StaggerItem>
               );
             })}
-          </div>
-          <div className="lm-sectores" id="sectores">
+          </Stagger>
+          <Reveal className="lm-sectores" id="sectores">
             <span>Sectores</span>
             <ul>
               {SECTORES.map((s) => (
                 <li key={s}>{s}</li>
               ))}
             </ul>
-          </div>
+          </Reveal>
         </div>
       </section>
 
       <section className="lm-ruta" id="sobre" aria-label="Cómo lo hacemos">
         <div className="lm-c lm-ruta-in">
-          <div className="lm-ruta-head">
+          <Reveal className="lm-ruta-head">
             <p className="lm-kicker">¿Cómo lo hacemos?</p>
             <h2>
               Una ruta clara
@@ -243,24 +258,26 @@ export default async function LandingPage() {
             <p>
               Conectamos necesidades con soluciones para que más empresas puedan avanzar.
             </p>
-          </div>
-          <ol className="lm-steps">
+          </Reveal>
+          <Stagger className="lm-steps" as="ol">
             {RUTA.map((p, i) => (
-              <li key={p.n}>
+              <StaggerItem key={p.n} as="li">
                 <span className={`n n-${p.n}`}>{p.n}</span>
                 {i < RUTA.length - 1 ? <ArrowRight className="arrow" size={20} aria-hidden="true" /> : null}
                 <h3>{p.titulo}</h3>
                 <p>{p.desc}</p>
-              </li>
+              </StaggerItem>
             ))}
-          </ol>
-          <p className="lm-script lm-ruta-script" aria-hidden="true">
-            Tu empresa
-            <br />
-            también deja
-            <br />
-            huella
-          </p>
+          </Stagger>
+          <Reveal>
+            <p className="lm-script lm-ruta-script" aria-hidden="true">
+              Tu empresa
+              <br />
+              también deja
+              <br />
+              huella
+            </p>
+          </Reveal>
         </div>
       </section>
 
@@ -268,39 +285,39 @@ export default async function LandingPage() {
         <img src="/brand/impact-andes.jpg" alt="" aria-hidden="true" width={2000} height={1333} />
         <div className="lm-impact-ov" aria-hidden="true" />
         <div className="lm-c lm-impact-in">
-          <div className="lm-impact-title">
+          <Reveal className="lm-impact-title">
             <p>Nuestro impacto</p>
             <h2>
               Resultados que
               <br />
               impulsan territorios
             </h2>
-          </div>
-          <div className="lm-impact-grid">
+          </Reveal>
+          <Stagger className="lm-impact-grid">
             {IMPACTO.map((it) => {
               const Icon = it.icon;
               return (
-                <div key={it.label} className="it">
+                <Metric key={it.label} className="it">
                   <Icon size={26} strokeWidth={1.5} aria-hidden="true" />
                   <strong>{it.value}</strong>
                   <span>{it.label}</span>
-                </div>
+                </Metric>
               );
             })}
-          </div>
-          <div className="lm-impact-end">
+          </Stagger>
+          <Reveal className="lm-impact-end">
             <strong>
               Empresas que crecen.
               <br />
               Territorios que avanzan.
             </strong>
             <span className="lm-uline" aria-hidden="true" />
-          </div>
+          </Reveal>
         </div>
       </section>
 
       <section className="lm-talk" id="contacto" aria-label="Contacto">
-        <div className="lm-c lm-talk-in">
+        <Reveal className="lm-c lm-talk-in">
           <div className="lm-talk-title">
             <h2>Hablemos</h2>
             <p>Cuéntanos cómo podemos trabajar juntos.</p>
@@ -334,13 +351,13 @@ export default async function LandingPage() {
               ))}
             </div>
           ) : null}
-        </div>
+        </Reveal>
       </section>
 
       <section className="lm-form" id="formulario" aria-label="Formulario de contacto">
-        <div className="lm-c lm-form-in">
+        <Reveal className="lm-c lm-form-in">
           <LandingContactForm />
-        </div>
+        </Reveal>
       </section>
 
       <footer className="lm-foot" id="recursos">

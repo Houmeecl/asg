@@ -113,8 +113,11 @@
   font-weight: 500; color: var(--lm-violet); line-height: 1.25; margin: 0; font-size: 15px;
 }
 .lm-hero-script { position: absolute; left: 77%; top: 34%; z-index: 2; }
-.lm-hero-pill {
+.lm-hero-pill-motion {
   position: absolute; right: 0; bottom: 4%; z-index: 3;
+}
+.lm-hero-pill {
+  position: relative;
   display: flex; align-items: center; gap: 12px; padding: 12px 22px 12px 14px;
   background: var(--lm-navy); color: #fff; border-radius: 999px;
   box-shadow: 0 18px 36px -18px rgba(15,27,61,.8);
@@ -134,6 +137,8 @@
   padding: 24px 22px 26px; border-radius: 18px; border: 1px solid transparent;
   min-height: 140px; transition: transform .25s ease, box-shadow .25s ease;
 }
+.lm-card-motion { height: 100%; }
+.lm-card-motion .lm-card { height: 100%; }
 .lm-card:hover { transform: translateY(-3px); box-shadow: 0 22px 40px -24px rgba(15,27,61,.35); }
 .lm-card .ico { margin-top: 2px; }
 .lm-card h3 { font-size: 16px; font-weight: 700; margin-bottom: 8px; letter-spacing: -0.01em; }
@@ -272,7 +277,8 @@
   .lm-talk-in { grid-template-columns: 1fr; }
   .lm-hero-photo { left: 6%; width: 88%; }
   .lm-hero-badge-blue { display: none; }
-  .lm-hero-pill { right: 0; left: auto; font-size: 12px; }
+  .lm-hero-pill-motion { right: 0; left: auto; }
+  .lm-hero-pill { font-size: 12px; }
 }
 @media (max-width: 860px) {
   .lm-hero-copy h1 { white-space: normal; }
