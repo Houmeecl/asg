@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import BaasShell, { formatClp } from '../../components/BaasShell';
 import { BAAS_LEGAL, DLOCAL_PAYOUT_COUNTRIES } from '@/lib/baas/config';
 
@@ -8,6 +9,7 @@ const NAV = [
   { href: '/ops', label: 'Cola' },
   { href: '/ops/lotes', label: 'Lotes' },
   { href: '/ops/pos', label: 'POS TUU' },
+  { href: '/ops/open-banking', label: 'Open Banking' },
   { href: '/ops/config', label: 'Config' },
 ];
 
@@ -54,8 +56,8 @@ export default function ConfigPage() {
       <div className="baas-panel">
         <h2>Documentación interna</h2>
         <p className="sub">
-          Ver <code>docs/baas-architecture.md</code>, <code>docs/tuu-partner-checklist.md</code> y{' '}
-          <code>docs/tuu-interapp.md</code> en el repo.
+          Ver <code>docs/baas-architecture.md</code>, <code>docs/open-banking.md</code>,{' '}
+          <code>docs/tuu-partner-checklist.md</code> y <Link href="/docs/open-banking">docs web OB</Link>.
         </p>
       </div>
     </BaasShell>
