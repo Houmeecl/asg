@@ -11,9 +11,9 @@ export default function SiteFooter() {
             sicr<span>3</span>p<span className="slash">/</span>
           </div>
           <p className="foot-legal">
-            {razonSocial}
+            Dueña: {BAAS_LEGAL.fundacion.razonSocial} · RUT {BAAS_LEGAL.fundacion.rut}
             <br />
-            RUT {rut}
+            Operadora: {razonSocial} · RUT {rut}
             <br />
             {direccion}
           </p>

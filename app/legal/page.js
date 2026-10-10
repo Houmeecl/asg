@@ -5,7 +5,8 @@ import { legalMeta } from '@/lib/baas/legal-copy';
 
 export const metadata = {
   title: 'Datos de la sociedad — sicr3p/',
-  description: 'SICR3P SpA (operador) y Fundación Entretodos (entidad relacionada).',
+  description:
+    'Fundación Entretodos (dueña) y SICR3P SpA (operadora administradora de sicr3p/).',
 };
 
 export default function LegalPage() {
@@ -30,90 +31,17 @@ export default function LegalPage() {
     <LegalShell
       eyebrow="Persona jurídica"
       title="Datos de la sociedad"
-      updated={`Estatuto SpA · CVE ${estatutoCve} · ${meta.updated}`}
+      updated={`Dueña: ${fundacion.razonSocial} · Operadora: ${razonSocial} · ${meta.updated}`}
     >
       <p className="legal-lead">
-        <strong>sicr3p/</strong> lo opera comercialmente <strong>{razonSocial}</strong>. Existe además{' '}
-        <strong>{fundacion.razonSocial}</strong>, persona jurídica distinta (fundación), con el mismo
-        representante. No son la misma entidad: la SpA administra el servicio; la Fundación es la entidad
-        de propósito social relacionada.
+        La <strong>dueña</strong> de sicr3p/ es <strong>{fundacion.razonSocial}</strong> (RUT{' '}
+        {fundacion.rut}). La plataforma la <strong>administra y opera</strong> comercialmente{' '}
+        <strong>{razonSocial}</strong> (RUT {rut}), bajo la representación de {representanteLegal}.
       </p>
 
-      <div className="legal-banner warn" style={{ marginBottom: 28 }}>
-        Según el estatuto vigente de la SpA, las acciones fueron suscritas por la persona natural del
-        gerente. Si la Fundación será dueña de la SpA, eso requiere cesión/aporte de acciones e
-        actualización en el Registro / SII — hoy los documentos públicos muestran dos RUTs separados.
-      </div>
-
-      <h2 className="legal-block-title">1. Operador comercial — {razonSocial}</h2>
+      <h2 className="legal-block-title">1. Dueña — {fundacion.razonSocial}</h2>
       <p className="legal-lead" style={{ marginBottom: 16 }}>
-        Titular de la plataforma sicr3p/ (comercio + software).
-      </p>
-      <dl className="legal-dl">
-        <div>
-          <dt>Razón social</dt>
-          <dd>{razonSocial}</dd>
-        </div>
-        <div>
-          <dt>Nombre de fantasía</dt>
-          <dd>{nombreFantasia}</dd>
-        </div>
-        <div>
-          <dt>RUT</dt>
-          <dd>{rut}</dd>
-        </div>
-        <div>
-          <dt>Domicilio</dt>
-          <dd>{direccion}</dd>
-        </div>
-        <div>
-          <dt>Fecha de constitución</dt>
-          <dd>{fechaConstitucion}</dd>
-        </div>
-        <div>
-          <dt>Capital social</dt>
-          <dd>{capitalSocial}</dd>
-        </div>
-        <div>
-          <dt>Gerente general / representante SII</dt>
-          <dd>
-            {representanteLegal}
-            <br />
-            <span style={{ fontSize: 14, color: 'var(--ink-soft)' }}>RUT {representanteRut}</span>
-          </dd>
-        </div>
-        <div>
-          <dt>Email / teléfono</dt>
-          <dd>
-            <a href={`mailto:${email}`}>{email}</a>
-            <br />
-            <a href={`tel:${telefono.replace(/\s/g, '')}`}>{telefono}</a>
-          </dd>
-        </div>
-        <div>
-          <dt>Objeto (resumen)</dt>
-          <dd style={{ fontSize: 15, fontWeight: 500 }}>
-            Auxiliares de la intermediación financiera (excepto seguros), I+D, organizaciones
-            empresariales, servicios informáticos y otras actividades de servicios.
-          </dd>
-        </div>
-        <div>
-          <dt>Estatuto</dt>
-          <dd style={{ fontSize: 15, fontWeight: 500 }}>
-            CVE {estatutoCve} ·{' '}
-            <a href={estatutoUrl} target="_blank" rel="noreferrer">
-              Descargar PDF
-            </a>
-          </dd>
-        </div>
-      </dl>
-
-      <h2 className="legal-block-title" style={{ marginTop: 40 }}>
-        2. Entidad relacionada — {fundacion.razonSocial}
-      </h2>
-      <p className="legal-lead" style={{ marginBottom: 16 }}>
-        Fundación (subtipo SII: {fundacion.subTipo}). No es el RUT merchant de sicr3p/; es la entidad
-        de propósito social asociada, administrada por el mismo representante.
+        Titular / dueña de propósito de sicr3p/. Persona jurídica tipo {fundacion.subTipo}.
       </p>
       <dl className="legal-dl">
         <div>
@@ -154,6 +82,72 @@ export default function LegalPage() {
           <dt>Certificado RUT</dt>
           <dd style={{ fontSize: 15, fontWeight: 500 }}>
             <a href={fundacion.pdfUrl} target="_blank" rel="noreferrer">
+              Descargar PDF
+            </a>
+          </dd>
+        </div>
+      </dl>
+
+      <h2 className="legal-block-title" style={{ marginTop: 40 }}>
+        2. Operadora / administradora — {razonSocial}
+      </h2>
+      <p className="legal-lead" style={{ marginBottom: 16 }}>
+        SpA que administra el servicio tecnológico sicr3p/ (portal, cobros y liquidaciones) por cuenta
+        de la dueña.
+      </p>
+      <dl className="legal-dl">
+        <div>
+          <dt>Razón social</dt>
+          <dd>{razonSocial}</dd>
+        </div>
+        <div>
+          <dt>Nombre de fantasía</dt>
+          <dd>{nombreFantasia}</dd>
+        </div>
+        <div>
+          <dt>RUT</dt>
+          <dd>{rut}</dd>
+        </div>
+        <div>
+          <dt>Domicilio</dt>
+          <dd>{direccion}</dd>
+        </div>
+        <div>
+          <dt>Fecha de constitución</dt>
+          <dd>{fechaConstitucion}</dd>
+        </div>
+        <div>
+          <dt>Capital social</dt>
+          <dd>{capitalSocial}</dd>
+        </div>
+        <div>
+          <dt>Gerente general / representante SII</dt>
+          <dd>
+            {representanteLegal}
+            <br />
+            <span style={{ fontSize: 14, color: 'var(--ink-soft)' }}>RUT {representanteRut}</span>
+          </dd>
+        </div>
+        <div>
+          <dt>Email / teléfono (operación)</dt>
+          <dd>
+            <a href={`mailto:${email}`}>{email}</a>
+            <br />
+            <a href={`tel:${telefono.replace(/\s/g, '')}`}>{telefono}</a>
+          </dd>
+        </div>
+        <div>
+          <dt>Objeto (resumen)</dt>
+          <dd style={{ fontSize: 15, fontWeight: 500 }}>
+            Auxiliares de la intermediación financiera (excepto seguros), I+D, organizaciones
+            empresariales, servicios informáticos y otras actividades de servicios.
+          </dd>
+        </div>
+        <div>
+          <dt>Estatuto</dt>
+          <dd style={{ fontSize: 15, fontWeight: 500 }}>
+            CVE {estatutoCve} ·{' '}
+            <a href={estatutoUrl} target="_blank" rel="noreferrer">
               Descargar PDF
             </a>
           </dd>
