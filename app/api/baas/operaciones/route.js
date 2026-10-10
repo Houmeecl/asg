@@ -10,6 +10,8 @@ import {
   liberarLoteConDlocal,
   getOperacion,
 } from '@/lib/baas/operations';
+import { createPayment } from '@/lib/baas/dlocal';
+import db from '@/lib/db';
 
 export async function GET() {
   const usuario = await exigirUsuarioSesion();
@@ -103,6 +105,33 @@ export async function POST(request) {
   if (action === 'get') {
     const op = getOperacion(body.operacionId);
     return NextResponse.json({ operacion: op });
+  }
+
+  if (action === 'payin_dlocal') {
+    const usuario = await exigirOps();
+    if (!usuario) return NextResponse.json({ error: 'Solo ops' }, { status: 403 });
+    const op = getOperacion(body.operacionId);
+    if (!op) return NextResponse.json({ error: 'Operación no encontrada' }, { status: 404 });
+    try {
+      const origin = process.env.NEXT_PUBLIC_APP_URL || 'https://sicr3p.cl';
+      const payment = await createPayment({
+        amount: op.monto_clp || body.montoClp,
+        currency: 'CLP',
+        country: 'CL',
+        orderId: op.id,
+        description: body.description || `SICR3P op ${op.id}`,
+        successUrl: body.successUrl || `${origin}/ops`,
+        backUrl: body.backUrl || `${origin}/ops`,
+        notificationUrl: body.notificationUrl || `${origin}/api/baas/webhooks/dlocal`,
+      });
+      const paymentId = payment.id || payment.payment_id;
+      if (paymentId) {
+        db.prepare(`UPDATE baas_operaciones SET dlocal_payment_id = ? WHERE id = ?`).run(String(paymentId), op.id);
+      }
+      return NextResponse.json({ ok: true, payment, operacion: getOperacion(op.id) });
+    } catch (err) {
+      return NextResponse.json({ error: err.message }, { status: 400 });
+    }
   }
 
   return NextResponse.json({ error: 'Acción desconocida' }, { status: 400 });

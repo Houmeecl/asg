@@ -1,13 +1,24 @@
 import { NextResponse } from 'next/server';
 import db from '@/lib/db';
-import { advanceSimPayout, getSimulatorState } from '@/lib/baas/dlocal';
+import { advanceSimPayout, getSimulatorState, verifyGoWebhook } from '@/lib/baas/dlocal';
 
 /**
  * Webhook merchant dLocal Go (pay-in + payout notifications).
- * En simulator acepta body { type, payout_id|payment_id, status }.
+ * En simulator acepta body sin firma. En sandbox/live exige HMAC si hay secret.
  */
 export async function POST(request) {
-  const body = await request.json().catch(() => ({}));
+  const raw = await request.text();
+  if (!verifyGoWebhook(raw, request.headers)) {
+    return NextResponse.json({ error: 'Firma inválida' }, { status: 401 });
+  }
+
+  let body = {};
+  try {
+    body = JSON.parse(raw || '{}');
+  } catch {
+    return NextResponse.json({ error: 'JSON inválido' }, { status: 400 });
+  }
+
   const type = body.type || body.event || 'payout';
   const status = String(body.status || 'SUCCESS').toUpperCase();
 
