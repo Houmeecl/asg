@@ -24,7 +24,7 @@ export default function BaasShell({ title, subtitle, nav, children, user }) {
               <SicrLogo size="sm" contrast="light" compact />
             </Link>
           </div>
-          <nav>
+          <nav aria-label="Operación">
             {nav.map((item) => {
               const hrefs = nav.map((n) => n.href);
               const exact = pathname === item.href;
@@ -35,24 +35,28 @@ export default function BaasShell({ title, subtitle, nav, children, user }) {
               );
               const active = exact || (nested && !longerMatch);
               return (
-                <Link key={item.href} href={item.href} className={active ? 'active' : ''}>
+                <Link key={item.href} href={item.href} className={active ? 'active' : ''} aria-current={active ? 'page' : undefined}>
                   {item.label}
                 </Link>
               );
             })}
           </nav>
           <div className="meta">
-            <div>{user?.nombre}</div>
-            <div>{user?.email}</div>
-            <div style={{ marginTop: 8 }}>{user?.rol}</div>
-            <button type="button" onClick={logout} style={{ marginTop: 12, color: 'var(--lime)', background: 'none', border: 0, cursor: 'pointer', padding: 0, fontSize: 12 }}>
+            <div className="who">
+              <strong>{user?.nombre}</strong>
+              <span>{user?.email}</span>
+              {user?.rol ? <span className="rol">{user?.rol}</span> : null}
+            </div>
+            <button type="button" className="baas-logout" onClick={logout}>
               Cerrar sesión
             </button>
           </div>
         </aside>
         <main className="baas-main">
-          <h1>{title}</h1>
-          {subtitle ? <p className="sub">{subtitle}</p> : null}
+          <header className="baas-head">
+            <h1>{title}</h1>
+            {subtitle ? <p className="sub">{subtitle}</p> : null}
+          </header>
           {children}
         </main>
       </div>
@@ -83,6 +87,12 @@ export function StatusPill({ estado }) {
     DESCONECTADO: 'info',
     EN_PRUEBA: 'warn',
     ALERTA: 'bad',
+    CREATING: 'info',
+    PENDING: 'warn',
+    APPROVED: 'ok',
+    BLOCKED: 'bad',
+    CANCELED: 'info',
+    REJECTED: 'bad',
   };
   return <span className={`baas-pill ${map[estado] || ''}`}>{estado}</span>;
 }
