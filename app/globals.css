@@ -1,19 +1,6 @@
 @import "tailwindcss";
 
-:root {
-  --sicr-navy: #0f1f2e;
-  --sicr-primary: #004f30;
-  --sicr-accent: #28a745;
-  --sicr-lime: #7ac943;
-  --sicr-bg: #f1f5f2;
-  --sicr-ink: #0d1f16;
-  --sicr-ink-soft: #56695e;
-  --sicr-line: #d5ddd8;
-  --sicr-select: #eef7f1;
-  --background: var(--sicr-bg);
-  --foreground: var(--sicr-ink);
-}
-
+/* Tokens canónicos en brand.css (Manual de marca v1.0) */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -46,7 +33,7 @@ body {
 }
 .panel-card input:focus, .panel-card select:focus {
   border-color: var(--sicr-accent);
-  box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.15);
+  box-shadow: 0 0 0 3px rgba(107, 92, 246, 0.18);
 }
 .panel-card input[type='file'] { @apply text-xs; }
 .panel-card input[type='checkbox'] { @apply w-auto; accent-color: var(--sicr-accent); }
@@ -108,7 +95,7 @@ body {
 .flex-title { @apply flex flex-wrap items-start justify-between gap-3; }
 .document-link {
   @apply shrink-0 rounded-xl border px-3 py-2 text-xs transition-colors;
-  border-color: rgba(40, 167, 69, 0.45);
+  border-color: rgba(107, 92, 246, 0.45);
   color: var(--sicr-primary);
 }
 .document-link:hover { background: var(--sicr-select); }

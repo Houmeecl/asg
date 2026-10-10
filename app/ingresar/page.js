@@ -103,7 +103,7 @@ export default function IngresarPage() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="border border-[var(--line)] rounded-xl px-3 py-2.5 text-sm text-[var(--ink)] outline-none focus:border-[var(--accent)] focus:ring-2 focus:ring-[rgba(40,167,69,0.15)]"
+                className="border border-[var(--line)] rounded-xl px-3 py-2.5 text-sm text-[var(--ink)] outline-none focus:border-[var(--accent)] focus:ring-2 focus:ring-[rgba(107,92,246,0.18)]"
                 required
               />
             </div>
@@ -117,7 +117,7 @@ export default function IngresarPage() {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="border border-[var(--line)] rounded-xl px-3 py-2.5 text-sm text-[var(--ink)] outline-none focus:border-[var(--accent)] focus:ring-2 focus:ring-[rgba(40,167,69,0.15)]"
+                className="border border-[var(--line)] rounded-xl px-3 py-2.5 text-sm text-[var(--ink)] outline-none focus:border-[var(--accent)] focus:ring-2 focus:ring-[rgba(107,92,246,0.18)]"
                 required
               />
             </div>
@@ -131,7 +131,7 @@ export default function IngresarPage() {
             <button
               type="submit"
               disabled={cargando}
-              className="btn lime w-full disabled:opacity-50"
+              className="btn brand w-full disabled:opacity-50"
             >
               <LogIn className="w-4 h-4" />
               {cargando ? 'Ingresando...' : 'Ingresar'}
