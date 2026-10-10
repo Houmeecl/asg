@@ -20,9 +20,12 @@ Software SICR3P ──POST /v1/payouts──► Beneficiario (cuenta banco CL/LA
 | TUU InterApp adapter + mock | `lib/baas/tuu.js` |
 | Wallet virtual / KYC QR | `lib/baas/wallet.js` |
 | Operaciones, lotes, liberar | `lib/baas/operations.js` |
+| Open Banking AIS/PIS (partner) | `lib/baas/open-banking.js` + `/api/open-banking/v1` |
 | Portal empresa | `app/portal/**` |
-| Ops / admin | `app/ops/**` |
+| Ops / admin | `app/ops/**` (+ `/ops/open-banking`) |
 | Webhook dLocal | `app/api/baas/webhooks/dlocal` |
+
+Ver también `docs/open-banking.md`.
 
 ## Estados de operación
 
