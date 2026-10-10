@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { BAAS_LEGAL } from '@/lib/baas/config';
+import SicrLogo from './SicrLogo';
 
 export default function SiteFooter() {
   const { razonSocial, rut, email, telefono, direccion, social } = BAAS_LEGAL;
@@ -8,7 +9,7 @@ export default function SiteFooter() {
       <div className="c foot-grid">
         <div>
           <div className="foot-brand">
-            sicr<span>3</span>p<span className="slash">/</span>
+            <SicrLogo size="sm" contrast="dark" compact />
           </div>
           <p className="foot-legal">
             Dueña: {BAAS_LEGAL.fundacion.razonSocial} · RUT {BAAS_LEGAL.fundacion.rut}
