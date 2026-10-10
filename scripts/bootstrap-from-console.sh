@@ -2,13 +2,13 @@
 # Pegá este archivo completo en la consola web de DonWeb (root) si el SSH
 # entrante (5757) todavía no responde desde Internet.
 # Alternativa de una línea (repo público o con token):
-#   curl -fsSL https://raw.githubusercontent.com/Houmeecl/asg/cursor/vps-setup-775f/scripts/bootstrap-from-console.sh | bash
+#   curl -fsSL https://raw.githubusercontent.com/Houmeecl/asg/cursor/vps-console-bootstrap-775f/scripts/bootstrap-from-console.sh | bash
 set -euo pipefail
 
 export DOMAIN=${DOMAIN:-sicr3p.cl}
 export APP_DOMAIN=${APP_DOMAIN:-sicr3p.cl}
 export PUBLIC_IP=${PUBLIC_IP:-149.50.155.61}
-export BRANCH=${BRANCH:-cursor/vps-setup-775f}
+export BRANCH=${BRANCH:-cursor/vps-console-bootstrap-775f}
 export REPO_URL=${REPO_URL:-https://github.com/Houmeecl/asg.git}
 
 if [ "$(id -u)" -ne 0 ]; then
