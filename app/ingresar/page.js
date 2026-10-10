@@ -7,9 +7,15 @@ import { ArrowRight, LogIn } from 'lucide-react';
 import SicrLogo from '../components/SicrLogo';
 import '../sicr-landing.css';
 
+const DEMOS = [
+  { email: 'empresa@sicr3p.cl', rol: 'Empresa → /portal' },
+  { email: 'ops@sicr3p.cl', rol: 'Operador → /ops' },
+  { email: 'admin@sicr3p.cl', rol: 'Admin → /ops' },
+];
+
 export default function IngresarPage() {
-  const [email, setEmail] = useState('admin@sicr3p.cl');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('empresa@sicr3p.cl');
+  const [password, setPassword] = useState('sicr3p2026');
   const [error, setError] = useState(null);
   const [cargando, setCargando] = useState(false);
   const router = useRouter();
@@ -26,7 +32,8 @@ export default function IngresarPage() {
       });
       const data = await res.json();
       if (res.ok) {
-        router.push('/panel');
+        const dest = data.destino || '/portal';
+        router.push(dest);
         router.refresh();
       } else {
         setError(data.error || 'No se pudo iniciar sesión.');
@@ -61,9 +68,11 @@ export default function IngresarPage() {
         <div className="relative z-10 max-w-md">
           <div className="text-5xl font-bold tracking-tight mb-4" style={{ fontFamily: 'var(--fd)' }}>
             sicr<span style={{ color: 'var(--lime)' }}>3</span>p
+            <span style={{ color: 'var(--lime)' }}>/</span>
           </div>
           <p className="text-lg leading-relaxed" style={{ color: 'rgba(241,245,242,.88)' }}>
-            Expedientes industriales con custodia SHA-256. CBAM y Corredor/EUDR, cada uno en su carril.
+            Acceso unificado: portal empresas, operaciones POS/lotes y administración.
+            Pagos vía TUU + dLocal Go.
           </p>
         </div>
       </aside>
@@ -78,10 +87,10 @@ export default function IngresarPage() {
               className="text-2xl font-semibold text-[var(--navy)]"
               style={{ fontFamily: 'var(--fd)' }}
             >
-              Ingresar al panel
+              Ingresar
             </h1>
             <p className="text-sm mt-2 text-[var(--ink-soft)]">
-              Acceso para operadores habilitados de SICR3P.
+              Empresa, operador o admin — te llevamos al panel correcto.
             </p>
           </div>
 
@@ -130,9 +139,22 @@ export default function IngresarPage() {
               <ArrowRight className="w-4 h-4" />
             </button>
 
-            <p className="text-[11px] text-center text-[var(--ink-soft)]">
-              Demo: admin@sicr3p.cl / sicr3p2026
-            </p>
+            <div className="text-[11px] text-[var(--ink-soft)] space-y-1">
+              <p className="font-semibold">Cuentas demo (clave sicr3p2026):</p>
+              {DEMOS.map((d) => (
+                <button
+                  key={d.email}
+                  type="button"
+                  className="block w-full text-left hover:text-[var(--navy)]"
+                  onClick={() => {
+                    setEmail(d.email);
+                    setPassword('sicr3p2026');
+                  }}
+                >
+                  {d.email} — {d.rol}
+                </button>
+              ))}
+            </div>
           </form>
         </div>
       </main>

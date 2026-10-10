@@ -8,7 +8,8 @@
     "prebuild": "node scripts/init-db.mjs",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "baas:e2e": "node scripts/baas-e2e-demo.mjs"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",

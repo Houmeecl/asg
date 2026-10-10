@@ -1,10 +1,10 @@
-import { Lexend, Source_Sans_3 } from "next/font/google";
+import { Syne, Source_Sans_3, Caveat } from "next/font/google";
 import "./globals.css";
 
-const display = Lexend({
+const display = Syne({
   variable: "--font-display",
   subsets: ["latin"],
-  weight: ["500", "600", "700"],
+  weight: ["500", "600", "700", "800"],
 });
 
 const body = Source_Sans_3({
@@ -13,16 +13,23 @@ const body = Source_Sans_3({
   weight: ["400", "500", "600", "700"],
 });
 
+const script = Caveat({
+  variable: "--font-script",
+  subsets: ["latin"],
+  weight: ["500", "600", "700"],
+});
+
 export const metadata = {
-  title: "SICR3P — Evidencia industrial, CBAM y Corredor + EUDR",
-  description: "Infraestructura de evidencia industrial para proveedores de la gran minería: expedientes, custodia SHA-256, CBAM preverificado y Corredor Bioceánico + EUDR.",
+  title: "sicr3p/ — Soluciones que impulsan empresas",
+  description:
+    "Desarrollo empresarial y finanzas sostenibles para PYMEs. Dueña: Fundación Entretodos. Operadora: SICR3P SpA.",
 };
 
 export default function RootLayout({ children }) {
   return (
     <html
       lang="es"
-      className={`${display.variable} ${body.variable} h-full antialiased`}
+      className={`${display.variable} ${body.variable} ${script.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-background text-foreground font-sans">
         {children}
