@@ -151,7 +151,7 @@ export default async function LandingPage() {
             </ul>
           </div>
           <div className="hero-visual">
-            <div className="hero-photo-wrap">
+            <div className="hero-photo-wrap mock-photo">
               <img
                 src="/brand/hero-emprendedora.jpg"
                 alt="Empresaria en su taller — sicr3p/"
@@ -159,19 +159,7 @@ export default async function LandingPage() {
                 height={1400}
                 fetchPriority="high"
               />
-              <p className="hero-script" aria-hidden="true">
-                Empresas que transforman su entorno
-              </p>
             </div>
-            <aside className="hero-float">
-              <span className="hero-float-icon" aria-hidden="true">
-                <Leaf size={20} />
-              </span>
-              <p>
-                Finanzas sostenibles para un crecimiento real.
-                <span> Impulsamos oportunidades. Construimos futuro.</span>
-              </p>
-            </aside>
           </div>
         </div>
       </section>
