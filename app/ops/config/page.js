@@ -27,6 +27,8 @@ export default function ConfigPage() {
 
   const mode = data?.dlocal?.mode || 'simulator';
   const modeTone = mode === 'live' ? 'ok' : mode === 'sandbox' ? 'info' : 'warn';
+  const platMode = data?.platforms?.mode || 'simulator';
+  const platTone = platMode === 'live' ? 'ok' : platMode === 'sandbox' ? 'info' : 'warn';
   let supaTone = 'info';
   let supaLabel = '…';
   if (supabase) {
@@ -44,13 +46,13 @@ export default function ConfigPage() {
   const apiText = supabase == null ? '…' : supabase.reachable ? `Responde ${supabase.status}` : 'Sin respuesta desde este servidor';
 
   return (
-    <BaasShell title="Configuración" subtitle="Rail SICR3P → TUU → lote → dLocal Go. Sin Global66." nav={NAV} user={data?.usuario}>
+    <BaasShell title="Configuración" subtitle="Rail SICR3P → TUU → lote → dLocal Go + Platforms. Sin Global66." nav={NAV} user={data?.usuario}>
       <div className="baas-status-grid">
         <article className="baas-panel">
           <div className="baas-panel-head">
             <div>
               <p className="eyebrow">Entorno</p>
-              <h2>dLocal</h2>
+              <h2>dLocal Go</h2>
             </div>
             <span className={`baas-pill ${modeTone}`}>{mode}</span>
           </div>
@@ -59,9 +61,8 @@ export default function ConfigPage() {
             <strong>{formatClp(data?.dlocal?.balance)}</strong>
           </div>
           <dl className="baas-kv">
-            <div><dt>DLOCAL_MODE</dt><dd className="mono">{mode}</dd></div>
+            <div><dt>Credenciales</dt><dd>{data?.dlocal?.configured ? 'Listas' : 'Faltan'}</dd></div>
             <div><dt>Webhook</dt><dd className="mono">POST /api/baas/webhooks/dlocal</dd></div>
-            <div><dt>Onboarding Platforms</dt><dd className="mono">/ops/onboarding · POST /api/baas/webhooks/dlocal-platforms</dd></div>
             <div><dt>TUU</dt><dd className="mono">mock InterApp</dd></div>
             <div>
               <dt>HubSpot</dt>
@@ -71,14 +72,44 @@ export default function ConfigPage() {
         </article>
         <article className="baas-panel">
           <div className="baas-panel-head">
-            <h2>Supabase</h2>
+            <div>
+              <p className="eyebrow">Onboarding</p>
+              <h2>dLocal Platforms</h2>
+            </div>
+            <span className={`baas-pill ${platTone}`}>{platMode}</span>
+          </div>
+          <dl className="baas-kv">
+            <div><dt>Credenciales</dt><dd>{data?.platforms?.configured ? 'Listas' : 'Simulator / faltan'}</dd></div>
+            <div><dt>UI</dt><dd className="mono"><Link href="/ops/onboarding">/ops/onboarding</Link></dd></div>
+            <div><dt>Webhook</dt><dd className="mono">POST /api/baas/webhooks/dlocal-platforms</dd></div>
+          </dl>
+        </article>
+      </div>
+      <div className="baas-status-grid">
+        <article className="baas-panel">
+          <div className="baas-panel-head">
+            <h2>Supabase (VPS)</h2>
             <span className={`baas-pill ${supaTone}`}>{supaLabel}</span>
           </div>
-          <p className="sub">Studio en {supabase?.host || 'vps-6495918-x.dattaweb.com'}. La app usa la URL https y la anon key. Postgres en 127.0.0.1:5432 queda dentro del VPS.</p>
+          <p className="sub">URL pública https://sicr3p.cl. Postgres solo en 127.0.0.1:5432 dentro del Cloud Server.</p>
           <dl className="baas-kv">
+            <div><dt>Host</dt><dd className="mono">{supabase?.host || 'sicr3p.cl'}</dd></div>
             <div><dt>Configurado</dt><dd>{supabase == null ? '…' : supabase.configured ? 'Sí' : 'No'}</dd></div>
             <div><dt>API</dt><dd>{apiText}</dd></div>
             <div><dt>Detalle</dt><dd className="mono">{supabase?.detail || '—'}</dd></div>
+          </dl>
+        </article>
+        <article className="baas-panel">
+          <div className="baas-panel-head">
+            <h2>Correo Ferozo</h2>
+            <span className="baas-pill info">DNS</span>
+          </div>
+          <p className="sub">El A del VPS no debe borrar los MX. Casilla y webmail siguen en DonWeb.</p>
+          <dl className="baas-kv">
+            <div><dt>Contacto app</dt><dd className="mono">{data?.mail?.contact || BAAS_LEGAL.email}</dd></div>
+            <div><dt>Teléfono</dt><dd className="mono">{data?.mail?.phone || BAAS_LEGAL.telefono}</dd></div>
+            <div><dt>Webmail</dt><dd className="mono"><a href="https://ferozo.email" target="_blank" rel="noreferrer">ferozo.email</a></dd></div>
+            <div><dt>Guía</dt><dd className="mono">docs/dns-vps-correo.md</dd></div>
           </dl>
         </article>
       </div>
@@ -98,8 +129,9 @@ export default function ConfigPage() {
         <article className="baas-panel">
           <h2>Documentación interna</h2>
           <p className="sub">
-            Ver <code>docs/baas-architecture.md</code>, <code>docs/open-banking.md</code>,{' '}
-            <code>docs/tuu-partner-checklist.md</code> y <Link href="/docs/open-banking">docs web OB</Link>.
+            Ver <code>docs/baas-architecture.md</code>, <code>docs/dns-vps-correo.md</code>,{' '}
+            <code>docs/open-banking.md</code>, <code>docs/tuu-partner-checklist.md</code> y{' '}
+            <Link href="/docs/open-banking">docs web OB</Link>.
           </p>
         </article>
       </div>
