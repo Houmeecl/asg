@@ -1,58 +1,77 @@
 import Link from 'next/link';
-import SicrLogo from '../components/SicrLogo';
-import SiteFooter from '../components/SiteFooter';
+import LegalShell from '../components/LegalShell';
 import { BAAS_LEGAL } from '@/lib/baas/config';
-import '../sicr-landing.css';
+import { legalMeta } from '@/lib/baas/legal-copy';
 
 export const metadata = {
   title: 'Datos de la sociedad — sicr3p/',
-  description: 'Razón social y datos de contacto para validación dLocal Go.',
+  description: 'Razón social, RUT y contacto para validación merchant (dLocal Go / TUU).',
 };
 
 export default function LegalPage() {
+  const meta = legalMeta();
   const { razonSocial, rut, email, telefono, direccion } = BAAS_LEGAL;
+  const pending = /confirmar|XXXX/i.test(`${razonSocial} ${rut}`);
+
   return (
-    <div className="sicr-lp min-h-screen">
-      <header className="top">
-        <div className="c">
-          <Link href="/" className="brand-mark"><SicrLogo size="sm" contrast="dark" /></Link>
-          <div className="sp" />
-          <Link href="/contacto" className="btn out sm">Contacto</Link>
+    <LegalShell
+      eyebrow="Persona jurídica"
+      title="Datos de la sociedad"
+      updated={`Visible para revisión merchant · ${meta.updated}`}
+    >
+      <p className="legal-lead">
+        Información que debe coincidir con el registro en dLocal Go y con el comercio TUU. Los campos marcados
+        como “dato a confirmar” no deben usarse para solicitar revisión live hasta completarlos.
+      </p>
+
+      {pending && (
+        <div className="legal-banner warn">
+          Hay placeholders pendientes (razón social / RUT). Completa variables{' '}
+          <code>SICR3P_RAZON_SOCIAL</code>, <code>SICR3P_RUT</code>, <code>SICR3P_CONTACT_EMAIL</code> y{' '}
+          <code>SICR3P_CONTACT_PHONE</code> antes de avisar a Bruna / dLocal Go.
         </div>
-      </header>
-      <main className="sec" style={{ paddingTop: 48 }}>
-        <div className="c" style={{ maxWidth: 720 }}>
-          <span className="eyebrow">Persona jurídica</span>
-          <h1 style={{ fontSize: 36, margin: '8px 0 12px' }}>Datos de la sociedad</h1>
-          <p style={{ color: 'var(--ink-soft)', marginBottom: 28 }}>
-            Información visible para revisión de cuenta merchant (p. ej. dLocal Go). Los campos marcados como
-            “dato a confirmar” deben alinearse con el registro oficial antes de solicitar activación live.
-          </p>
-          <dl style={{ display: 'grid', gap: 16, background: 'var(--bg)', padding: 24, borderRadius: 14 }}>
-            <div>
-              <dt style={{ fontSize: 12, fontWeight: 700, color: 'var(--ink-soft)', textTransform: 'uppercase' }}>Razón social</dt>
-              <dd style={{ margin: '4px 0 0', fontSize: 18, fontFamily: 'var(--fd)', color: 'var(--navy)' }}>{razonSocial}</dd>
-            </div>
-            <div>
-              <dt style={{ fontSize: 12, fontWeight: 700, color: 'var(--ink-soft)', textTransform: 'uppercase' }}>RUT</dt>
-              <dd style={{ margin: '4px 0 0', fontSize: 18, fontFamily: 'var(--fd)', color: 'var(--navy)' }}>{rut}</dd>
-            </div>
-            <div>
-              <dt style={{ fontSize: 12, fontWeight: 700, color: 'var(--ink-soft)', textTransform: 'uppercase' }}>Email</dt>
-              <dd style={{ margin: '4px 0 0' }}><a href={`mailto:${email}`}>{email}</a></dd>
-            </div>
-            <div>
-              <dt style={{ fontSize: 12, fontWeight: 700, color: 'var(--ink-soft)', textTransform: 'uppercase' }}>Teléfono</dt>
-              <dd style={{ margin: '4px 0 0' }}><a href={`tel:${telefono.replace(/\s/g, '')}`}>{telefono}</a></dd>
-            </div>
-            <div>
-              <dt style={{ fontSize: 12, fontWeight: 700, color: 'var(--ink-soft)', textTransform: 'uppercase' }}>Dirección</dt>
-              <dd style={{ margin: '4px 0 0' }}>{direccion}</dd>
-            </div>
-          </dl>
+      )}
+
+      <dl className="legal-dl">
+        <div>
+          <dt>Razón social</dt>
+          <dd>{razonSocial}</dd>
         </div>
-      </main>
-      <SiteFooter />
-    </div>
+        <div>
+          <dt>RUT</dt>
+          <dd>{rut}</dd>
+        </div>
+        <div>
+          <dt>Email de contacto</dt>
+          <dd><a href={`mailto:${email}`}>{email}</a></dd>
+        </div>
+        <div>
+          <dt>Teléfono</dt>
+          <dd><a href={`tel:${telefono.replace(/\s/g, '')}`}>{telefono}</a></dd>
+        </div>
+        <div>
+          <dt>Dirección / ciudad</dt>
+          <dd>{direccion}</dd>
+        </div>
+        <div>
+          <dt>Actividad declarada</dt>
+          <dd>
+            Comercio de servicios tecnológicos de pagos y liquidación operativa (software + mandato). Cobro
+            presencial vía TUU; pay-in/payouts vía dLocal Go.
+          </dd>
+        </div>
+      </dl>
+
+      <p className="legal-lead" style={{ marginTop: 28 }}>
+        Documentos relacionados:{' '}
+        <Link href="/terminos">Términos</Link>
+        {' · '}
+        <Link href="/privacidad">Privacidad</Link>
+        {' · '}
+        <Link href="/contacto">Contacto</Link>
+        {' · '}
+        <Link href="/docs/legal/dlocal-go-checklist">Checklist dLocal Go</Link>
+      </p>
+    </LegalShell>
   );
 }

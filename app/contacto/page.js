@@ -37,39 +37,49 @@ export default function ContactoPage() {
   }
 
   return (
-    <div className="sicr-lp min-h-screen">
+    <div className="sicr-lp framer min-h-screen">
+      <div className="grain" aria-hidden="true" />
       <header className="top">
         <div className="c">
           <Link href="/" className="brand-mark"><SicrLogo size="sm" contrast="dark" /></Link>
+          <nav className="menu legal-nav" aria-label="Legal">
+            <Link href="/terminos">Términos</Link>
+            <Link href="/privacidad">Privacidad</Link>
+            <Link href="/legal">Datos PJ</Link>
+          </nav>
           <div className="sp" />
           <Link href="/ingresar" className="btn dark sm">Ingresar</Link>
         </div>
       </header>
-      <main className="sec" style={{ paddingTop: 48 }}>
-        <div className="c" style={{ maxWidth: 560 }}>
+
+      <section className="legal-hero">
+        <div className="c">
           <span className="eyebrow">Contacto</span>
-          <h1 style={{ fontSize: 36, margin: '8px 0 12px' }}>Escríbenos</h1>
-          <p style={{ color: 'var(--ink-soft)', marginBottom: 24 }}>
-            Nombre, email y mensaje. También puedes escribir a{' '}
+          <h1>Escríbenos</h1>
+          <p className="legal-updated">
+            Nombre, email y mensaje. También{' '}
             <a href="mailto:contacto@sicr3p.cl">contacto@sicr3p.cl</a>.
           </p>
-          <form onSubmit={onSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 14, background: '#fff', border: '1px solid var(--line)', borderRadius: 16, padding: 24 }}>
-            <label style={{ display: 'flex', flexDirection: 'column', gap: 6, fontSize: 12, fontWeight: 600, color: 'var(--ink-soft)' }}>
+        </div>
+      </section>
+
+      <main className="sec legal-body">
+        <div className="c" style={{ maxWidth: 520 }}>
+          <form onSubmit={onSubmit} className="contact-form">
+            <label>
               Nombre
-              <input required value={nombre} onChange={(e) => setNombre(e.target.value)} style={{ border: '1px solid var(--line)', borderRadius: 10, padding: '10px 12px' }} />
+              <input required value={nombre} onChange={(e) => setNombre(e.target.value)} />
             </label>
-            <label style={{ display: 'flex', flexDirection: 'column', gap: 6, fontSize: 12, fontWeight: 600, color: 'var(--ink-soft)' }}>
+            <label>
               Email
-              <input required type="email" value={email} onChange={(e) => setEmail(e.target.value)} style={{ border: '1px solid var(--line)', borderRadius: 10, padding: '10px 12px' }} />
+              <input required type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
             </label>
-            <label style={{ display: 'flex', flexDirection: 'column', gap: 6, fontSize: 12, fontWeight: 600, color: 'var(--ink-soft)' }}>
+            <label>
               Mensaje
-              <textarea required rows={5} value={mensaje} onChange={(e) => setMensaje(e.target.value)} style={{ border: '1px solid var(--line)', borderRadius: 10, padding: '10px 12px', resize: 'vertical' }} />
+              <textarea required rows={5} value={mensaje} onChange={(e) => setMensaje(e.target.value)} />
             </label>
             {estado && (
-              <div style={{ padding: 10, borderRadius: 10, fontSize: 13, background: estado.ok ? '#e8f8ec' : '#fdecea', color: estado.ok ? '#067647' : '#b42318' }}>
-                {estado.msg}
-              </div>
+              <div className={`form-msg ${estado.ok ? 'ok' : 'err'}`}>{estado.msg}</div>
             )}
             <button type="submit" disabled={cargando} className="btn lime" style={{ width: '100%' }}>
               {cargando ? 'Enviando…' : 'Enviar mensaje'}

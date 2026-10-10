@@ -1,10 +1,10 @@
-import { Lexend, Source_Sans_3 } from "next/font/google";
+import { Syne, Source_Sans_3 } from "next/font/google";
 import "./globals.css";
 
-const display = Lexend({
+const display = Syne({
   variable: "--font-display",
   subsets: ["latin"],
-  weight: ["500", "600", "700"],
+  weight: ["500", "600", "700", "800"],
 });
 
 const body = Source_Sans_3({

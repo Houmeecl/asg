@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, ArrowUpRight } from 'lucide-react';
 import SicrLogo from './components/SicrLogo';
 import SiteFooter from './components/SiteFooter';
 import { obtenerUsuarioSesion, destinoTrasLogin } from '@/lib/auth';
@@ -8,27 +8,27 @@ import './sicr-landing.css';
 
 const CAPAS = [
   {
-    tag: 'Cobro presencial',
+    tag: '01 — Cobro',
     titulo: 'Terminales TUU',
-    desc: 'Código en el portal, cobro con tarjeta en POS vía InterApp. SICR3P no toca el PAN ni liquida comercios ajenos.',
+    desc: 'Código en el portal, cobro con tarjeta en POS vía InterApp. No tocamos el PAN ni liquidamos comercios ajenos.',
   },
   {
-    tag: 'Liquidación',
-    titulo: 'Saldo merchant dLocal Go',
-    desc: 'Los fondos operativos viven en el saldo merchant de dLocal Go. El panel instruye payouts B2C/B2B documentados.',
+    tag: '02 — Liquidación',
+    titulo: 'Merchant dLocal Go',
+    desc: 'Los fondos operativos viven en el saldo merchant. El panel instruye payouts B2C/B2B documentados.',
   },
   {
-    tag: 'Panel operativo',
-    titulo: 'Plataforma tecnológica',
-    desc: 'Solicitudes, beneficiarios, cola y lotes FIFO. Sin billetera pública ni emisión de medios de pago propios.',
+    tag: '03 — Software',
+    titulo: 'Panel operativo',
+    desc: 'Solicitudes, beneficiarios, cola y lotes FIFO. Sin billetera pública ni emisión propia de medios de pago.',
   },
 ];
 
 const PASOS = [
-  { n: '1', titulo: 'Solicitud en el portal', desc: 'La empresa crea el pago, elige corredor y obtiene un código para POS.' },
-  { n: '2', titulo: 'Cobro en TUU', desc: 'El operador cobra en terminal autorizado; el abono llega a la cuenta del comercio SICR3P.' },
-  { n: '3', titulo: 'Lote y fondeo', desc: 'Ops cierra lote y fondea el saldo merchant dLocal Go desde treasury.' },
-  { n: '4', titulo: 'Payout instruido', desc: 'El software libera FIFO vía API dLocal Go hacia la cuenta del beneficiario.' },
+  { n: '01', titulo: 'Solicitud', desc: 'La empresa crea el pago y obtiene un código para POS.' },
+  { n: '02', titulo: 'Cobro TUU', desc: 'Operador cobra en terminal; abono al comercio SICR3P.' },
+  { n: '03', titulo: 'Lote', desc: 'Ops cierra lote y fondea el saldo merchant dLocal Go.' },
+  { n: '04', titulo: 'Payout', desc: 'Instrucción FIFO vía API hacia la cuenta del beneficiario.' },
 ];
 
 export default async function LandingPage() {
@@ -36,7 +36,9 @@ export default async function LandingPage() {
   const destino = usuario ? destinoTrasLogin(usuario) : '/ingresar';
 
   return (
-    <div className="sicr-lp min-h-screen">
+    <div className="sicr-lp framer min-h-screen">
+      <div className="grain" aria-hidden="true" />
+
       <header className="top">
         <div className="c">
           <Link href="/" className="brand-mark" aria-label="sicr3p/ inicio">
@@ -44,12 +46,12 @@ export default async function LandingPage() {
           </Link>
           <nav className="menu" aria-label="Secciones">
             <a href="#producto">Producto</a>
-            <a href="#como">Cómo opera</a>
+            <a href="#como">Flujo</a>
             <a href="#cumplimiento">Cumplimiento</a>
-            <Link href="/contacto">Contacto</Link>
+            <Link href="/terminos">Legal</Link>
           </nav>
           <div className="sp" />
-          <a className="btn out sm" href={`mailto:${BAAS_LEGAL.email}`}>
+          <a className="btn out sm hide-sm" href={`mailto:${BAAS_LEGAL.email}`}>
             {BAAS_LEGAL.email}
           </a>
           <Link href={destino} className="btn dark sm">
@@ -67,16 +69,19 @@ export default async function LandingPage() {
           fetchPriority="high"
         />
         <div className="ov" aria-hidden="true" />
-        <div className="c">
+        <div className="hero-orb" aria-hidden="true" />
+        <div className="c hero-inner">
           <div className="brand-hero">
-            sicr<span>3</span>p<span style={{ color: 'var(--lime)' }}>/</span>
+            sicr<span>3</span>p<span className="slash">/</span>
           </div>
           <h1>
-            Pagos y liquidación para tu operación.{' '}
-            <em>Software, no banco.</em>
+            Pagos y liquidación
+            <br />
+            para tu operación.
+            <em> Software, no banco.</em>
           </h1>
           <p className="lead">
-            Panel operativo para solicitar cobros en TUU, conciliar lotes y ejecutar payouts vía dLocal Go — sin custodiar fondos del público.
+            Panel operativo para cobros en TUU, lotes y payouts vía dLocal Go — sin custodiar fondos del público.
           </p>
           <div className="cta">
             <Link href="/portal" className="btn lime">
@@ -86,22 +91,29 @@ export default async function LandingPage() {
               {usuario ? 'Continuar sesión' : 'Ingresar'}
             </Link>
           </div>
+          <div className="hero-meta">
+            <span>TUU InterApp</span>
+            <span className="dot" />
+            <span>dLocal Go</span>
+            <span className="dot" />
+            <span>Chile · LATAM</span>
+          </div>
         </div>
       </section>
 
-      <section className="sec tint" id="producto">
+      <section className="sec strip" id="producto">
         <div className="c">
-          <div className="sh">
+          <div className="sh wide">
             <span className="eyebrow">Producto</span>
             <h2>Una plataforma tecnológica de pagos</h2>
             <p>
-              sicr3p/ opera como comercio + software: cobro presencial con TUU, pay-in y payouts con dLocal Go.
-              El “saldo disponible” del panel es saldo merchant / operativo, no una cuenta bancaria de clientes.
+              sicr3p/ opera como comercio + software. El “saldo disponible” del panel es saldo merchant /
+              operativo — no una cuenta bancaria de clientes.
             </p>
           </div>
-          <div className="flows">
+          <div className="rails">
             {CAPAS.map((f) => (
-              <article key={f.titulo} className="flow">
+              <article key={f.titulo} className="rail">
                 <span className="tag">{f.tag}</span>
                 <h3>{f.titulo}</h3>
                 <p>{f.desc}</p>
@@ -114,13 +126,13 @@ export default async function LandingPage() {
       <section className="sec" id="como">
         <div className="c">
           <div className="sh">
-            <span className="eyebrow">Operación</span>
+            <span className="eyebrow">Flujo</span>
             <h2>Del código POS al payout</h2>
-            <p>Flujo real que describen los términos: portal → TUU → fondeo → instrucción dLocal Go.</p>
+            <p>El mismo recorrido que describen los términos — sin atajos de copy genérico.</p>
           </div>
-          <div className="steps">
+          <div className="timeline">
             {PASOS.map((p) => (
-              <div key={p.n} className="step">
+              <div key={p.n} className="tl-item">
                 <span className="n">{p.n}</span>
                 <h3>{p.titulo}</h3>
                 <p>{p.desc}</p>
@@ -131,43 +143,36 @@ export default async function LandingPage() {
       </section>
 
       <section className="sec navy" id="cumplimiento">
-        <div className="c">
+        <div className="c split">
           <div className="sh">
-            <span className="eyebrow" style={{ color: 'var(--lime)' }}>
-              Posicionamiento
-            </span>
+            <span className="eyebrow lime">Cumplimiento</span>
             <h2>Fuera del perímetro de emisor o billetera</h2>
             <p>
-              No emitimos tarjeta prepago propia, no prometemos depósito ni cuenta con provisión de fondos a nombre sicr3p/.
-              Cobro y payout los ejecutan proveedores autorizados (TUU, dLocal Go). Nosotros proveemos mandato, software y conciliación.
+              No emitimos prepago propio ni prometemos depósito a nombre sicr3p/. Cobro y payout los ejecutan
+              TUU y dLocal Go. Nosotros: mandato, software y conciliación.
             </p>
+            <div className="legal-links">
+              <Link href="/terminos">Términos <ArrowUpRight size={16} /></Link>
+              <Link href="/privacidad">Privacidad <ArrowUpRight size={16} /></Link>
+              <Link href="/legal">Datos PJ <ArrowUpRight size={16} /></Link>
+              <Link href="/docs/legal/dlocal-go-checklist">Checklist dLocal Go <ArrowUpRight size={16} /></Link>
+            </div>
           </div>
-          <div className="norm-row">
-            <div className="norm">
-              <div className="k">TUU</div>
-              <h3>Adquirente presencial</h3>
-              <p>InterApp en terminales SUNMI/KOZEN. Voucher y liquidación del comercio SICR3P SpA.</p>
+          <div className="comply-list">
+            <div>
+              <strong>TUU</strong>
+              <p>Adquirente presencial · InterApp · voucher del comercio SICR3P SpA.</p>
             </div>
-            <div className="norm">
-              <div className="k">dLocal Go</div>
-              <h3>Pay-in y payouts</h3>
-              <p>Checkout online y envíos a CL, PE, BR, AR, MX, EC, PY, UY según corredores documentados.</p>
+            <div>
+              <strong>dLocal Go</strong>
+              <p>Pay-in y payouts · CL, PE, BR, AR, MX, EC, PY, UY.</p>
             </div>
-            <div className="norm">
-              <div className="k">Legal</div>
-              <h3>Términos claros</h3>
+            <div>
+              <strong>Contacto</strong>
               <p>
-                <Link href="/terminos" style={{ color: 'var(--lime)' }}>
-                  Términos
-                </Link>
-                {' · '}
-                <Link href="/privacidad" style={{ color: 'var(--lime)' }}>
-                  Privacidad
-                </Link>
-                {' · '}
-                <Link href="/legal" style={{ color: 'var(--lime)' }}>
-                  Datos PJ
-                </Link>
+                <a href={`mailto:${BAAS_LEGAL.email}`}>{BAAS_LEGAL.email}</a>
+                <br />
+                {BAAS_LEGAL.telefono}
               </p>
             </div>
           </div>
@@ -177,9 +182,7 @@ export default async function LandingPage() {
       <section className="cta-band">
         <div className="c">
           <h2>Activa el panel operativo</h2>
-          <p>
-            Demo: empresa@sicr3p.cl · ops@sicr3p.cl · admin@sicr3p.cl — clave sicr3p2026
-          </p>
+          <p>Demo: empresa@ · ops@ · admin@sicr3p.cl — clave sicr3p2026</p>
           <div className="actions">
             <Link href="/ingresar" className="btn lime">
               Ingresar <ArrowRight className="w-4 h-4" />
