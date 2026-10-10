@@ -1,72 +1,59 @@
 import Link from 'next/link';
-import { ArrowRight, MapPinned } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import SicrLogo from './components/SicrLogo';
-import { obtenerUsuarioSesion } from '@/lib/auth';
+import SiteFooter from './components/SiteFooter';
+import { obtenerUsuarioSesion, destinoTrasLogin } from '@/lib/auth';
+import { BAAS_LEGAL } from '@/lib/baas/config';
 import './sicr-landing.css';
 
-const FLUJOS = [
+const CAPAS = [
   {
-    tag: 'Operación industrial',
-    titulo: 'Proveedor minero y maestranza',
-    desc: 'Expedientes por empresa, instalación, producto, lote, energía, combustible, producción y respaldo documental.',
+    tag: 'Cobro presencial',
+    titulo: 'Terminales TUU',
+    desc: 'Código en el portal, cobro con tarjeta en POS vía InterApp. SICR3P no toca el PAN ni liquida comercios ajenos.',
   },
   {
-    tag: 'Bienes cubiertos UE',
-    titulo: 'CBAM preverificado',
-    desc: 'Informe Preverificado CBAM con fuentes, brechas visibles y límites explícitos frente al certificado oficial.',
+    tag: 'Liquidación',
+    titulo: 'Saldo merchant dLocal Go',
+    desc: 'Los fondos operativos viven en el saldo merchant de dLocal Go. El panel instruye payouts B2C/B2B documentados.',
   },
   {
-    tag: 'Ruta y legalidad',
-    titulo: 'Corredor Bioceánico + EUDR',
-    desc: 'Actor, país, documento y requisito: origen, tránsito, aduana, destino y evaluación EUDR cuando aplica.',
+    tag: 'Panel operativo',
+    titulo: 'Plataforma tecnológica',
+    desc: 'Solicitudes, beneficiarios, cola y lotes FIFO. Sin billetera pública ni emisión de medios de pago propios.',
   },
 ];
 
 const PASOS = [
-  { n: '1', titulo: 'Crea acceso', desc: 'Un administrador habilita usuarios internos para operar expedientes.' },
-  { n: '2', titulo: 'Registra empresa', desc: 'Proveedor, instalación, producto, lote, período y flujo aplicable.' },
-  { n: '3', titulo: 'Carga evidencia', desc: 'Cada dato queda declarado o documentado, con custodia SHA-256.' },
-  { n: '4', titulo: 'Emite informe', desc: 'Cobertura, normas, trazabilidad, faltantes y estado de revisión.' },
-];
-
-const NORMAS = [
-  {
-    k: 'CBAM',
-    titulo: 'Cálculo y verificación',
-    desc: 'Metodologías, valores por defecto y guías para preparar el Informe Preverificado con límites claros.',
-  },
-  {
-    k: 'EUDR',
-    titulo: 'Libre de deforestación',
-    desc: 'Aplicabilidad, geolocalización, legalidad, riesgo y referencia DDS/TRACES cuando corresponda.',
-  },
-  {
-    k: 'Corredor',
-    titulo: 'Hitos por país',
-    desc: 'Chile, Argentina, Bolivia, Brasil, Paraguay y Perú con documentos esperados en cada tramo.',
-  },
+  { n: '1', titulo: 'Solicitud en el portal', desc: 'La empresa crea el pago, elige corredor y obtiene un código para POS.' },
+  { n: '2', titulo: 'Cobro en TUU', desc: 'El operador cobra en terminal autorizado; el abono llega a la cuenta del comercio SICR3P.' },
+  { n: '3', titulo: 'Lote y fondeo', desc: 'Ops cierra lote y fondea el saldo merchant dLocal Go desde treasury.' },
+  { n: '4', titulo: 'Payout instruido', desc: 'El software libera FIFO vía API dLocal Go hacia la cuenta del beneficiario.' },
 ];
 
 export default async function LandingPage() {
   const usuario = await obtenerUsuarioSesion();
-  const destino = usuario ? '/panel' : '/ingresar';
+  const destino = usuario ? destinoTrasLogin(usuario) : '/ingresar';
 
   return (
     <div className="sicr-lp min-h-screen">
       <header className="top">
         <div className="c">
-          <Link href="/" className="brand-mark" aria-label="SICR3P inicio">
+          <Link href="/" className="brand-mark" aria-label="sicr3p/ inicio">
             <SicrLogo size="sm" contrast="dark" />
           </Link>
           <nav className="menu" aria-label="Secciones">
-            <a href="#flujos">Flujos</a>
-            <a href="#pasos">Cómo opera</a>
-            <a href="#normas">Normas</a>
-            <a href="#para-quien">Para quién</a>
+            <a href="#producto">Producto</a>
+            <a href="#como">Cómo opera</a>
+            <a href="#cumplimiento">Cumplimiento</a>
+            <Link href="/contacto">Contacto</Link>
           </nav>
           <div className="sp" />
-          <Link href={destino} className="btn out sm">
-            {usuario ? 'Ir al panel' : 'Ingresar'}
+          <a className="btn out sm" href={`mailto:${BAAS_LEGAL.email}`}>
+            {BAAS_LEGAL.email}
+          </a>
+          <Link href={destino} className="btn dark sm">
+            {usuario ? 'Abrir panel' : 'Ingresar'}
           </Link>
         </div>
       </header>
@@ -74,7 +61,7 @@ export default async function LandingPage() {
       <section className="hero" aria-label="Inicio">
         <img
           src="/brand/hero-industrial.jpg"
-          alt="Operación industrial: infraestructura y evidencia en terreno"
+          alt="Operación sicr3p/: plataforma de pagos y liquidación"
           width={2400}
           height={1600}
           fetchPriority="high"
@@ -82,35 +69,38 @@ export default async function LandingPage() {
         <div className="ov" aria-hidden="true" />
         <div className="c">
           <div className="brand-hero">
-            sicr<span>3</span>p
+            sicr<span>3</span>p<span style={{ color: 'var(--lime)' }}>/</span>
           </div>
           <h1>
-            Evidencia industrial ordenada.{' '}
-            <em>Informes que se pueden revisar.</em>
+            Pagos y liquidación para tu operación.{' '}
+            <em>Software, no banco.</em>
           </h1>
           <p className="lead">
-            Un solo sistema para registrar empresa, cargar respaldos y ver qué falta — CBAM y Corredor/EUDR sin mezclar obligaciones.
+            Panel operativo para solicitar cobros en TUU, conciliar lotes y ejecutar payouts vía dLocal Go — sin custodiar fondos del público.
           </p>
           <div className="cta">
-            <Link href={destino} className="btn lime">
-              {usuario ? 'Abrir panel' : 'Ingresar al panel'} <ArrowRight className="w-4 h-4" />
+            <Link href="/portal" className="btn lime">
+              Portal empresas <ArrowRight className="w-4 h-4" />
             </Link>
-            <a href="#flujos" className="btn ghost">
-              Ver flujos
-            </a>
+            <Link href={destino} className="btn ghost">
+              {usuario ? 'Continuar sesión' : 'Ingresar'}
+            </Link>
           </div>
         </div>
       </section>
 
-      <section className="sec tint" id="flujos">
+      <section className="sec tint" id="producto">
         <div className="c">
           <div className="sh">
-            <span className="eyebrow">Flujos</span>
-            <h2>Elige el camino correcto</h2>
-            <p>Entras, escoges tu flujo y avanzas paso a paso. Lo técnico queda ordenado por detrás.</p>
+            <span className="eyebrow">Producto</span>
+            <h2>Una plataforma tecnológica de pagos</h2>
+            <p>
+              sicr3p/ opera como comercio + software: cobro presencial con TUU, pay-in y payouts con dLocal Go.
+              El “saldo disponible” del panel es saldo merchant / operativo, no una cuenta bancaria de clientes.
+            </p>
           </div>
           <div className="flows">
-            {FLUJOS.map((f) => (
+            {CAPAS.map((f) => (
               <article key={f.titulo} className="flow">
                 <span className="tag">{f.tag}</span>
                 <h3>{f.titulo}</h3>
@@ -121,12 +111,12 @@ export default async function LandingPage() {
         </div>
       </section>
 
-      <section className="sec" id="pasos">
+      <section className="sec" id="como">
         <div className="c">
           <div className="sh">
             <span className="eyebrow">Operación</span>
-            <h2>Cuatro pasos, sin enredo</h2>
-            <p>Primero se registra, luego se documenta, después se revisa. Si falta algo, el sistema lo muestra.</p>
+            <h2>Del código POS al payout</h2>
+            <p>Flujo real que describen los términos: portal → TUU → fondeo → instrucción dLocal Go.</p>
           </div>
           <div className="steps">
             {PASOS.map((p) => (
@@ -140,51 +130,45 @@ export default async function LandingPage() {
         </div>
       </section>
 
-      <section className="sec navy" id="normas">
+      <section className="sec navy" id="cumplimiento">
         <div className="c">
           <div className="sh">
-            <span className="eyebrow" style={{ color: 'var(--lime)' }}>Normas</span>
-            <h2>Guía práctica, no certificado oficial</h2>
+            <span className="eyebrow" style={{ color: 'var(--lime)' }}>
+              Posicionamiento
+            </span>
+            <h2>Fuera del perímetro de emisor o billetera</h2>
             <p>
-              SICR3P no reemplaza certificado CBAM, declaración DDS ni asesoría legal del operador europeo.
-              Muestra qué revisar, qué documento falta y qué salida se puede emitir.
+              No emitimos tarjeta prepago propia, no prometemos depósito ni cuenta con provisión de fondos a nombre sicr3p/.
+              Cobro y payout los ejecutan proveedores autorizados (TUU, dLocal Go). Nosotros proveemos mandato, software y conciliación.
             </p>
           </div>
           <div className="norm-row">
-            {NORMAS.map((n) => (
-              <div key={n.k} className="norm">
-                <div className="k">{n.k}</div>
-                <h3>{n.titulo}</h3>
-                <p>{n.desc}</p>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 36, display: 'flex', alignItems: 'center', gap: 10, color: 'rgba(241,245,242,.7)', fontSize: 14 }}>
-            <MapPinned className="w-4 h-4" style={{ color: 'var(--lime)' }} />
-            Antofagasta, Chile · infraestructura de evidencia para la cadena minera
-          </div>
-        </div>
-      </section>
-
-      <section className="sec" id="para-quien">
-        <div className="c">
-          <div className="sh">
-            <span className="eyebrow">Triple impacto</span>
-            <h2>Para quién trabaja SICR3P</h2>
-            <p>Social · ambiental · económico — con trazabilidad que un tercero puede auditar.</p>
-          </div>
-          <div className="audiences">
-            <div className="aud">
-              <h3>Empresa / proveedor</h3>
-              <p>Controla la información que entrega y prepara expedientes reutilizables para sus mandantes.</p>
+            <div className="norm">
+              <div className="k">TUU</div>
+              <h3>Adquirente presencial</h3>
+              <p>InterApp en terminales SUNMI/KOZEN. Voucher y liquidación del comercio SICR3P SpA.</p>
             </div>
-            <div className="aud">
-              <h3>Mandante / minera</h3>
-              <p>Revisa cobertura, origen y brechas de proveedores sin reemplazar al auditor independiente.</p>
+            <div className="norm">
+              <div className="k">dLocal Go</div>
+              <h3>Pay-in y payouts</h3>
+              <p>Checkout online y envíos a CL, PE, BR, AR, MX, EC, PY, UY según corredores documentados.</p>
             </div>
-            <div className="aud">
-              <h3>Banco / inversionista</h3>
-              <p>Observa trazabilidad y brechas para decisiones de financiamiento sostenible.</p>
+            <div className="norm">
+              <div className="k">Legal</div>
+              <h3>Términos claros</h3>
+              <p>
+                <Link href="/terminos" style={{ color: 'var(--lime)' }}>
+                  Términos
+                </Link>
+                {' · '}
+                <Link href="/privacidad" style={{ color: 'var(--lime)' }}>
+                  Privacidad
+                </Link>
+                {' · '}
+                <Link href="/legal" style={{ color: 'var(--lime)' }}>
+                  Datos PJ
+                </Link>
+              </p>
             </div>
           </div>
         </div>
@@ -192,19 +176,22 @@ export default async function LandingPage() {
 
       <section className="cta-band">
         <div className="c">
-          <h2>Listo para operar el expediente</h2>
-          <p>Acceso creado por administrador. Demo: admin@sicr3p.cl</p>
+          <h2>Activa el panel operativo</h2>
+          <p>
+            Demo: empresa@sicr3p.cl · ops@sicr3p.cl · admin@sicr3p.cl — clave sicr3p2026
+          </p>
           <div className="actions">
-            <Link href={destino} className="btn lime">
-              {usuario ? 'Ir al panel' : 'Ingresar'} <ArrowRight className="w-4 h-4" />
+            <Link href="/ingresar" className="btn lime">
+              Ingresar <ArrowRight className="w-4 h-4" />
+            </Link>
+            <Link href="/contacto" className="btn ghost">
+              Hablar con nosotros
             </Link>
           </div>
         </div>
       </section>
 
-      <footer>
-        © 2026 SICR3P · triple impacto: social · ambiental · económico
-      </footer>
+      <SiteFooter />
     </div>
   );
 }

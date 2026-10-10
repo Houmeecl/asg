@@ -14,8 +14,9 @@ const body = Source_Sans_3({
 });
 
 export const metadata = {
-  title: "SICR3P — Evidencia industrial, CBAM y Corredor + EUDR",
-  description: "Infraestructura de evidencia industrial para proveedores de la gran minería: expedientes, custodia SHA-256, CBAM preverificado y Corredor Bioceánico + EUDR.",
+  title: "sicr3p/ — Pagos y liquidación operativa",
+  description:
+    "Plataforma tecnológica sicr3p/: cobros en TUU, panel operativo y payouts vía dLocal Go. Software y mandato — no banco ni billetera.",
 };
 
 export default function RootLayout({ children }) {
