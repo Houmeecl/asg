@@ -1,13 +1,7 @@
-# Términos y condiciones — sicr3p/
+# Términos — política editorial
 
-Fuente canónica renderizada en `/terminos` desde `lib/baas/legal-copy.js`.
+Las condiciones públicas (`/terminos`, `/privacidad`) **solo nombran sicr3p/ y SICR3P SpA**.
 
-Resumen para revisión merchant:
+No citar en copy legal público: adquirentes POS, procesadores de payout, CRM u otras marcas.
 
-1. Plataforma tecnológica B2B (no banco / no billetera / no emisor).
-2. Cobro presencial: TUU InterApp.
-3. Pay-in y payouts: dLocal Go (saldo merchant).
-4. Flujo: portal → código/POS → fondeo → instrucción payout FIFO.
-5. Saldo en panel = merchant/operativo, no cuenta de clientes.
-6. Prepago solo con emisor regulado (próximamente / en evaluación).
-7. Contacto: variables `SICR3P_CONTACT_*` / footer web.
+Integraciones técnicas (rails, APIs, tokens) viven en docs internas (`docs/baas-architecture.md`, `docs/hubspot.md`, `docs/tuu-*`) y en el código, no en los términos del sitio.

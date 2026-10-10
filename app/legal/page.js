@@ -5,32 +5,36 @@ import { legalMeta } from '@/lib/baas/legal-copy';
 
 export const metadata = {
   title: 'Datos de la sociedad — sicr3p/',
-  description: 'Razón social, RUT y contacto para validación merchant (dLocal Go / TUU).',
+  description: 'Razón social, RUT y datos societarios de SICR3P SpA.',
 };
 
 export default function LegalPage() {
   const meta = legalMeta();
-  const { razonSocial, rut, email, telefono, direccion } = BAAS_LEGAL;
-  const pending = /confirmar|XXXX/i.test(`${razonSocial} ${rut}`);
+  const {
+    razonSocial,
+    nombreFantasia,
+    rut,
+    email,
+    telefono,
+    direccion,
+    fechaConstitucion,
+    capitalSocial,
+    representanteLegal,
+    representanteRut,
+    estatutoCve,
+    estatutoUrl,
+  } = BAAS_LEGAL;
 
   return (
     <LegalShell
       eyebrow="Persona jurídica"
       title="Datos de la sociedad"
-      updated={`Visible para revisión merchant · ${meta.updated}`}
+      updated={`Estatuto actualizado · CVE ${estatutoCve} · ${meta.updated}`}
     >
       <p className="legal-lead">
-        Información que debe coincidir con el registro en dLocal Go y con el comercio TUU. Los campos marcados
-        como “dato a confirmar” no deben usarse para solicitar revisión live hasta completarlos.
+        Identificación de {razonSocial}, titular de la plataforma sicr3p/, conforme al Certificado de
+        Estatuto Actualizado del Registro de Empresas y Sociedades.
       </p>
-
-      {pending && (
-        <div className="legal-banner warn">
-          Hay placeholders pendientes (razón social / RUT). Completa variables{' '}
-          <code>SICR3P_RAZON_SOCIAL</code>, <code>SICR3P_RUT</code>, <code>SICR3P_CONTACT_EMAIL</code> y{' '}
-          <code>SICR3P_CONTACT_PHONE</code> antes de avisar a Bruna / dLocal Go.
-        </div>
-      )}
 
       <dl className="legal-dl">
         <div>
@@ -38,11 +42,35 @@ export default function LegalPage() {
           <dd>{razonSocial}</dd>
         </div>
         <div>
+          <dt>Nombre de fantasía</dt>
+          <dd>{nombreFantasia}</dd>
+        </div>
+        <div>
           <dt>RUT</dt>
           <dd>{rut}</dd>
         </div>
         <div>
-          <dt>Email de contacto</dt>
+          <dt>Domicilio</dt>
+          <dd>{direccion}</dd>
+        </div>
+        <div>
+          <dt>Fecha de constitución</dt>
+          <dd>{fechaConstitucion}</dd>
+        </div>
+        <div>
+          <dt>Capital social</dt>
+          <dd>{capitalSocial}</dd>
+        </div>
+        <div>
+          <dt>Gerente general / representante SII</dt>
+          <dd>
+            {representanteLegal}
+            <br />
+            <span style={{ fontSize: 14, color: 'var(--ink-soft)' }}>RUT {representanteRut}</span>
+          </dd>
+        </div>
+        <div>
+          <dt>Email</dt>
           <dd><a href={`mailto:${email}`}>{email}</a></dd>
         </div>
         <div>
@@ -50,27 +78,29 @@ export default function LegalPage() {
           <dd><a href={`tel:${telefono.replace(/\s/g, '')}`}>{telefono}</a></dd>
         </div>
         <div>
-          <dt>Dirección / ciudad</dt>
-          <dd>{direccion}</dd>
+          <dt>Objeto (resumen estatutario)</dt>
+          <dd style={{ fontSize: 15, fontWeight: 500 }}>
+            Auxiliares de la intermediación financiera (excepto seguros), investigación y desarrollo,
+            organizaciones empresariales, servicios informáticos y otras actividades de servicios.
+          </dd>
         </div>
         <div>
-          <dt>Actividad declarada</dt>
-          <dd>
-            Comercio de servicios tecnológicos de pagos y liquidación operativa (software + mandato). Cobro
-            presencial vía TUU; pay-in/payouts vía dLocal Go.
+          <dt>Estatuto</dt>
+          <dd style={{ fontSize: 15, fontWeight: 500 }}>
+            CVE {estatutoCve} ·{' '}
+            <a href={estatutoUrl} target="_blank" rel="noreferrer">
+              Descargar PDF
+            </a>
           </dd>
         </div>
       </dl>
 
       <p className="legal-lead" style={{ marginTop: 28 }}>
-        Documentos relacionados:{' '}
         <Link href="/terminos">Términos</Link>
         {' · '}
         <Link href="/privacidad">Privacidad</Link>
         {' · '}
         <Link href="/contacto">Contacto</Link>
-        {' · '}
-        <Link href="/docs/legal/dlocal-go-checklist">Checklist dLocal Go</Link>
       </p>
     </LegalShell>
   );

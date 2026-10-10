@@ -15,8 +15,8 @@ export default function PrivacidadPage() {
       updated={`Última actualización: ${meta.updated}`}
     >
       <p className="legal-lead">
-        Tratamos solo los datos necesarios para operar el panel, responder contacto y ejecutar cobros/payouts
-        a través de proveedores autorizados (TUU, dLocal Go).
+        Tratamos solo los datos necesarios para operar el panel sicr3p/, responder contacto y ejecutar cobros
+        y liquidaciones del servicio contratado con SICR3P SpA.
       </p>
       <article className="legal-prose">
         {PRIVACIDAD_SECTIONS.map((s) => (

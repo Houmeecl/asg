@@ -3,33 +3,33 @@ import LegalShell from '../../../components/LegalShell';
 import { BAAS_LEGAL } from '@/lib/baas/config';
 
 export const metadata = {
-  title: 'Checklist sitio dLocal Go — sicr3p/',
-  description: 'Requisitos de sitio web para activación / revisión dLocal Go.',
+  title: 'Checklist del sitio — sicr3p/',
+  description: 'Requisitos de sitio web público de SICR3P SpA antes de activación merchant.',
 };
 
 const ITEMS = [
   {
     ok: true,
     label: 'Landing que representa la operación real',
-    detail: 'Qué es sicr3p/, cómo se contrata, flujo portal → TUU → dLocal Go.',
+    detail: 'Qué es sicr3p/, cómo se contrata y el flujo portal → cobro → liquidación.',
     href: '/',
   },
   {
     ok: true,
     label: 'Términos y condiciones propios (servicios)',
-    detail: 'No política de envíos de productos físicos; describe POS, lotes y payouts.',
+    detail: 'Solo nombran sicr3p/ / SICR3P SpA; describen POS, lotes y liquidación.',
     href: '/terminos',
   },
   {
     ok: true,
     label: 'Privacidad',
-    detail: 'Tratamiento de datos del formulario y del panel.',
+    detail: 'Tratamiento de datos del formulario y del panel sicr3p/.',
     href: '/privacidad',
   },
   {
     ok: true,
     label: 'Formulario de contacto activo',
-    detail: 'Nombre, email, mensaje con confirmación de envío (API + persistencia).',
+    detail: 'Nombre, email, mensaje con confirmación de envío.',
     href: '/contacto',
   },
   {
@@ -40,8 +40,8 @@ const ITEMS = [
   },
   {
     ok: !/XXXX|confirmar/i.test(`${BAAS_LEGAL.razonSocial}${BAAS_LEGAL.rut}`),
-    label: 'Razón social + RUT coincidentes con cuenta dLocal Go',
-    detail: `${BAAS_LEGAL.razonSocial} · ${BAAS_LEGAL.rut}`,
+    label: 'Razón social + RUT oficiales',
+    detail: `${BAAS_LEGAL.razonSocial} · ${BAAS_LEGAL.rut} (CVE ${BAAS_LEGAL.estatutoCve})`,
     href: '/legal',
   },
   {
@@ -52,22 +52,22 @@ const ITEMS = [
   },
   {
     ok: Boolean(process.env.HUBSPOT_PRIVATE_APP_TOKEN || process.env.HUBSPOT_ACCESS_TOKEN),
-    label: 'HubSpot CRM (opcional comercial)',
-    detail: 'Token Private App → upsert lead desde /contacto. Ver docs/hubspot.md.',
+    label: 'CRM de leads (opcional)',
+    detail: 'Token de CRM configurado para /contacto, o modo simulador.',
     href: '/contacto',
   },
 ];
 
-export default function DlocalChecklistPage() {
+export default function SiteChecklistPage() {
   return (
     <LegalShell
       eyebrow="Cumplimiento"
-      title="Checklist sitio dLocal Go"
-      updated="Usar antes de solicitar revisión a Bruna / activación live"
+      title="Checklist del sitio"
+      updated="Usar antes de solicitar revisión / activación merchant"
     >
       <p className="legal-lead">
-        Fuente operativa interna. Marca en verde lo listo; el RUT/razón social oficiales bloquean el go-live
-        hasta confirmarse.
+        Fuente operativa interna de sicr3p/. Marca en verde lo listo. El RUT y la razón social deben
+        coincidir con el estatuto de SICR3P SpA.
       </p>
       <ul className="check-list">
         {ITEMS.map((item) => (

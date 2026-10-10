@@ -47,13 +47,13 @@ export default function SiteFooter() {
             <Link href="/terminos">Términos y condiciones</Link>
             <Link href="/privacidad">Privacidad</Link>
             <Link href="/legal">Datos de la sociedad</Link>
-            <Link href="/docs/legal/dlocal-go-checklist">Checklist dLocal Go</Link>
+            <Link href="/docs/legal/dlocal-go-checklist">Checklist del sitio</Link>
             <Link href="/contacto">Contacto</Link>
           </p>
         </div>
       </div>
       <div className="c foot-copy">
-        © {new Date().getFullYear()} sicr3p/ · plataforma tecnológica de pagos y liquidación vía proveedores autorizados
+        © {new Date().getFullYear()} sicr3p/ · SICR3P SpA · plataforma tecnológica de pagos y liquidación
       </div>
     </footer>
   );
