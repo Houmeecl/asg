@@ -1,37 +1,26 @@
-import { Syne, Source_Sans_3, Caveat } from "next/font/google";
-import "./globals.css";
+import { Inter } from 'next/font/google';
+import './brand.css';
+import './globals.css';
 
-const display = Syne({
-  variable: "--font-display",
-  subsets: ["latin"],
-  weight: ["500", "600", "700", "800"],
-});
-
-const body = Source_Sans_3({
-  variable: "--font-body",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-});
-
-const script = Caveat({
-  variable: "--font-script",
-  subsets: ["latin"],
-  weight: ["500", "600", "700"],
+const inter = Inter({
+  variable: '--font-body',
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700'],
 });
 
 export const metadata = {
-  title: "sicr3p/ — Soluciones que impulsan empresas",
+  title: 'sicr3p/ — Soluciones que impulsan empresas',
   description:
-    "Desarrollo empresarial y finanzas sostenibles para PYMEs. Dueña: Fundación Entretodos. Operadora: SICR3P SpA.",
+    'Desarrollo empresarial y finanzas sostenibles para PYMEs. Una iniciativa de Proveedor Regional. Operadora: SICR3P SpA.',
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html
-      lang="es"
-      className={`${display.variable} ${body.variable} ${script.variable} h-full antialiased`}
-    >
-      <body className="min-h-full flex flex-col bg-background text-foreground font-sans">
+    <html lang="es" className={`${inter.variable} h-full antialiased`}>
+      <body
+        className="min-h-full flex flex-col bg-background text-foreground font-sans"
+        style={{ fontFamily: 'var(--font-body), Inter, sans-serif' }}
+      >
         {children}
       </body>
     </html>

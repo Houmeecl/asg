@@ -1,0 +1,26 @@
+/* Manual de marca SICR3P v1.0 — tokens canónicos */
+:root {
+  --sicr-navy: #0f1b3d;
+  --sicr-violet: #6b5cf6;
+  --sicr-green: #00b67a;
+  --sicr-blue-soft: #e6f0ff;
+  --sicr-gray: #f4f5f9;
+  --sicr-ink: #0f1b3d;
+  --sicr-ink-soft: #5b6578;
+  --sicr-line: #e2e6ef;
+  --sicr-white: #ffffff;
+  --sicr-orange: #e07a3a; /* acento operativo (mock landing) */
+
+  /* aliases usados por paneles / Tailwind theme */
+  --sicr-primary: var(--sicr-navy);
+  --sicr-accent: var(--sicr-violet);
+  --sicr-lime: var(--sicr-green);
+  --sicr-bg: var(--sicr-gray);
+  --sicr-select: var(--sicr-blue-soft);
+  --background: var(--sicr-gray);
+  --foreground: var(--sicr-ink);
+
+  /* compat: display/script apuntan a Inter (manual) */
+  --font-display: var(--font-body);
+  --font-script: var(--font-body);
+}

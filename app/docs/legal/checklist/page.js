@@ -15,8 +15,8 @@ const ITEMS = [
   {
     ok: true,
     label: 'Logo oficial SicrLogo',
-    detail: 'Wordmark sicr3p con grafismo “3” y triple impacto — no wordmarks mock.',
-    href: '/',
+    detail: 'Wordmark sicr3p/ con acento violeta en «3/» (Manual de marca v1.0).',
+    href: '/marca',
   },
   {
     ok: true,

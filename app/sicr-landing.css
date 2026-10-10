@@ -1,22 +1,22 @@
-/* sicr3p/ landing — Framer corporativo (mock) + páginas legales */
+/* sicr3p/ landing — Manual de marca v1.0 + páginas legales */
 .sicr-lp {
-  --navy: #0d2748;
-  --navy-deep: #081a32;
-  --ink: #12233a;
-  --ink-soft: #5b6b7f;
-  --brand: #3f51c8;
-  --brand-dark: #2f3ea3;
-  --green: #2f9e5b;
-  --green-soft: #e8f6ee;
-  --orange: #e07a3a;
-  --violet: #6b5ce0;
+  --navy: var(--sicr-navy, #0f1b3d);
+  --navy-deep: #0a1329;
+  --ink: var(--sicr-ink, #0f1b3d);
+  --ink-soft: var(--sicr-ink-soft, #5b6578);
+  --brand: var(--sicr-violet, #6b5cf6);
+  --brand-dark: #5748d4;
+  --green: var(--sicr-green, #00b67a);
+  --green-soft: #e6f8f1;
+  --orange: var(--sicr-orange, #e07a3a);
+  --violet: var(--sicr-violet, #6b5cf6);
   --azul: #3d7bd9;
-  --bg: #f7f8fb;
-  --line: #e2e7ef;
+  --bg: var(--sicr-gray, #f4f5f9);
+  --line: var(--sicr-line, #e2e6ef);
   --white: #ffffff;
-  --fd: var(--font-display), "Segoe UI", sans-serif;
-  --ft: var(--font-body), "Segoe UI", sans-serif;
-  --fs: var(--font-script), "Segoe Script", cursive;
+  --fd: var(--font-body), Inter, sans-serif;
+  --ft: var(--font-body), Inter, sans-serif;
+  --fs: var(--font-body), Inter, sans-serif;
   --r: 18px;
   --hdr: 78px;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
@@ -24,8 +24,8 @@
   font-family: var(--ft);
   color: var(--ink);
   background:
-    radial-gradient(900px 480px at 8% -8%, rgba(63, 81, 200, 0.08), transparent 55%),
-    radial-gradient(700px 420px at 100% 0%, rgba(47, 158, 91, 0.07), transparent 50%),
+    radial-gradient(900px 480px at 8% -8%, rgba(107, 92, 246, 0.1), transparent 55%),
+    radial-gradient(700px 420px at 100% 0%, rgba(0, 182, 122, 0.08), transparent 50%),
     var(--white);
   -webkit-font-smoothing: antialiased;
   position: relative;
@@ -162,7 +162,7 @@
 .sicr-lp .btn.brand {
   background: var(--brand);
   color: #fff;
-  box-shadow: 0 14px 30px -14px rgba(63, 81, 200, 0.7);
+  box-shadow: 0 14px 30px -14px rgba(107, 92, 246, 0.55);
 }
 .sicr-lp .btn.brand:hover { background: var(--brand-dark); }
 .sicr-lp .btn.dark {
@@ -182,7 +182,7 @@
   background: rgba(255, 255, 255, 0.9);
 }
 .sicr-lp .btn.out.brand-out {
-  border-color: rgba(63, 81, 200, 0.45);
+  border-color: rgba(107, 92, 246, 0.45);
   color: var(--brand);
 }
 .sicr-lp .btn.lime {

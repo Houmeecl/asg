@@ -1,17 +1,17 @@
-/* Shell BaaS portal / ops — tokens alineados a landing sicr3p/ */
+/* Shell BaaS portal / ops — Manual de marca v1.0 */
 .baas {
-  --navy: #0f1f2e;
-  --navy-deep: #0a1520;
-  --primary: #004f30;
-  --accent: #28a745;
-  --lime: #7ac943;
-  --bg: #f1f5f2;
-  --ink: #0d1f16;
-  --ink-soft: #56695e;
-  --line: #d5ddd8;
+  --navy: var(--sicr-navy, #0f1b3d);
+  --navy-deep: #0a1329;
+  --primary: var(--sicr-navy, #0f1b3d);
+  --accent: var(--sicr-violet, #6b5cf6);
+  --lime: var(--sicr-green, #00b67a);
+  --bg: var(--sicr-gray, #f4f5f9);
+  --ink: var(--sicr-ink, #0f1b3d);
+  --ink-soft: var(--sicr-ink-soft, #5b6578);
+  --line: var(--sicr-line, #e2e6ef);
   --white: #ffffff;
-  --fd: var(--font-display), "Segoe UI", sans-serif;
-  --ft: var(--font-body), "Segoe UI", sans-serif;
+  --fd: var(--font-body), Inter, sans-serif;
+  --ft: var(--font-body), Inter, sans-serif;
   --danger: #b42318;
   --warn: #b54708;
   --info: #175cd3;

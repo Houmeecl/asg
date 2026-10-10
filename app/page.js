@@ -126,11 +126,11 @@ export default async function LandingPage() {
       <section className="hero-split" id="inicio" aria-label="Inicio">
         <div className="c hero-split-inner">
           <div className="hero-copy">
-            <p className="hero-eyebrow">Desarrollo · Oportunidades · Finanzas sostenibles</p>
+            <p className="hero-eyebrow">Desarrollamos empresas. Acercamos soluciones.</p>
             <h1>
-              Más empresas hoy.
+              Hoy más empresas construyen
               <br />
-              Un mejor mañana.
+              un mejor mañana
             </h1>
             <p className="lead">
               Integramos desarrollo empresarial y finanzas sostenibles para acercar soluciones que

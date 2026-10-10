@@ -1,19 +1,6 @@
 @import "tailwindcss";
 
-:root {
-  --sicr-navy: #0f1f2e;
-  --sicr-primary: #004f30;
-  --sicr-accent: #28a745;
-  --sicr-lime: #7ac943;
-  --sicr-bg: #f1f5f2;
-  --sicr-ink: #0d1f16;
-  --sicr-ink-soft: #56695e;
-  --sicr-line: #d5ddd8;
-  --sicr-select: #eef7f1;
-  --background: var(--sicr-bg);
-  --foreground: var(--sicr-ink);
-}
-
+/* Tokens canónicos en brand.css (Manual de marca v1.0) */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
