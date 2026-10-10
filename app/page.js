@@ -151,13 +151,13 @@ export default async function LandingPage() {
               <p className="hero-script" aria-hidden="true">
                 Empresas que transforman su entorno.
               </p>
-              <aside className="hero-float">
-                <span className="hero-float-icon" aria-hidden="true">
-                  <Leaf size={20} />
-                </span>
-                <p>Finanzas sostenibles para un crecimiento real</p>
-              </aside>
             </div>
+            <aside className="hero-float">
+              <span className="hero-float-icon" aria-hidden="true">
+                <Leaf size={20} />
+              </span>
+              <p>Finanzas sostenibles para un crecimiento real</p>
+            </aside>
           </div>
         </div>
       </section>

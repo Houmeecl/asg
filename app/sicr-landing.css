@@ -263,6 +263,7 @@
   position: relative;
   min-height: 520px;
   animation: sicr-rise 1s var(--ease) 0.08s both;
+  overflow: visible;
 }
 
 .sicr-lp .hero-photo-wrap {
