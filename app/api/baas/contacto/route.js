@@ -10,7 +10,11 @@ export async function POST(request) {
   const body = await request.json().catch(() => ({}));
   const nombre = String(body.nombre || '').trim();
   const email = String(body.email || '').trim().toLowerCase();
-  const mensaje = String(body.mensaje || '').trim();
+  const empresa = String(body.empresa || '').trim();
+  const mensajeRaw = String(body.mensaje || '').trim();
+  const mensaje = empresa && !mensajeRaw.includes(`[Empresa: ${empresa}]`)
+    ? `[Empresa: ${empresa}] ${mensajeRaw}`.trim()
+    : mensajeRaw;
   const telefono = String(body.telefono || '').trim() || undefined;
 
   if (!nombre || nombre.length < 2) {

@@ -53,7 +53,7 @@ export default function SiteFooter() {
         </div>
       </div>
       <div className="c foot-copy">
-        © {new Date().getFullYear()} sicr3p/ · SICR3P SpA · plataforma tecnológica de pagos y liquidación
+        © {new Date().getFullYear()} sicr3p/ · Dueña Fundación Entretodos · Operadora SICR3P SpA
       </div>
     </footer>
   );

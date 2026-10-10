@@ -1,34 +1,71 @@
 import Link from 'next/link';
-import { ArrowRight, ArrowUpRight } from 'lucide-react';
-import SicrLogo from './components/SicrLogo';
+import {
+  ArrowRight,
+  BarChart3,
+  Handshake,
+  Leaf,
+  Settings2,
+  Users,
+  Building2,
+  Network,
+} from 'lucide-react';
 import SiteFooter from './components/SiteFooter';
+import LandingContactForm from './components/LandingContactForm';
 import { obtenerUsuarioSesion, destinoTrasLogin } from '@/lib/auth';
 import { BAAS_LEGAL } from '@/lib/baas/config';
 import './sicr-landing.css';
 
-const CAPAS = [
+const SOLUCIONES = [
   {
-    tag: '01 — Cobro',
-    titulo: 'Terminales TUU',
-    desc: 'Código en el portal, cobro con tarjeta en POS vía InterApp. No tocamos el PAN ni liquidamos comercios ajenos.',
+    key: 'desarrollo',
+    tono: 'azul',
+    icon: Building2,
+    titulo: 'Desarrollo empresarial',
+    desc: 'Capacidades, herramientas y acompañamiento para que tu empresa avance con orden y foco.',
   },
   {
-    tag: '02 — Liquidación',
-    titulo: 'Merchant dLocal Go',
-    desc: 'Los fondos operativos viven en el saldo merchant. El panel instruye payouts B2C/B2B documentados.',
+    key: 'finanzas',
+    tono: 'verde',
+    icon: Leaf,
+    titulo: 'Finanzas sostenibles',
+    desc: 'Soluciones financieras responsables para inversión, productividad y crecimiento real.',
   },
   {
-    tag: '03 — Software',
-    titulo: 'Panel operativo',
-    desc: 'Solicitudes, beneficiarios, cola y lotes FIFO. Sin billetera pública ni emisión propia de medios de pago.',
+    key: 'conexiones',
+    tono: 'violeta',
+    icon: Handshake,
+    titulo: 'Oportunidades y conexiones',
+    desc: 'Redes, encuentros y puentes con compradores, aliados y territorios.',
+  },
+  {
+    key: 'operativas',
+    tono: 'naranja',
+    icon: Settings2,
+    titulo: 'Soluciones operativas',
+    desc: 'Herramientas para el día a día: cobros, liquidación y panel operativo de tu operación.',
+    href: '/portal',
   },
 ];
 
-const PASOS = [
-  { n: '01', titulo: 'Solicitud', desc: 'La empresa crea el pago y obtiene un código para POS.' },
-  { n: '02', titulo: 'Cobro TUU', desc: 'Operador cobra en terminal; abono al comercio SICR3P.' },
-  { n: '03', titulo: 'Lote', desc: 'Ops cierra lote y fondea el saldo merchant dLocal Go.' },
-  { n: '04', titulo: 'Payout', desc: 'Instrucción FIFO vía API hacia la cuenta del beneficiario.' },
+const IMPACTO = [
+  { value: '+1.200', label: 'empresas conectadas', icon: Users },
+  { value: '+350', label: 'oportunidades generadas', icon: Network },
+  { value: '+80', label: 'proyectos con enfoque sostenible', icon: Leaf },
+  { value: '5', label: 'territorios en desarrollo', icon: BarChart3 },
+];
+
+const RUTA = [
+  { n: 1, titulo: 'Conocemos', desc: 'Identificamos necesidades y contexto de tu empresa.' },
+  { n: 2, titulo: 'Integramos', desc: 'Articulamos capacidades, datos y aliados.' },
+  { n: 3, titulo: 'Activamos', desc: 'Acompañamos la conexión con soluciones concretas.' },
+  { n: 4, titulo: 'Impulsamos', desc: 'Seguimos el avance y ajustamos el plan.' },
+  { n: 5, titulo: 'Crecemos juntos', desc: 'Más empresa, más territorio, más futuro.' },
+];
+
+const VALORES = [
+  { icon: Leaf, label: 'Empresas más competitivas' },
+  { icon: BarChart3, label: 'Territorios más fuertes' },
+  { icon: Users, label: 'Crecimiento más inclusivo' },
 ];
 
 export default async function LandingPage() {
@@ -36,161 +73,209 @@ export default async function LandingPage() {
   const destino = usuario ? destinoTrasLogin(usuario) : '/ingresar';
 
   return (
-    <div className="sicr-lp framer min-h-screen">
+    <div className="sicr-lp framer brand-v2 min-h-screen">
       <div className="grain" aria-hidden="true" />
 
       <header className="top">
         <div className="c">
-          <Link href="/" className="brand-mark" aria-label="sicr3p/ inicio">
-            <SicrLogo size="sm" contrast="dark" />
+          <Link href="/" className="brand-lockup" aria-label="sicr3p/ inicio">
+            <span className="brand-word">
+              sicr<span>3</span>p<span className="slash">/</span>
+            </span>
+            <span className="brand-tag">Soluciones que impulsan empresas</span>
           </Link>
           <nav className="menu" aria-label="Secciones">
-            <a href="#producto">Producto</a>
-            <a href="#como">Flujo</a>
-            <a href="#cumplimiento">Cumplimiento</a>
-            <Link href="/terminos">Legal</Link>
+            <a href="#inicio">Inicio</a>
+            <a href="#soluciones">Soluciones</a>
+            <a href="#impacto">Impacto</a>
+            <a href="#ruta">Sobre SICR3P</a>
+            <a href="#contacto">Contacto</a>
+            <Link href="/legal">Legal</Link>
           </nav>
           <div className="sp" />
-          <a className="btn out sm hide-sm" href={`mailto:${BAAS_LEGAL.email}`}>
-            {BAAS_LEGAL.email}
-          </a>
-          <Link href={destino} className="btn dark sm">
+          <Link href={destino} className="btn out sm hide-sm">
             {usuario ? 'Abrir panel' : 'Ingresar'}
           </Link>
+          <a href="#contacto" className="btn brand sm">
+            Hablemos
+          </a>
         </div>
       </header>
 
-      <section className="hero" aria-label="Inicio">
-        <img
-          src="/brand/hero-industrial.jpg"
-          alt="Operación sicr3p/: plataforma de pagos y liquidación"
-          width={2400}
-          height={1600}
-          fetchPriority="high"
-        />
-        <div className="ov" aria-hidden="true" />
-        <div className="hero-orb" aria-hidden="true" />
-        <div className="c hero-inner">
-          <div className="brand-hero">
-            sicr<span>3</span>p<span className="slash">/</span>
-          </div>
-          <h1>
-            Pagos y liquidación
-            <br />
-            para tu operación.
-            <em> Software, no banco.</em>
-          </h1>
-          <p className="lead">
-            Panel operativo para cobros en TUU, lotes y payouts vía dLocal Go — sin custodiar fondos del público.
-          </p>
-          <div className="cta">
-            <Link href="/portal" className="btn lime">
-              Portal empresas <ArrowRight className="w-4 h-4" />
-            </Link>
-            <Link href={destino} className="btn ghost">
-              {usuario ? 'Continuar sesión' : 'Ingresar'}
-            </Link>
-          </div>
-          <div className="hero-meta">
-            <span>TUU InterApp</span>
-            <span className="dot" />
-            <span>dLocal Go</span>
-            <span className="dot" />
-            <span>Chile · LATAM</span>
-          </div>
-        </div>
-      </section>
-
-      <section className="sec strip" id="producto">
-        <div className="c">
-          <div className="sh wide">
-            <span className="eyebrow">Producto</span>
-            <h2>Una plataforma tecnológica de pagos</h2>
-            <p>
-              sicr3p/ opera como comercio + software. El “saldo disponible” del panel es saldo merchant /
-              operativo — no una cuenta bancaria de clientes.
+      <section className="hero-split" id="inicio" aria-label="Inicio">
+        <div className="c hero-split-inner">
+          <div className="hero-copy">
+            <p className="brand-kicker">
+              sicr<span>3</span>p<span className="slash">/</span>
             </p>
-          </div>
-          <div className="rails">
-            {CAPAS.map((f) => (
-              <article key={f.titulo} className="rail">
-                <span className="tag">{f.tag}</span>
-                <h3>{f.titulo}</h3>
-                <p>{f.desc}</p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="sec" id="como">
-        <div className="c">
-          <div className="sh">
-            <span className="eyebrow">Flujo</span>
-            <h2>Del código POS al payout</h2>
-            <p>El mismo recorrido que describen los términos — sin atajos de copy genérico.</p>
-          </div>
-          <div className="timeline">
-            {PASOS.map((p) => (
-              <div key={p.n} className="tl-item">
-                <span className="n">{p.n}</span>
-                <h3>{p.titulo}</h3>
-                <p>{p.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="sec navy" id="cumplimiento">
-        <div className="c split">
-          <div className="sh">
-            <span className="eyebrow lime">Cumplimiento</span>
-            <h2>Fuera del perímetro de emisor o billetera</h2>
-            <p>
-              No emitimos prepago propio ni prometemos depósito a nombre sicr3p/. Cobro y payout los ejecutan
-              TUU y dLocal Go. Nosotros: mandato, software y conciliación.
+            <h1>
+              Más empresas hoy.
+              <br />
+              Un mejor mañana.
+            </h1>
+            <p className="lead">
+              Integramos desarrollo empresarial y finanzas sostenibles para impulsar a las PYMEs y
+              fortalecer el territorio.
             </p>
-            <div className="legal-links">
-              <Link href="/terminos">Términos <ArrowUpRight size={16} /></Link>
-              <Link href="/privacidad">Privacidad <ArrowUpRight size={16} /></Link>
-              <Link href="/legal">Datos PJ <ArrowUpRight size={16} /></Link>
-              <Link href="/docs/legal/checklist">Checklist del sitio <ArrowUpRight size={16} /></Link>
+            <div className="cta">
+              <a href="#soluciones" className="btn brand">
+                Conoce nuestras soluciones <ArrowRight className="w-4 h-4" />
+              </a>
+              <a href="#contacto" className="btn out">
+                Contáctanos
+              </a>
             </div>
+            <ul className="valor-row">
+              {VALORES.map((v) => {
+                const Icon = v.icon;
+                return (
+                  <li key={v.label}>
+                    <span className="valor-icon" aria-hidden="true">
+                      <Icon size={18} />
+                    </span>
+                    <span>{v.label}</span>
+                  </li>
+                );
+              })}
+            </ul>
           </div>
-          <div className="comply-list">
-            <div>
-              <strong>TUU</strong>
-              <p>Adquirente presencial · InterApp · voucher del comercio SICR3P SpA.</p>
-            </div>
-            <div>
-              <strong>dLocal Go</strong>
-              <p>Pay-in y payouts · CL, PE, BR, AR, MX, EC, PY, UY.</p>
-            </div>
-            <div>
-              <strong>Contacto</strong>
-              <p>
-                <a href={`mailto:${BAAS_LEGAL.email}`}>{BAAS_LEGAL.email}</a>
-                <br />
-                {BAAS_LEGAL.telefono}
+          <div className="hero-visual">
+            <div className="hero-photo-wrap">
+              <img
+                src="/brand/hero-emprendedora.jpg"
+                alt="Empresaria en su taller — sicr3p/"
+                width={1200}
+                height={1400}
+                fetchPriority="high"
+              />
+              <p className="hero-script" aria-hidden="true">
+                Empresas que transforman su entorno.
               </p>
+              <aside className="hero-float">
+                <span className="hero-float-icon" aria-hidden="true">
+                  <Leaf size={20} />
+                </span>
+                <p>Finanzas sostenibles para un crecimiento real</p>
+              </aside>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="cta-band">
+      <section className="sec soluciones" id="soluciones">
         <div className="c">
-          <h2>Activa el panel operativo</h2>
-          <p>Demo: empresa@ · ops@ · admin@sicr3p.cl — clave sicr3p2026</p>
-          <div className="actions">
-            <Link href="/ingresar" className="btn lime">
-              Ingresar <ArrowRight className="w-4 h-4" />
-            </Link>
-            <Link href="/contacto" className="btn ghost">
-              Hablar con nosotros
-            </Link>
+          <div className="sec-head dual">
+            <h2>Soluciones para cada etapa del crecimiento</h2>
+            <p>
+              Desde el diagnóstico hasta la operación diaria: un mismo acompañamiento para que tu
+              empresa avance con claridad.
+            </p>
           </div>
+          <div className="sol-grid">
+            {SOLUCIONES.map((s) => {
+              const Icon = s.icon;
+              const inner = (
+                <>
+                  <span className={`sol-icon tono-${s.tono}`} aria-hidden="true">
+                    <Icon size={22} />
+                  </span>
+                  <h3>{s.titulo}</h3>
+                  <p>{s.desc}</p>
+                  <span className="sol-more">
+                    Ver más <ArrowRight size={14} />
+                  </span>
+                </>
+              );
+              return s.href ? (
+                <Link key={s.key} href={s.href} className={`sol-card tono-${s.tono}`}>
+                  {inner}
+                </Link>
+              ) : (
+                <article key={s.key} className={`sol-card tono-${s.tono}`}>
+                  {inner}
+                </article>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      <section className="impacto" id="impacto" aria-label="Impacto">
+        <img src="/brand/impact-andes.jpg" alt="" aria-hidden="true" />
+        <div className="impacto-ov" aria-hidden="true" />
+        <div className="c impacto-inner">
+          <h2>Impacto que se mide</h2>
+          <div className="impacto-grid">
+            {IMPACTO.map((item) => {
+              const Icon = item.icon;
+              return (
+                <div key={item.label} className="impacto-item">
+                  <Icon size={22} aria-hidden="true" />
+                  <strong>{item.value}</strong>
+                  <span>{item.label}</span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      <section className="sec ruta" id="ruta">
+        <div className="c">
+          <div className="sec-head">
+            <h2>Una ruta clara para avanzar</h2>
+            <p>Cinco pasos simples: de conocerte a crecer juntos.</p>
+          </div>
+          <div className="ruta-wrap">
+            <ol className="ruta-steps">
+              {RUTA.map((paso, i) => (
+                <li key={paso.n}>
+                  <span className={`ruta-n n-${paso.n}`}>{paso.n}</span>
+                  {i < RUTA.length - 1 ? <span className="ruta-arrow" aria-hidden="true" /> : null}
+                  <h3>{paso.titulo}</h3>
+                  <p>{paso.desc}</p>
+                </li>
+              ))}
+            </ol>
+            <p className="ruta-script" aria-hidden="true">
+              Tu crecimiento también genera un futuro mejor
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section className="contacto-band" id="contacto">
+        <div className="c contacto-grid">
+          <div className="contacto-visual">
+            <img
+              src="/brand/contact-costa.jpg"
+              alt="Territorio costero — Antofagasta y norte de Chile"
+              width={900}
+              height={1100}
+            />
+            <div className="contacto-visual-copy">
+              <p className="brand-word light">
+                sicr<span>3</span>p<span className="slash">/</span>
+              </p>
+              <h2>Construyamos el próximo paso de tu empresa</h2>
+            </div>
+          </div>
+          <LandingContactForm />
+          <aside className="contacto-aside">
+            <h4>Contacto directo</h4>
+            <p>
+              <a href={`mailto:${BAAS_LEGAL.email}`}>{BAAS_LEGAL.email}</a>
+              <br />
+              <a href={`tel:${BAAS_LEGAL.telefono.replace(/\s/g, '')}`}>{BAAS_LEGAL.telefono}</a>
+              <br />
+              {BAAS_LEGAL.direccion}
+            </p>
+            <p className="aside-note">
+              Dueña: {BAAS_LEGAL.fundacion.razonSocial}
+              <br />
+              Operadora: {BAAS_LEGAL.razonSocial}
+            </p>
+          </aside>
         </div>
       </section>
 
