@@ -21,7 +21,7 @@ export default function ConfigPage() {
   }, []);
 
   return (
-    <BaasShell title="Configuración" subtitle="Rail SICR3P → TUU → lote → dLocal Go. Sin Global66." nav={NAV} user={data?.usuario}>
+    <BaasShell title="Configuración" subtitle="Rail SICR3P → TUU → lote → dLocal Go." nav={NAV} user={data?.usuario}>
       <div className="baas-grid-2">
         <div className="baas-panel">
           <h2>Entorno</h2>

@@ -126,23 +126,23 @@ export default async function LandingPage() {
       <section className="hero-split" id="inicio" aria-label="Inicio">
         <div className="c hero-split-inner">
           <div className="hero-copy">
-            <p className="hero-eyebrow">Desarrollo · Oportunidades · Finanzas sostenibles</p>
+            <p className="hero-eyebrow">Panel operativo · Cobros · Liquidaciones</p>
             <h1>
               Más empresas hoy.
               <br />
               Un mejor mañana.
             </h1>
             <p className="lead">
-              Integramos desarrollo empresarial y finanzas sostenibles para acercar soluciones que
-              impulsan el crecimiento de las PYMEs y fortalecen el desarrollo de los territorios.
+              Plataforma tecnológica sicr3p/ para empresas: cobro presencial, lotes e instrucción de
+              liquidación — software y mandato, no banco ni billetera pública.
             </p>
             <div className="cta">
-              <a href="#soluciones" className="btn brand">
-                Conoce nuestras soluciones <ArrowRight className="w-4 h-4" />
-              </a>
-              <a href="#contacto" className="btn out brand-out">
-                Contáctanos
-              </a>
+              <Link href={destino} className="btn brand">
+                Portal empresas <ArrowRight className="w-4 h-4" />
+              </Link>
+              <Link href="/ingresar" className="btn out brand-out">
+                Ingresar
+              </Link>
             </div>
             <ul className="valor-row">
               {VALORES.map((v) => {
