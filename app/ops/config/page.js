@@ -18,9 +18,11 @@ const NAV = [
 
 export default function ConfigPage() {
   const [data, setData] = useState(null);
+  const [supabase, setSupabase] = useState(null);
 
   useEffect(() => {
     fetch('/api/baas/dashboard').then((r) => r.json()).then(setData);
+    fetch('/api/supabase/health').then((r) => r.json()).then((json) => setSupabase(json.supabase || null));
   }, []);
 
   return (
@@ -56,6 +58,17 @@ export default function ConfigPage() {
             ))}
           </ul>
         </div>
+      </div>
+      <div className="baas-panel">
+        <h2>Supabase</h2>
+        <p className="sub">Studio en {supabase?.host || 'vps-6495918-x.dattaweb.com'}. La app usa la URL https y la anon key. Postgres en 127.0.0.1:5432 queda dentro del VPS.</p>
+        <table className="baas-tbl">
+          <tbody>
+            <tr><td>Configurado</td><td>{supabase?.configured ? 'Sí' : 'No'}</td></tr>
+            <tr><td>API</td><td>{supabase == null ? '…' : supabase.reachable ? `Responde ${supabase.status}` : 'Sin respuesta desde este servidor'}</td></tr>
+            <tr><td>Detalle</td><td className="mono">{supabase?.detail || '—'}</td></tr>
+          </tbody>
+        </table>
       </div>
       <div className="baas-panel">
         <h2>Documentación interna</h2>
