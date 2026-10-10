@@ -22,5 +22,4 @@
 
   /* compat: display/script apuntan a Inter (manual) */
   --font-display: var(--font-body);
-  --font-script: var(--font-body);
 }
