@@ -33,10 +33,22 @@ Software SICR3P ──POST /v1/payouts──► Beneficiario (cuenta banco CL/LA
 
 ## Variables de entorno
 
+Ver plantilla en `.env.example`.
+
 - `DLOCAL_MODE=simulator|sandbox|live`
 - `DLOCAL_API_KEY` / `DLOCAL_SECRET_KEY` / `DLOCAL_BASE_URL`
 - `SICR3P_RAZON_SOCIAL` / `SICR3P_RUT` / `SICR3P_CONTACT_EMAIL` / `SICR3P_CONTACT_PHONE`
-- `VITE_TUU_MODE` / modo mock InterApp en web (Cloud Agent)
+- `SICR3P_FUNDACION_*` (dueña Fundación Entretodos)
+- `HUBSPOT_PRIVATE_APP_TOKEN` (opcional; sin token = simulador)
+- InterApp TUU en web: mock en `lib/baas/tuu.js` + UI `/ops/pos` hasta partner/APK real
+
+## Pendiente fuera del Cloud Agent
+
+1. Confirmar teléfono real (`SICR3P_CONTACT_PHONE`) y redes si aplican.
+2. Token HubSpot Private App para leads live.
+3. Credenciales dLocal Go sandbox → live.
+4. Registro partner TUU + APK InterApp (ver `docs/tuu-partner-checklist.md`).
+5. Cesión societaria formal dueña/operadora si aún no está inscrita.
 
 ## Demo users
 
