@@ -212,7 +212,72 @@
 
 .sicr-lp .hero-copy {
   padding: 28px 0 48px;
-  animation: sicr-rise 0.85s var(--ease) both;
+}
+
+/* Wordmark tipográfico sicr3p/ (mock Framer) */
+.sicr-wordmark {
+  display: inline-flex;
+  align-items: baseline;
+  font-family: var(--fd);
+  font-weight: 800;
+  letter-spacing: -0.045em;
+  line-height: 1;
+  user-select: none;
+}
+.sicr-wordmark .wm-base,
+.sicr-wordmark .wm-accent {
+  display: inline-block;
+}
+.sicr-wordmark.wm-dark .wm-base { color: #1c192e; }
+.sicr-wordmark.wm-dark .wm-accent { color: #8b7ec8; }
+.sicr-wordmark.wm-light .wm-base { color: #ffffff; }
+.sicr-wordmark.wm-light .wm-accent { color: #c4b8ef; }
+.sicr-wordmark.wm-xs { font-size: 22px; }
+.sicr-wordmark.wm-sm { font-size: 28px; }
+.sicr-wordmark.wm-md { font-size: 40px; }
+.sicr-wordmark.wm-lg { font-size: 64px; }
+
+.sicr-lp .sol-card-link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+  height: 100%;
+}
+.sicr-lp .sol-card.tono-azul,
+.sicr-lp .sol-card.tono-verde,
+.sicr-lp .sol-card.tono-violeta,
+.sicr-lp .sol-card.tono-naranja {
+  display: block;
+}
+
+/* Fallback: si Motion no hidrata, el hero no queda invisible */
+.sicr-lp.fm-motion:not(.fm-ready) .hero-copy,
+.sicr-lp.fm-motion:not(.fm-ready) .hero-photo-wrap,
+.sicr-lp.fm-motion:not(.fm-ready) .hero-script,
+.sicr-lp.fm-motion:not(.fm-ready) .hero-float,
+.sicr-lp.fm-motion:not(.fm-ready) .sicr-wordmark {
+  animation: fm-hero-fallback 0.01s linear 1.6s forwards;
+}
+@keyframes fm-hero-fallback {
+  to {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sicr-lp.fm-motion .hero-copy,
+  .sicr-lp.fm-motion .hero-photo-wrap,
+  .sicr-lp.fm-motion .hero-script,
+  .sicr-lp.fm-motion .hero-float,
+  .sicr-lp.fm-motion .sicr-wordmark,
+  .sicr-lp.fm-motion .sol-card,
+  .sicr-lp.fm-motion .impacto-item {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    animation: none !important;
+  }
 }
 
 .sicr-lp .hero-eyebrow {
