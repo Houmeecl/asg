@@ -128,7 +128,7 @@
 }
 .baas-field input:focus, .baas-field select:focus, .baas-field textarea:focus {
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(40,167,69,.12);
+  box-shadow: 0 0 0 3px rgba(107,92,246,.14);
 }
 .baas-alert { padding: 10px 12px; border-radius: 10px; font-size: 13px; }
 .baas-alert.ok { background: #e8f8ec; color: #067647; border: 1px solid #abefc6; }
