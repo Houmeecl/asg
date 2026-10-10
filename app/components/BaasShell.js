@@ -22,15 +22,21 @@ export default function BaasShell({ title, subtitle, nav, children, user }) {
             sicr<span>3</span>p/
           </div>
           <nav>
-            {nav.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={pathname === item.href || pathname.startsWith(item.href + '/') ? 'active' : ''}
-              >
-                {item.label}
-              </Link>
-            ))}
+            {nav.map((item) => {
+              const hrefs = nav.map((n) => n.href);
+              const exact = pathname === item.href;
+              const nested = pathname.startsWith(`${item.href}/`);
+              // Avoid marking /ops active on /ops/open-banking (longer sibling wins).
+              const longerMatch = hrefs.some(
+                (h) => h !== item.href && h.startsWith(`${item.href}/`) && (pathname === h || pathname.startsWith(`${h}/`)),
+              );
+              const active = exact || (nested && !longerMatch);
+              return (
+                <Link key={item.href} href={item.href} className={active ? 'active' : ''}>
+                  {item.label}
+                </Link>
+              );
+            })}
           </nav>
           <div className="meta">
             <div>{user?.nombre}</div>
