@@ -57,8 +57,9 @@ export default function OpenBankingDocsPage() {
 
       <h2 className="legal-block-title">3. Demo</h2>
       <p className="legal-lead">
-        Credenciales demo en <Link href="/ops/open-banking">/ops/open-banking</Link> (rol ops/admin).
-        Script: <code>node scripts/open-banking-e2e.mjs</code>.
+        Credenciales demo en el portal{' '}
+        <Link href="/open-banking/console">/open-banking/console</Link> (rol ops/admin). Script:{' '}
+        <code>node scripts/open-banking-e2e.mjs</code>.
       </p>
 
       <h2 className="legal-block-title">4. Ejemplo token</h2>
@@ -69,7 +70,9 @@ export default function OpenBankingDocsPage() {
       </pre>
 
       <p className="legal-lead" style={{ marginTop: 28 }}>
-        <Link href="/ops/open-banking">Panel ops</Link>
+        <Link href="/open-banking">Portal Open Banking</Link>
+        {' · '}
+        <Link href="/open-banking/console">Console</Link>
         {' · '}
         <Link href="/docs/legal/checklist">Checklist sitio</Link>
         {' · '}

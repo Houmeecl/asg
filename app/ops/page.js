@@ -7,7 +7,7 @@ const NAV = [
   { href: '/ops', label: 'Cola' },
   { href: '/ops/lotes', label: 'Lotes' },
   { href: '/ops/pos', label: 'POS TUU' },
-  { href: '/ops/open-banking', label: 'Open Banking' },
+  { href: '/open-banking/console', label: 'Open Banking' },
   { href: '/ops/config', label: 'Config' },
 ];
 
