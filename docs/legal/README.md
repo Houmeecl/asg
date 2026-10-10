@@ -1,20 +1,17 @@
 # Documentación legal sicr3p/
 
-## Sociedad (estatuto)
+## Dos personas jurídicas (no confundir)
 
-| Campo | Valor |
-|-------|--------|
-| Razón social | SICR3P SpA |
-| Fantasía | sicr3p spa |
-| RUT | 78.529.455-6 |
-| Domicilio | Antofagasta, Región de Antofagasta |
-| Constitución | 07-10-2026 |
-| Capital | $20.000.000 (1.000 acciones) |
-| Gerente / rep. SII | Edward Gonzalo Venegas Bugueño · 17.434.487-6 |
-| CVE estatuto | CRFgy53XBVxc |
-| PDF público | `/legal/estatuto-sicr3p-spa.pdf` |
+| | **SICR3P SpA** (operador sicr3p/) | **Fundación Entretodos** |
+|--|----------------------------------|---------------------------|
+| Rol | Opera la plataforma comercial | Entidad de propósito social relacionada |
+| RUT | 78.529.455-6 | 65.279.032-1 |
+| Tipo | SpA | Fundación |
+| Representante | Edward G. Venegas B. · 17.434.487-6 | Mismo · incorporación 03-07-2026 |
+| Capital | $20.000.000 | $1.000.000 |
+| PDF | `/legal/estatuto-sicr3p-spa.pdf` (CVE CRFgy53XBVxc) | `/legal/fundacion-entretodos-rut.pdf` (folio 16548963) |
 
-Fuente: Certificado de Estatuto Actualizado, Registro de Empresas y Sociedades (Chile).
+**Dueño vs administración (lectura de los PDFs):** la SpA la **administra** el gerente Edward. El estatuto de la SpA indica que **él suscribió el 100 % de las acciones** como persona natural. La Fundación es **otra** persona jurídica (él es representante, no “la misma razón social”). Si la Fundación debe ser dueña de la SpA, hace falta cesión/aporte de acciones e inscripción — hoy el sitio no afirma esa titularidad.
 
 ## Páginas públicas
 
