@@ -82,6 +82,7 @@ export function StatusPill({ estado }) {
     CONECTADO: 'ok',
     DESCONECTADO: 'info',
     EN_PRUEBA: 'warn',
+    ALERTA: 'bad',
   };
   return <span className={`baas-pill ${map[estado] || ''}`}>{estado}</span>;
 }
