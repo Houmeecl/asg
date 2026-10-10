@@ -19,8 +19,10 @@ Capa partner **AIS / PIS** sobre el rail existente (TUU → lote → dLocal Go).
 
 ## UI
 
+- Landing: `/open-banking`
+- Console partner: `/open-banking/console`
 - Docs: `/docs/open-banking`
-- Ops: `/ops/open-banking`
+- Legacy redirect: `/ops/open-banking` → `/open-banking/console`
 - Admin API clients: `GET/POST /api/baas/open-banking/clients`
 
 ## Demo

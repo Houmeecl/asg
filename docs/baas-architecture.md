@@ -22,7 +22,8 @@ Software SICR3P ──POST /v1/payouts──► Beneficiario (cuenta banco CL/LA
 | Operaciones, lotes, liberar | `lib/baas/operations.js` |
 | Open Banking AIS/PIS (partner) | `lib/baas/open-banking.js` + `/api/open-banking/v1` |
 | Portal empresa | `app/portal/**` |
-| Ops / admin | `app/ops/**` (+ `/ops/open-banking`) |
+| Ops / admin | `app/ops/**` |
+| Open Banking portal | `/open-banking` + `/open-banking/console` (legacy `/ops/open-banking` redirige) |
 | Webhook dLocal | `app/api/baas/webhooks/dlocal` |
 
 Ver también `docs/open-banking.md`.
