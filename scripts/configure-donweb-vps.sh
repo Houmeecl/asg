@@ -36,12 +36,33 @@ else
   echo "El dominio todavía no apunta a este Cloud Server. Sigo con la app en local y no pido certificado."
 fi
 
-if command -v ufw >/dev/null 2>&1 && ufw status | grep -q 'Status: active'; then
-  ufw allow 80/tcp
-  ufw allow 443/tcp
+# Abrir puertos locales (el firewall del panel DonWeb también debe permitir 5757).
+if command -v ufw >/dev/null 2>&1; then
+  ufw allow 80/tcp || true
+  ufw allow 443/tcp || true
+  ufw allow 5757/tcp || true
   ufw deny 5432/tcp || true
-  echo "==> ufw: 80 y 443 abiertos, 5432 cerrado"
+  if ufw status 2>/dev/null | grep -q 'Status: active'; then
+    echo "==> ufw: 80, 443 y 5757 abiertos; 5432 cerrado"
+  else
+    echo "==> ufw: reglas agregadas (ufw no activo aún)"
+  fi
 fi
+if command -v iptables >/dev/null 2>&1; then
+  iptables -C INPUT -p tcp --dport 5757 -j ACCEPT 2>/dev/null \
+    || iptables -I INPUT -p tcp --dport 5757 -j ACCEPT || true
+fi
+# sshd en 5757 (DonWeb) + 22
+mkdir -p /etc/ssh/sshd_config.d
+cat > /etc/ssh/sshd_config.d/99-sicr3p-port.conf <<'EOF'
+Port 22
+Port 5757
+PasswordAuthentication yes
+PubkeyAuthentication yes
+EOF
+systemctl reload sshd 2>/dev/null || systemctl reload ssh 2>/dev/null \
+  || systemctl restart sshd 2>/dev/null || systemctl restart ssh 2>/dev/null || true
+
 
 # Busca el .env del stack Supabase que instaló DonWeb.
 supabase_env=""
