@@ -136,17 +136,20 @@ export default function OnboardingPage() {
       <div className="baas-steps">
         {(data?.pasos || []).map((paso) => (
           <div className="baas-step" key={paso.n}>
-            <b>{paso.n}. {paso.titulo}</b>
+            <b><span className="n">{paso.n}</span>{paso.titulo}</b>
             <span>{paso.detalle}</span>
           </div>
         ))}
       </div>
 
-      {msg ? <div className="baas-alert ok" style={{ marginBottom: 12 }}>{msg}</div> : null}
-      {err ? <div className="baas-alert err" style={{ marginBottom: 12 }}>{err}</div> : null}
+      {msg ? <div className="baas-alert ok">{msg}</div> : null}
+      {err ? <div className="baas-alert err">{err}</div> : null}
 
-      <div className="baas-panel" style={{ marginBottom: 16 }}>
-        <h2>Cuenta Platform · {data?.platform?.country || 'CL'}</h2>
+      <div className="baas-panel">
+        <div className="baas-panel-head">
+          <h2>Cuenta Platform · {data?.platform?.country || 'CL'}</h2>
+          <span className={`baas-pill ${data?.mode === 'live' ? 'ok' : data?.mode === 'sandbox' ? 'info' : 'warn'}`}>{data?.mode || 'simulator'}</span>
+        </div>
         <p className="sub">La abre dLocal con la entidad. Este registro guarda el account ID y el platform type que después heredan las user accounts. Modo {data?.mode || 'simulator'}.</p>
         {platformForm ? (
           <form
@@ -156,7 +159,7 @@ export default function OnboardingPage() {
               post({ action: 'guardar_platform', ...platformForm }, 'Cuenta Platform actualizada.');
             }}
           >
-            <div className="baas-grid-2">
+            <div className="baas-fields">
               <Field label="Account ID">
                 <input value={platformForm.account_id} onChange={(e) => setPlatformForm({ ...platformForm, account_id: e.target.value })} />
               </Field>
@@ -176,55 +179,67 @@ export default function OnboardingPage() {
                 <input value={platformForm.settlement_period} onChange={(e) => setPlatformForm({ ...platformForm, settlement_period: e.target.value })} />
               </Field>
             </div>
-            <p className="sub">{data?.platform?.fee_note}</p>
-            <p className="sub">Webhook de estados: {data?.notification_url}</p>
-            <button className="baas-btn sm" type="submit">Guardar cuenta Platform</button>
+            <div className="baas-notes">
+              <p className="sub">{data?.platform?.fee_note}</p>
+              <p className="sub">Webhook de estados: {data?.notification_url}</p>
+            </div>
+            <div className="baas-form-actions">
+              <button className="baas-btn sm" type="submit">Guardar cuenta Platform</button>
+            </div>
           </form>
         ) : null}
       </div>
 
-      <div className="baas-grid-pos">
+      <div className="baas-split">
         <form className="baas-panel baas-form" onSubmit={crear}>
           <h2>Nueva user account</h2>
-          <Field label="Rol en la plataforma">
-            <select value={form.rol} onChange={(e) => set('rol', e.target.value)}>
-              {ROLES.map(([id, label]) => <option key={id} value={id}>{label}</option>)}
-            </select>
-          </Field>
-          <Field label="Tipo">
-            <select value={form.tax_category} onChange={(e) => set('tax_category', e.target.value)}>
-              <option value="individual">Persona natural</option>
-              <option value="company">Empresa</option>
-            </select>
-          </Field>
-          <Field label="Nombre de la cuenta">
-            <input value={form.account_name} onChange={(e) => set('account_name', e.target.value)} required />
-          </Field>
-          <Field label="Email">
-            <input type="email" value={form.account_email} onChange={(e) => set('account_email', e.target.value)} required />
-          </Field>
-          <Field label="RUT">
-            <input value={form.tax_id} onChange={(e) => set('tax_id', e.target.value)} required />
-          </Field>
-          <Field label="Número de documento">
-            <input value={form.document_number} onChange={(e) => set('document_number', e.target.value)} placeholder="Si es el mismo RUT, se usa ese" />
-          </Field>
-          <Field label="Teléfono">
-            <input value={form.phone} onChange={(e) => set('phone', e.target.value)} placeholder="+56912345678" required />
-          </Field>
-          <Field label="Ciudad">
-            <input value={form.city} onChange={(e) => set('city', e.target.value)} required />
-          </Field>
-          <Field label="Dirección">
-            <input value={form.address} onChange={(e) => set('address', e.target.value)} required />
-          </Field>
-          <label className="baas-layer"><input type="checkbox" checked={form.is_pep} onChange={(e) => set('is_pep', e.target.checked)} /> PEP</label>
-          <label className="baas-layer"><input type="checkbox" checked={form.is_so} onChange={(e) => set('is_so', e.target.checked)} /> Sujeto obligado</label>
-          {form.tax_category === 'company' ? (
-            <>
-              <Field label="Razón social">
-                <input value={form.registered_name} onChange={(e) => set('registered_name', e.target.value)} />
+          <div className="baas-fields">
+            <Field label="Rol en la plataforma">
+              <select value={form.rol} onChange={(e) => set('rol', e.target.value)}>
+                {ROLES.map(([id, label]) => <option key={id} value={id}>{label}</option>)}
+              </select>
+            </Field>
+            <Field label="Tipo">
+              <select value={form.tax_category} onChange={(e) => set('tax_category', e.target.value)}>
+                <option value="individual">Persona natural</option>
+                <option value="company">Empresa</option>
+              </select>
+            </Field>
+            <Field label="Nombre de la cuenta">
+              <input value={form.account_name} onChange={(e) => set('account_name', e.target.value)} required />
+            </Field>
+            <Field label="Email">
+              <input type="email" value={form.account_email} onChange={(e) => set('account_email', e.target.value)} required />
+            </Field>
+            <Field label="RUT">
+              <input value={form.tax_id} onChange={(e) => set('tax_id', e.target.value)} required />
+            </Field>
+            <Field label="Número de documento">
+              <input value={form.document_number} onChange={(e) => set('document_number', e.target.value)} placeholder="Si es el mismo RUT, se usa ese" />
+            </Field>
+            <Field label="Teléfono">
+              <input value={form.phone} onChange={(e) => set('phone', e.target.value)} placeholder="+56912345678" required />
+            </Field>
+            <Field label="Ciudad">
+              <input value={form.city} onChange={(e) => set('city', e.target.value)} required />
+            </Field>
+            <div className="baas-span">
+              <Field label="Dirección">
+                <input value={form.address} onChange={(e) => set('address', e.target.value)} required />
               </Field>
+            </div>
+          </div>
+          <div className="baas-choices">
+            <label className="baas-choice"><input type="checkbox" checked={form.is_pep} onChange={(e) => set('is_pep', e.target.checked)} /> PEP</label>
+            <label className="baas-choice"><input type="checkbox" checked={form.is_so} onChange={(e) => set('is_so', e.target.checked)} /> Sujeto obligado</label>
+          </div>
+          {form.tax_category === 'company' ? (
+            <div className="baas-fields">
+              <div className="baas-span">
+                <Field label="Razón social">
+                  <input value={form.registered_name} onChange={(e) => set('registered_name', e.target.value)} />
+                </Field>
+              </div>
               <Field label="Constitución">
                 <input type="date" value={form.date_of_incorporation} onChange={(e) => set('date_of_incorporation', e.target.value)} />
               </Field>
@@ -237,64 +252,84 @@ export default function OnboardingPage() {
               <Field label="% propiedad UBO">
                 <input value={form.ownership_percentage} onChange={(e) => set('ownership_percentage', e.target.value)} />
               </Field>
-            </>
+            </div>
           ) : null}
-          <label className="baas-layer"><input type="checkbox" checked={form.consent_data} onChange={(e) => set('consent_data', e.target.checked)} /> Acepta recolección de datos</label>
-          <label className="baas-layer"><input type="checkbox" checked={form.consent_terms} onChange={(e) => set('consent_terms', e.target.checked)} /> Acepta términos</label>
-          {form.tax_category === 'company' ? (
-            <>
-              <label className="baas-layer"><input type="checkbox" checked={form.consent_contract} onChange={(e) => set('consent_contract', e.target.checked)} /> Efectos contractuales</label>
-              <label className="baas-layer"><input type="checkbox" checked={form.consent_funds} onChange={(e) => set('consent_funds', e.target.checked)} /> Declaración de fondos</label>
-            </>
-          ) : null}
-          <button className="baas-btn" type="submit">Crear user account</button>
+          <div className="baas-choices">
+            <label className="baas-choice"><input type="checkbox" checked={form.consent_data} onChange={(e) => set('consent_data', e.target.checked)} /> Acepta recolección de datos</label>
+            <label className="baas-choice"><input type="checkbox" checked={form.consent_terms} onChange={(e) => set('consent_terms', e.target.checked)} /> Acepta términos</label>
+            {form.tax_category === 'company' ? (
+              <>
+                <label className="baas-choice"><input type="checkbox" checked={form.consent_contract} onChange={(e) => set('consent_contract', e.target.checked)} /> Efectos contractuales</label>
+                <label className="baas-choice"><input type="checkbox" checked={form.consent_funds} onChange={(e) => set('consent_funds', e.target.checked)} /> Declaración de fondos</label>
+              </>
+            ) : null}
+          </div>
+          <div className="baas-form-actions">
+            <button className="baas-btn" type="submit">Crear user account</button>
+          </div>
         </form>
 
-        <div className="baas-panel">
-          <h2>Cuentas · {cuentas.length}</h2>
+        <div className="baas-panel baas-sticky">
+          <div className="baas-panel-head">
+            <h2>Cuentas · {cuentas.length}</h2>
+          </div>
           <p className="sub">Aprobadas para operar: {data?.operables || 0}</p>
-          <table className="baas-tbl">
-            <thead>
-              <tr><th>Nombre</th><th>Rol</th><th>Estado</th></tr>
-            </thead>
-            <tbody>
-              {cuentas.map((cuenta) => (
-                <tr key={cuenta.id} onClick={() => setSelectedId(cuenta.id)} style={{ cursor: 'pointer' }}>
-                  <td>{cuenta.account_name}<div className="sub">{cuenta.tax_id}</div></td>
-                  <td>{cuenta.rol}</td>
-                  <td><StatusPill estado={cuenta.status} /></td>
-                </tr>
-              ))}
-              {!cuentas.length ? <tr><td colSpan={3}>Todavía no hay user accounts.</td></tr> : null}
-            </tbody>
-          </table>
+          <div className="baas-scroll">
+            <table className="baas-tbl">
+              <thead>
+                <tr><th>Nombre</th><th>Rol</th><th>Estado</th></tr>
+              </thead>
+              <tbody>
+                {cuentas.map((cuenta) => (
+                  <tr
+                    key={cuenta.id}
+                    onClick={() => setSelectedId(cuenta.id)}
+                    className={selected?.id === cuenta.id ? 'is-selected' : undefined}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    <td>{cuenta.account_name}<div className="sub">{cuenta.tax_id}</div></td>
+                    <td>{cuenta.rol}</td>
+                    <td><StatusPill estado={cuenta.status} /></td>
+                  </tr>
+                ))}
+                {!cuentas.length ? <tr><td colSpan={3}>Todavía no hay user accounts.</td></tr> : null}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
 
       {selected ? (
-        <div className="baas-panel" style={{ marginTop: 16 }}>
-          <h2>{selected.account_name}</h2>
-          <p className="sub">
+        <div className="baas-panel">
+          <div className="baas-panel-head">
+            <h2>{selected.account_name}</h2>
+            <StatusPill estado={selected.status} />
+          </div>
+          <p className="baas-meta-line">
             {selected.account_id} · {selected.status_detail} ({selected.status_code}) · ref {selected.external_reference}
           </p>
-          <StatusPill estado={selected.status} />
-          <ul className="baas-checks">
-            <li><span>Pay-ins</span><b>{selected.capacidades.payins ? 'Habilitado' : 'Bloqueado'}</b></li>
-            <li><span>Payouts</span><b>{selected.capacidades.payouts ? 'Habilitado' : 'Bloqueado'}</b></li>
-            <li><span>Liquidación</span><b>{selected.capacidades.settlements ? 'Habilitada' : 'Bloqueada'}</b></li>
-            <li><span>Reembolsos</span><b>{selected.capacidades.refunds ? 'Habilitados' : 'Bloqueados'}</b></li>
+          <ul className="baas-caps">
+            <li><span>Pay-ins</span><b className={selected.capacidades.payins ? 'is-on' : 'is-off'}>{selected.capacidades.payins ? 'Habilitado' : 'Bloqueado'}</b></li>
+            <li><span>Payouts</span><b className={selected.capacidades.payouts ? 'is-on' : 'is-off'}>{selected.capacidades.payouts ? 'Habilitado' : 'Bloqueado'}</b></li>
+            <li><span>Liquidación</span><b className={selected.capacidades.settlements ? 'is-on' : 'is-off'}>{selected.capacidades.settlements ? 'Habilitada' : 'Bloqueada'}</b></li>
+            <li><span>Reembolsos</span><b className={selected.capacidades.refunds ? 'is-on' : 'is-off'}>{selected.capacidades.refunds ? 'Habilitados' : 'Bloqueados'}</b></li>
           </ul>
           {!selected.capacidades.operable ? (
-            <div className="baas-alert info" style={{ marginBottom: 12 }}>Esta cuenta todavía no puede cobrar ni pagar. dLocal pide status APPROVED.</div>
+            <div className="baas-alert info">Esta cuenta todavía no puede cobrar ni pagar. dLocal pide status APPROVED.</div>
           ) : (
-            <div className="baas-alert ok" style={{ marginBottom: 12 }}>APPROVED. Ya puede cobrar, pagar, liquidar y reembolsar.</div>
+            <div className="baas-alert ok">APPROVED. Ya puede cobrar, pagar, liquidar y reembolsar.</div>
           )}
 
           <h2>Documentos</h2>
-          <ul className="baas-checks">
+          <ul className="baas-docs">
             {selected.requeridos.map((name) => {
               const loaded = selected.files.some((f) => f.file_name === name);
-              return <li key={name}><span className="mono">{name}</span><b>{loaded ? 'Cargado' : 'Falta'}</b></li>;
+              return (
+                <li key={name}>
+                  <span className="mono">{name}</span>
+                  <span className={`baas-pill ${loaded ? 'ok' : 'warn'}`}>{loaded ? 'Cargado' : 'Falta'}</span>
+                </li>
+              );
             })}
           </ul>
           <form
@@ -311,7 +346,7 @@ export default function OnboardingPage() {
               setFileLabel('');
             }}
           >
-            <div className="baas-grid-2">
+            <div className="baas-fields">
               <Field label="Archivo dLocal">
                 <select value={kycName} onChange={(e) => setKycName(e.target.value)}>
                   {[...new Set([...(selected.requeridos || []), ...selected.files.map((f) => f.file_name), 'proof_of_address', 'tax_id'])].map((name) => (
@@ -323,10 +358,12 @@ export default function OnboardingPage() {
                 <input value={fileLabel} onChange={(e) => setFileLabel(e.target.value)} placeholder="cedula-frente.pdf" />
               </Field>
             </div>
-            <button className="baas-btn sm" type="submit" disabled={!selected.puede_actualizar}>Subir documento</button>
+            <div className="baas-form-actions">
+              <button className="baas-btn sm" type="submit" disabled={!selected.puede_actualizar}>Subir documento</button>
+            </div>
           </form>
 
-          <h2 style={{ marginTop: 18 }}>Configuración de la cuenta</h2>
+          <h2 className="baas-h">Configuración de la cuenta</h2>
           <form
             className="baas-form"
             onSubmit={async (event) => {
@@ -334,7 +371,7 @@ export default function OnboardingPage() {
               await post({ action: 'settings', id: selected.id, ...settings }, 'Pricing y plazo actualizados.');
             }}
           >
-            <div className="baas-grid-2">
+            <div className="baas-fields">
               <Field label="Pricing level">
                 <input value={settings.pricing_level} onChange={(e) => setSettings({ ...settings, pricing_level: e.target.value })} />
               </Field>
@@ -342,31 +379,35 @@ export default function OnboardingPage() {
                 <input value={settings.settlement_period} onChange={(e) => setSettings({ ...settings, settlement_period: e.target.value })} />
               </Field>
             </div>
-            <button className="baas-btn sm ghost" type="submit" disabled={!selected.puede_actualizar}>Guardar configuración</button>
+            <div className="baas-form-actions">
+              <button className="baas-btn sm ghost" type="submit" disabled={!selected.puede_actualizar}>Guardar configuración</button>
+            </div>
           </form>
 
           {data?.mode === 'simulator' ? (
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 16 }}>
+            <div className="baas-toolbar">
               <button className="baas-btn sm" type="button" disabled={!enRevision} onClick={() => post({ action: 'revisar', id: selected.id, decision: 'aprobar' }, 'dLocal aprobó la cuenta.')}>Simular aprobación</button>
               <button className="baas-btn sm ghost" type="button" disabled={!enRevision} onClick={() => post({ action: 'revisar', id: selected.id, decision: 'pedir_documentos' }, 'dLocal pidió más documentos.')}>Pedir documentos</button>
-              <button className="baas-btn sm ghost" type="button" disabled={!enRevision} onClick={() => post({ action: 'revisar', id: selected.id, decision: 'rechazar' }, 'dLocal rechazó la cuenta.')}>Rechazar</button>
-              <button className="baas-btn sm ghost" type="button" disabled={selected.status === 'CANCELED' || selected.status === 'REJECTED'} onClick={() => post({ action: 'bloquear', id: selected.id }, 'Cuenta bloqueada.')}>Bloquear</button>
+              <button className="baas-btn sm danger" type="button" disabled={!enRevision} onClick={() => post({ action: 'revisar', id: selected.id, decision: 'rechazar' }, 'dLocal rechazó la cuenta.')}>Rechazar</button>
+              <button className="baas-btn sm danger" type="button" disabled={selected.status === 'CANCELED' || selected.status === 'REJECTED'} onClick={() => post({ action: 'bloquear', id: selected.id }, 'Cuenta bloqueada.')}>Bloquear</button>
             </div>
           ) : null}
 
-          <h2 style={{ marginTop: 18 }}>Notificaciones</h2>
-          <table className="baas-tbl">
-            <thead><tr><th>Tipo</th><th>Estado</th><th>Detalle</th></tr></thead>
-            <tbody>
-              {(data?.eventos || []).filter((e) => e.account_row_id === selected.id).map((e) => (
-                <tr key={e.id}>
-                  <td>{e.tipo}</td>
-                  <td>{e.status}</td>
-                  <td>{e.detalle}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <h2 className="baas-h">Notificaciones</h2>
+          <div className="baas-scroll">
+            <table className="baas-tbl">
+              <thead><tr><th>Tipo</th><th>Estado</th><th>Detalle</th></tr></thead>
+              <tbody>
+                {(data?.eventos || []).filter((e) => e.account_row_id === selected.id).map((e) => (
+                  <tr key={e.id}>
+                    <td>{e.tipo}</td>
+                    <td>{e.status}</td>
+                    <td>{e.detalle}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       ) : null}
     </BaasShell>
