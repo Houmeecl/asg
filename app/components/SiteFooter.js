@@ -47,7 +47,7 @@ export default function SiteFooter() {
             <Link href="/terminos">Términos y condiciones</Link>
             <Link href="/privacidad">Privacidad</Link>
             <Link href="/legal">Datos de la sociedad</Link>
-            <Link href="/docs/legal/dlocal-go-checklist">Checklist del sitio</Link>
+            <Link href="/docs/legal/checklist">Checklist del sitio</Link>
             <Link href="/contacto">Contacto</Link>
           </p>
         </div>

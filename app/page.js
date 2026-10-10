@@ -155,7 +155,7 @@ export default async function LandingPage() {
               <Link href="/terminos">Términos <ArrowUpRight size={16} /></Link>
               <Link href="/privacidad">Privacidad <ArrowUpRight size={16} /></Link>
               <Link href="/legal">Datos PJ <ArrowUpRight size={16} /></Link>
-              <Link href="/docs/legal/dlocal-go-checklist">Checklist dLocal Go <ArrowUpRight size={16} /></Link>
+              <Link href="/docs/legal/checklist">Checklist del sitio <ArrowUpRight size={16} /></Link>
             </div>
           </div>
           <div className="comply-list">
