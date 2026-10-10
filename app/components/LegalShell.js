@@ -6,6 +6,8 @@ import '../sicr-landing.css';
 const LINKS = [
   { href: '/terminos', label: 'Términos' },
   { href: '/privacidad', label: 'Privacidad' },
+  { href: '/autorizar', label: 'Autorizar' },
+  { href: '/soporte', label: 'Soporte' },
   { href: '/legal', label: 'Datos PJ' },
   { href: '/contacto', label: 'Contacto' },
 ];
