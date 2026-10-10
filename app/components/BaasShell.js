@@ -75,6 +75,13 @@ export function StatusPill({ estado }) {
     PAGADA: 'ok',
     RECHAZADA: 'bad',
     VIRTUAL: 'info',
+    PENDIENTE: 'warn',
+    EN_REVISION: 'warn',
+    APROBADO: 'ok',
+    RECHAZADO: 'bad',
+    CONECTADO: 'ok',
+    DESCONECTADO: 'info',
+    EN_PRUEBA: 'warn',
   };
   return <span className={`baas-pill ${map[estado] || ''}`}>{estado}</span>;
 }
