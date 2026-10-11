@@ -20,7 +20,8 @@
 
 - `scripts/RUN-EN-TU-SSH.sh` — pegar en SSH local del operador (`DOMAIN=supabase.sicr3p.cl`)
 - `scripts/PASTE-EN-CONSOLA-DONWEB.sh` — pegar en consola web
-- `scripts/configure-donweb-vps.sh` — respeta el cert del panel en `supabase.*`, despliega app en apex
+- `scripts/configure-donweb-vps.sh` — respeta el cert del panel en `supabase.*`, despliega app en apex (`dig @8.8.8.8` + `ASSUME_DNS_OK`)
+- `scripts/rewire-public-domains.sh` — re-cablea SITE_URL / nginx apex tras un bootstrap que cayó en dattaweb
 - `scripts/open-ssh-5757.sh` — ufw/iptables/sshd 5757
 - `scripts/probe-vps-access.sh` — probe externo
 
