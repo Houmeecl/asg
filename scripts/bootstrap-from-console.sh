@@ -5,10 +5,11 @@
 #   curl -fsSL https://raw.githubusercontent.com/Houmeecl/asg/cursor/vps-console-bootstrap-775f/scripts/bootstrap-from-console.sh | bash
 set -euo pipefail
 
-export DOMAIN=${DOMAIN:-sicr3p.cl}
-export APP_DOMAIN=${APP_DOMAIN:-sicr3p.cl}
+export DOMAIN=${DOMAIN:-supabase.sicr3p.cl}
+export APP_DOMAIN=${APP_DOMAIN:-$DOMAIN}
 export PUBLIC_IP=${PUBLIC_IP:-149.50.155.61}
-export BRANCH=${BRANCH:-cursor/vps-console-bootstrap-775f}
+export BRANCH=${BRANCH:-cursor/configurar-vps-plan-775f}
+export ASSUME_DNS_OK=${ASSUME_DNS_OK:-1}
 export REPO_URL=${REPO_URL:-https://github.com/Houmeecl/asg.git}
 
 if [ "$(id -u)" -ne 0 ]; then
