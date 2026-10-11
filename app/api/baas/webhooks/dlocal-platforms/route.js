@@ -1,11 +1,11 @@
 import crypto from 'crypto';
 import { NextResponse } from 'next/server';
 import { aplicarNotificacion, platformsMode } from '@/lib/baas/platforms';
+import { resolvePlatformsConfig } from '@/lib/baas/dlocal-env';
 
 function firmaValida(request, raw) {
   const mode = platformsMode();
-  const secret = process.env.DLOCAL_PLATFORMS_SECRET || '';
-  const login = process.env.DLOCAL_PLATFORMS_LOGIN || '';
+  const { secret, login } = resolvePlatformsConfig();
   if (mode === 'simulator' && !secret) return true;
   const auth = request.headers.get('authorization') || '';
   const date = request.headers.get('x-date') || '';
@@ -30,7 +30,13 @@ export async function POST(request) {
   }
   try {
     const cuenta = aplicarNotificacion(body);
-    return NextResponse.json({ ok: true, account_id: cuenta.account_id, status: cuenta.status, status_detail: cuenta.status_detail });
+    return NextResponse.json({
+      ok: true,
+      environment: platformsMode(),
+      account_id: cuenta.account_id,
+      status: cuenta.status,
+      status_detail: cuenta.status_detail,
+    });
   } catch (err) {
     return NextResponse.json({ error: err.message }, { status: 400 });
   }

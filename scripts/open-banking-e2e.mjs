@@ -131,6 +131,65 @@ async function main() {
   );
   assert(got.Data.PaymentId === pay.Data.PaymentId, 'get payment');
 
+  console.log('6) Discovery + OpenAPI');
+  const discovery = await json(await fetch(`${BASE}/api/open-banking/v1/discovery`));
+  assert(discovery.grant_types_supported?.includes('client_credentials'), 'grant');
+  assert(discovery.token_endpoint?.endsWith('/auth/token'), 'token endpoint');
+  const spec = await json(await fetch(`${BASE}/api/open-banking/v1/openapi.json`));
+  assert(spec.openapi?.startsWith('3.'), 'openapi');
+  assert(spec.paths?.['/auth/token'], 'spec token');
+
+  console.log('7) OAuth form + Basic + introspección');
+  const basic = Buffer.from(`${clientId}:${secret}`).toString('base64');
+  const formTok = await json(
+    await fetch(`${BASE}/api/open-banking/v1/auth/token`, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/x-www-form-urlencoded',
+        authorization: `Basic ${basic}`,
+      },
+      body: 'grant_type=client_credentials',
+    }),
+  );
+  assert(formTok.token_type === 'Bearer', 'bearer');
+  const intro = await json(
+    await fetch(`${BASE}/api/open-banking/v1/auth/introspect`, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/x-www-form-urlencoded',
+        authorization: `Basic ${basic}`,
+      },
+      body: new URLSearchParams({ token: formTok.access_token }),
+    }),
+  );
+  assert(intro.active === true, 'introspect active');
+  assert(intro.client_id === clientId, 'introspect client');
+
+  console.log('8) Idempotency-Key');
+  const idemHeaders = {
+    'content-type': 'application/json',
+    authorization: `Bearer ${tok2.access_token}`,
+    'idempotency-key': 'e2e-ob-idem-1',
+  };
+  const idemBody = JSON.stringify({
+    amount: 2100,
+    currency: 'CLP',
+    creditorName: 'Beneficiario Idem',
+    creditorAccount: '999',
+    reference: 'E2E-IDEM',
+  });
+  const first = await json(
+    await fetch(`${BASE}/api/open-banking/v1/payments`, { method: 'POST', headers: idemHeaders, body: idemBody }),
+  );
+  const secondRes = await fetch(`${BASE}/api/open-banking/v1/payments`, {
+    method: 'POST',
+    headers: idemHeaders,
+    body: idemBody,
+  });
+  const second = await json(secondRes);
+  assert(secondRes.status === 200, `replay status ${secondRes.status}`);
+  assert(second.Data.PaymentId === first.Data.PaymentId, 'mismo payment id');
+
   console.log('OK open-banking e2e', {
     clientId,
     consentId,
