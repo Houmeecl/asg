@@ -60,7 +60,7 @@ Pay-in ops: `POST /api/baas/operaciones` con `{ action: "payin_dlocal", operacio
 2. Confirmar teléfono real (`SICR3P_CONTACT_PHONE`) y casilla `contacto@` o usar `edward@sicr3p.cl`.
 3. Token HubSpot Private App para leads live.
 4. Credenciales dLocal Go + Platforms en slots sandbox (`DLOCAL_SANDBOX_*`) y luego live.
-5. Firewall TCP 5757 + SSL `sicr3p.cl` en Cloud Server / consola bootstrap.
+5. Firewall TCP 5757 + SSL `supabase.sicr3p.cl` (panel) y app en `sicr3p.cl` / consola bootstrap.
 6. Registro partner TUU + APK InterApp (ver `docs/tuu-partner-checklist.md`).
 7. Cesión societaria formal dueña/operadora si aún no está inscrita.
 

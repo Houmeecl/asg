@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 # Pegá esto en TU sesión SSH (root@149.50.155.61) y dejalo correr.
+# Cert SSL del panel: supabase.sicr3p.cl · app Next: sicr3p.cl
 set -euo pipefail
-export DOMAIN=sicr3p.cl APP_DOMAIN=sicr3p.cl PUBLIC_IP=149.50.155.61
-export BRANCH=cursor/autorizar-soporte-775f
+export DOMAIN=supabase.sicr3p.cl APP_DOMAIN=sicr3p.cl PUBLIC_IP=149.50.155.61
+export BRANCH=${BRANCH:-cursor/supabase-sicr3p-ssl-775f}
 export DEBIAN_FRONTEND=noninteractive
 
 # Abrir SSH 5757 también hacia Internet (ufw) por si el panel ya lo permite
@@ -28,5 +29,7 @@ DOMAIN="$DOMAIN" APP_DOMAIN="$APP_DOMAIN" PUBLIC_IP="$PUBLIC_IP" BRANCH="$BRANCH
 echo "==> Verificación local"
 curl -fsS -m 5 http://127.0.0.1:3000/api/health || true
 echo
+curl -kI -m 8 https://127.0.0.1/ -H "Host: supabase.sicr3p.cl" 2>/dev/null | head -15 || true
 curl -kI -m 8 https://127.0.0.1/ -H "Host: sicr3p.cl" 2>/dev/null | head -15 || true
-echo "==> Listo. Avisá al agente o abrí 5757 en el firewall del panel para todo el Internet."
+echo "==> Listo. Supabase: https://supabase.sicr3p.cl  App: https://sicr3p.cl"
+echo "==> Avisá al agente o abrí 5757 en el firewall del panel para todo el Internet."

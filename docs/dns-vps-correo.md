@@ -8,7 +8,8 @@ desaparecen los MX, el correo “se pierde” aunque la casilla siga existiendo.
 
 | Tipo | Nombre | Contenido | Notas |
 |------|--------|-----------|--------|
-| A | `sicr3p.cl` | `149.50.155.61` | VPS (web / Supabase / app) |
+| A | `sicr3p.cl` | `149.50.155.61` | VPS (app Next) |
+| A | `supabase.sicr3p.cl` | `149.50.155.61` | VPS (Supabase + SSL del panel) |
 | AAAA | `sicr3p.cl` | IPv6 del VPS (opcional) | Como en el panel |
 | CNAME | `www.sicr3p.cl` | `sicr3p.cl` | |
 | A | `mail.sicr3p.cl` | `200.58.111.129` | IP Ferozo (`a0170393.ferozo.com`) |
@@ -32,24 +33,27 @@ Firewall del Cloud Server: TCP `80`, `443`, `5757` (hacia Internet, no solo tu I
 
 El DNS **ya debe** resolver a la IP del Cloud Server antes del botón:
 
-- A `sicr3p.cl` → `149.50.155.61` (verificado públicamente)
+- A `sicr3p.cl` → `149.50.155.61`
+- A `supabase.sicr3p.cl` → `149.50.155.61`
 
-En **Software y accesos → Configurar Dominio y SSL** ingresá exactamente `sicr3p.cl`.
-No hace falta un CNAME especial a “supabase”: Supabase corre en ese VPS.
-Si el panel solo acepta subdominio, creá A `supabase.sicr3p.cl` → `149.50.155.61` y usá ese nombre.
+En **Software y accesos → Configurar Dominio y SSL** ingresá exactamente `supabase.sicr3p.cl`
+(certificado emitido ahí). La app Next usa el apex `sicr3p.cl`.
 
 ### Cuando ya tenés SSH (desde tu PC)
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/Houmeecl/asg/cursor/autorizar-soporte-775f/scripts/RUN-EN-TU-SSH.sh | bash
+curl -fsSL https://raw.githubusercontent.com/Houmeecl/asg/cursor/supabase-sicr3p-ssl-775f/scripts/RUN-EN-TU-SSH.sh | bash
 ```
 
-Eso abre ufw 5757, fija `SITE_URL`/`API_EXTERNAL_URL` de Supabase a `https://sicr3p.cl`, emite/usa SSL y levanta la app.
+Eso abre ufw 5757, fija `SITE_URL`/`API_EXTERNAL_URL` de Supabase a
+`https://supabase.sicr3p.cl`, no pisa el cert del panel, y levanta la app en `sicr3p.cl`.
 
 ### Consola web (si SSH no responde desde Internet)
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/Houmeecl/asg/cursor/autorizar-soporte-775f/scripts/PASTE-EN-CONSOLA-DONWEB.sh | bash
+curl -fsSL https://raw.githubusercontent.com/Houmeecl/asg/cursor/supabase-sicr3p-ssl-775f/scripts/PASTE-EN-CONSOLA-DONWEB.sh | bash
 ```
 
-Estado verificado desde el Cloud Agent (2026-10-10): DNS OK; TCP 80/443 abiertos; TCP 5757 cerrado desde la red del agente; TLS `sicr3p.cl` aún sin certificado usable desde esa red.
+Estado verificado desde el Cloud Agent (2026-10-11): DNS OK para apex y
+`supabase.sicr3p.cl`; TCP 80/443 abiertos (HTTP `403`); TCP 5757 cerrado desde
+la red del agente; TLS público aún sin handshake usable desde esa red.

@@ -2,22 +2,22 @@
 # Configura el Cloud Server de DonWeb para sicr3p.
 # Se ejecuta DENTRO del VPS, como root, cuando el SSH ya responde.
 #
-#   DOMAIN=sicr3p.cl bash scripts/configure-donweb-vps.sh
+#   DOMAIN=supabase.sicr3p.cl APP_DOMAIN=sicr3p.cl bash scripts/configure-donweb-vps.sh
 #
-# Por defecto usa sicr3p.cl (A → 149.50.155.61). Si preferís un
-# subdominio, pasá DOMAIN=supabase.sicr3p.cl APP_DOMAIN=sicr3p.cl.
-# Un solo hostname: app y Supabase comparten DOMAIN (proxy por path).
+# Por defecto: Supabase SSL en supabase.sicr3p.cl (cert del panel DonWeb)
+# y la app Next en sicr3p.cl. Si APP_DOMAIN=DOMAIN, app + Kong comparten un host.
 #
 # No abre el puerto 5432. Postgres de Supabase queda en 127.0.0.1.
 # No insiste con Let's Encrypt si el DNS todavía no apunta a este servidor.
+# No pisa el vhost SSL que DonWeb ya creó para DOMAIN (supabase.*).
 set -euo pipefail
 
-DOMAIN=${DOMAIN:-sicr3p.cl}
-APP_DOMAIN=${APP_DOMAIN:-$DOMAIN}
+DOMAIN=${DOMAIN:-supabase.sicr3p.cl}
+APP_DOMAIN=${APP_DOMAIN:-sicr3p.cl}
 PUBLIC_IP=${PUBLIC_IP:-149.50.155.61}
 APP_DIR=${APP_DIR:-/var/www/sicr3p}
 REPO_URL=${REPO_URL:-https://github.com/Houmeecl/asg.git}
-BRANCH=${BRANCH:-cursor/autorizar-soporte-775f}
+BRANCH=${BRANCH:-cursor/supabase-sicr3p-ssl-775f}
 APP_PORT=${APP_PORT:-3000}
 # Puerto interno de Kong/Studio del stack DonWeb (solo localhost).
 KONG_HTTP=${KONG_HTTP:-8000}
@@ -116,23 +116,32 @@ export DEBIAN_FRONTEND=noninteractive
 apt-get update -y
 apt-get install -y curl git build-essential python3 nginx certbot python3-certbot-nginx
 
-# Si DonWeb ya emitió el certificado vía panel, no pedimos otro.
+# Si DonWeb ya emitió el certificado vía panel (supabase.sicr3p.cl), no pedimos otro.
 donweb_ssl=0
 if [ "$dns_ok" -eq 1 ]; then
   if echo | openssl s_client -connect "127.0.0.1:443" -servername "$DOMAIN" 2>/dev/null \
     | openssl x509 -noout -subject 2>/dev/null | grep -qi "$DOMAIN"; then
     donweb_ssl=1
     echo "==> Certificado ya presente para $DOMAIN (panel DonWeb o certbot previo)."
+  elif [ -d "/etc/letsencrypt/live/$DOMAIN" ] \
+    || ls /etc/nginx/sites-enabled/*"$DOMAIN"* >/dev/null 2>&1 \
+    || grep -Rql "server_name[[:space:]].*$DOMAIN" /etc/nginx 2>/dev/null; then
+    donweb_ssl=1
+    echo "==> SSL/vhost de $DOMAIN detectado en disco (panel DonWeb). No corro certbot sobre ese host."
   fi
 fi
 
-if [ "$dns_ok" -eq 1 ] && [ "$donweb_ssl" -eq 0 ]; then
+# Solo certbot sobre DOMAIN si NO hay cert del panel y APP comparte el mismo host.
+# Con DOMAIN=supabase.* el panel ya gestiona ese certificado: no reintentar LE.
+if [ "$dns_ok" -eq 1 ] && [ "$donweb_ssl" -eq 0 ] && [ "$APP_DOMAIN" = "$DOMAIN" ]; then
   if ! certbot certificates 2>/dev/null | grep -q "$DOMAIN"; then
     # Un solo intento. Let's Encrypt bloquea una semana si se insiste.
     certbot --nginx -d "$DOMAIN" --non-interactive --agree-tos --register-unsafely-without-email --keep-until-expiring || {
       echo "certbot no emitió el certificado. Revisa que el puerto 80 llegue a este servidor y no reintentes en ráfaga." >&2
     }
   fi
+elif [ "$APP_DOMAIN" != "$DOMAIN" ]; then
+  echo "==> Supabase queda en https://$DOMAIN (cert panel). App en https://$APP_DOMAIN."
 fi
 
 if [ ! -d "$HOME/.nvm" ]; then
@@ -274,11 +283,20 @@ if [ "$APP_DOMAIN" = "$DOMAIN" ] && [ "$dns_ok" -eq 1 ]; then
   fi
   echo "==> App + Supabase en https://$DOMAIN (Kong local: $kong_up)"
 elif [ "$APP_DOMAIN" != "$DOMAIN" ] && [ "$app_resolved" = "$PUBLIC_IP" ]; then
+  # No tocar el vhost SSL de DOMAIN (supabase.*) que emitió el panel.
   write_nginx_app "$APP_DOMAIN" "0"
-  certbot --nginx -d "$APP_DOMAIN" --non-interactive --agree-tos --register-unsafely-without-email --keep-until-expiring || {
-    echo "certbot no emitió el certificado de $APP_DOMAIN. No reintentar en ráfaga." >&2
-  }
-  echo "==> App publicada en https://$APP_DOMAIN (Supabase en https://$DOMAIN)"
+  app_ssl=0
+  if echo | openssl s_client -connect "127.0.0.1:443" -servername "$APP_DOMAIN" 2>/dev/null \
+    | openssl x509 -noout -subject 2>/dev/null | grep -qi "$APP_DOMAIN"; then
+    app_ssl=1
+    echo "==> Certificado ya presente para $APP_DOMAIN."
+  fi
+  if [ "$app_ssl" -eq 0 ]; then
+    certbot --nginx -d "$APP_DOMAIN" --non-interactive --agree-tos --register-unsafely-without-email --keep-until-expiring || {
+      echo "certbot no emitió el certificado de $APP_DOMAIN. No reintentar en ráfaga." >&2
+    }
+  fi
+  echo "==> App publicada en https://$APP_DOMAIN (Supabase en https://$DOMAIN; Kong local: $kong_up)"
 else
   echo "==> $APP_DOMAIN no apunta a $PUBLIC_IP. La app queda en 127.0.0.1:$APP_PORT"
 fi
@@ -286,4 +304,4 @@ fi
 curl -fsS -m 5 "http://127.0.0.1:$APP_PORT/api/health"
 echo
 echo "==> Listo. Supabase: $public_url  App local: http://127.0.0.1:$APP_PORT/api/health"
-echo "==> Verificá /ops/config en el hostname público cuando el proxy esté arriba."
+echo "==> Verificá /ops/config en https://$APP_DOMAIN cuando el proxy esté arriba."
