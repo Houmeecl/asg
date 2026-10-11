@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
 # Pegá en consola web DonWeb (root). Baja e ejecuta open-ssh + configure del tip.
 set -euo pipefail
-export DOMAIN=${DOMAIN:-sicr3p.cl}
+export DOMAIN=${DOMAIN:-supabase.sicr3p.cl}
 export APP_DOMAIN=${APP_DOMAIN:-sicr3p.cl}
 export PUBLIC_IP=${PUBLIC_IP:-149.50.155.61}
-export BRANCH=${BRANCH:-cursor/autorizar-soporte-775f}
+export BRANCH=${BRANCH:-cursor/supabase-sicr3p-ssl-775f}
+export ASSUME_DNS_OK=${ASSUME_DNS_OK:-1}
 export REPO_URL=${REPO_URL:-https://github.com/Houmeecl/asg.git}
 
 if [ "$(id -u)" -ne 0 ]; then echo "Corré como root"; exit 1; fi
