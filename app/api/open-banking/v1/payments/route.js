@@ -25,9 +25,16 @@ export async function POST(request) {
   const { auth, error } = withObAuth(request, { requireConsent: true });
   if (error) return error;
   const body = (await readJson(request)) || {};
+  const idempotencyKey = request.headers.get('idempotency-key') || undefined;
   try {
-    const payment = await initiatePayment(auth, body.Data?.Initiation ? flattenInitiation(body) : body);
-    return NextResponse.json(payment, { status: 201 });
+    const payment = await initiatePayment(
+      auth,
+      body.Data?.Initiation ? flattenInitiation(body) : body,
+      { idempotencyKey },
+    );
+    const replayed = Boolean(payment?.replayed);
+    if (payment) delete payment.replayed;
+    return NextResponse.json(payment, { status: replayed ? 200 : 201 });
   } catch (err) {
     return obError(err.message, err.message, err.status || 400);
   }

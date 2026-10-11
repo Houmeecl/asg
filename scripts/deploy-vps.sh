@@ -4,9 +4,9 @@
 #   VPS_HOST=x.x.x.x VPS_USER=deploy ./scripts/deploy-vps.sh
 set -euo pipefail
 
-VPS_HOST=${VPS_HOST:-}
-VPS_USER=${VPS_USER:-deploy}
-VPS_PORT=${VPS_PORT:-22}
+VPS_HOST=${VPS_HOST:-149.50.155.61}
+VPS_USER=${VPS_USER:-root}
+VPS_PORT=${VPS_PORT:-5757}
 APP_DIR=${APP_DIR:-/var/www/sicr3p}
 BRANCH=${BRANCH:-main}
 MODE=${MODE:-pm2} # pm2 | docker

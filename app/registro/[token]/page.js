@@ -57,10 +57,11 @@ export default function RegistroKycPage() {
         {error && <div style={{ background: '#fdecea', color: '#b42318', padding: 12, borderRadius: 10, marginBottom: 12 }}>{error}</div>}
         {done ? (
           <div style={{ background: '#fff', border: '1px solid var(--line)', borderRadius: 16, padding: 24 }}>
-            <p style={{ color: '#067647', fontWeight: 700 }}>Registro aprobado</p>
-            <p style={{ fontSize: 14, marginTop: 8 }}>Wallet: <code>{done.wallet.wallet_id}</code></p>
-            <p style={{ fontSize: 14 }}>Tarjeta virtual: <code>{done.wallet.tarjeta_virtual_id}</code></p>
-            <p style={{ fontSize: 13, color: 'var(--ink-soft)', marginTop: 12 }}>Ya puedes continuar el cobro en el POS.</p>
+            <p style={{ color: '#067647', fontWeight: 700 }}>Preregistro en revisión</p>
+            <p style={{ fontSize: 14, marginTop: 8 }}>{done.mensaje}</p>
+            <p style={{ fontSize: 13, color: 'var(--ink-soft)', marginTop: 12 }}>
+              Estado: <strong>{done.persona?.kyc_estado || done.estado}</strong>. El POS habilita el cobro cuando el operador aprueba el KYC.
+            </p>
           </div>
         ) : (
           <form onSubmit={submit} style={{ display: 'flex', flexDirection: 'column', gap: 12, background: '#fff', border: '1px solid var(--line)', borderRadius: 16, padding: 24 }}>
@@ -77,7 +78,7 @@ export default function RegistroKycPage() {
               Teléfono
               <input value={telefono} onChange={(e) => setTelefono(e.target.value)} style={{ display: 'block', width: '100%', marginTop: 6, border: '1px solid var(--line)', borderRadius: 10, padding: '10px 12px' }} />
             </label>
-            <button type="submit" className="btn lime">Crear wallet virtual</button>
+            <button type="submit" className="btn lime">Enviar preregistro</button>
           </form>
         )}
       </main>

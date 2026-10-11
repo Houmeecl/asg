@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { completeKycAndCreateVirtualCard, getRegistroByToken } from '@/lib/baas/wallet';
+import { getRegistroByToken, submitPreregistro } from '@/lib/baas/wallet';
 
 export async function GET(request) {
   const token = new URL(request.url).searchParams.get('token');
@@ -19,13 +19,17 @@ export async function GET(request) {
 export async function POST(request) {
   const body = await request.json().catch(() => ({}));
   try {
-    const result = completeKycAndCreateVirtualCard(body.token, {
+    const persona = submitPreregistro(body.token, {
       nombre: body.nombre,
       email: body.email,
       telefono: body.telefono,
       pais: body.pais || 'CL',
     });
-    return NextResponse.json(result);
+    return NextResponse.json({
+      persona,
+      estado: 'EN_REVISION',
+      mensaje: 'Preregistro enviado. Un operador debe aprobar el KYC antes de habilitar la wallet.',
+    });
   } catch (err) {
     return NextResponse.json({ error: err.message }, { status: 400 });
   }
