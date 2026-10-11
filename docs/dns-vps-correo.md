@@ -19,11 +19,23 @@ desaparecen los MX, el correo “se pierde” aunque la casilla siga existiendo.
 En **Zona DNS** → **Configuración de correo** → **Restaurar MX por defecto**
 si no querés cargarlos a mano. **No borres** el A `149.50.155.61`.
 
-## Casilla
+## Casilla (Ferozo — actual)
 
 - Webmail: https://ferozo.email  
 - Cuenta: `edward@sicr3p.cl`  
 - IMAP/SMTP: `a0170393.ferozo.com` (993 / 465, SSL)
+
+## Correo self-host (opcional)
+
+Si preferís **poste.io** (gratis) o **Mailu** (código libre) en el VPS,
+ver `docs/correo-selfhost.md` y:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/Houmeecl/asg/cursor/supabase-sicr3p-ssl-775f/scripts/install-posteio.sh | bash
+```
+
+Eso mueve el A de `mail.sicr3p.cl` al VPS y requiere puertos `25/465/587/993`
++ PTR. Mientras tanto dejá los MX en Ferozo.
 
 ## VPS (app + Supabase)
 
