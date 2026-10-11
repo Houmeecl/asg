@@ -26,6 +26,24 @@
 
 Branch tip: `cursor/supabase-sicr3p-ssl-775f` (base `cursor/autorizar-soporte-775f`).
 
-## Bloqueo actual
+## Bootstrap ya corrido en el VPS (evidencia operador)
 
-Sin TCP 5757 abierto a Internet, el agente no puede entrar al VPS. El panel ya tiene el dominio SSL en `supabase.sicr3p.cl`; falta que configure corra dentro del VPS (SSH/consola) para cablear `SITE_URL` / app y dejar HTTPS respondiendo desde fuera.
+PM2 `sicr3p` **online**, health local `{"ok":true,"service":"sicr3p-baas"}`.
+Ese pase usó un script viejo: el DNS *local* del VPS dijo que `sicr3p.cl`
+no apuntaba a la IP → dejó Supabase en `https://vps-6495918-x.dattaweb.com`
+y la app solo en `127.0.0.1:3000`. Kong en 443 local responde `401` Basic
+(esperable para Studio).
+
+## Siguiente paso en el VPS (rewire, sin rebuild)
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/Houmeecl/asg/cursor/supabase-sicr3p-ssl-775f/scripts/rewire-public-domains.sh | bash
+```
+
+Eso pone `SITE_URL`/`NEXT_PUBLIC_SUPABASE_URL` en `https://supabase.sicr3p.cl`
+y nginx del apex → `:3000`.
+
+## Bloqueo del agente
+
+TCP 5757 sigue cerrado desde la red del agente; TLS público aún sin handshake
+usable. El operador puede seguir por su SSH/consola con el rewire de arriba.

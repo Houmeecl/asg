@@ -4,6 +4,8 @@
 set -euo pipefail
 export DOMAIN=supabase.sicr3p.cl APP_DOMAIN=sicr3p.cl PUBLIC_IP=149.50.155.61
 export BRANCH=${BRANCH:-cursor/supabase-sicr3p-ssl-775f}
+# El resolver local del VPS a veces no ve el A público; dig @8.8.8.8 + este flag.
+export ASSUME_DNS_OK=${ASSUME_DNS_OK:-1}
 export DEBIAN_FRONTEND=noninteractive
 
 # Abrir SSH 5757 también hacia Internet (ufw) por si el panel ya lo permite

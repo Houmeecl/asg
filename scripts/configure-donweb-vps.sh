@@ -27,13 +27,38 @@ if [ "$(id -u)" -ne 0 ]; then
   exit 1
 fi
 
-resolved="$(getent ahostsv4 "$DOMAIN" 2>/dev/null | awk '{print $1; exit}' || true)"
+# Resolver DNS con DNS públicos: el resolver local del VPS a veces miente
+# (getent vacío/errado) aunque el A público ya apunta al Cloud Server.
+resolve_a() {
+  local name="$1" ip=""
+  if command -v dig >/dev/null 2>&1; then
+    ip="$(dig +short A "$name" @8.8.8.8 2>/dev/null | awk 'NR==1 && $1 ~ /^[0-9.]+$/ {print $1; exit}')"
+    [ -z "$ip" ] && ip="$(dig +short A "$name" @1.1.1.1 2>/dev/null | awk 'NR==1 && $1 ~ /^[0-9.]+$/ {print $1; exit}')"
+  fi
+  if [ -z "$ip" ] && command -v host >/dev/null 2>&1; then
+    ip="$(host -t A "$name" 8.8.8.8 2>/dev/null | awk '/has address/ {print $4; exit}')"
+  fi
+  if [ -z "$ip" ]; then
+    ip="$(getent ahostsv4 "$name" 2>/dev/null | awk '{print $1; exit}' || true)"
+  fi
+  printf '%s' "$ip"
+}
+
+resolved="$(resolve_a "$DOMAIN")"
 echo "==> $DOMAIN resuelve a '${resolved:-<vacío>}' (esperado $PUBLIC_IP)"
 dns_ok=0
-if [ "$resolved" = "$PUBLIC_IP" ]; then
+if [ "$resolved" = "$PUBLIC_IP" ] || [ "${ASSUME_DNS_OK:-0}" = "1" ]; then
   dns_ok=1
+  [ "$resolved" != "$PUBLIC_IP" ] && echo "==> ASSUME_DNS_OK=1: fuerzo URL pública aunque dig local no coincida."
 else
-  echo "El dominio todavía no apunta a este Cloud Server. Sigo con la app en local y no pido certificado."
+  echo "El dominio todavía no apunta a este Cloud Server (dig @8.8.8.8). Sigo con la app en local."
+fi
+
+app_resolved="$(resolve_a "$APP_DOMAIN")"
+echo "==> $APP_DOMAIN resuelve a '${app_resolved:-<vacío>}' (esperado $PUBLIC_IP)"
+app_dns_ok=0
+if [ "$app_resolved" = "$PUBLIC_IP" ] || [ "${ASSUME_DNS_OK:-0}" = "1" ]; then
+  app_dns_ok=1
 fi
 
 # Abrir puertos locales (el firewall del panel DonWeb también debe permitir 5757).
@@ -218,7 +243,6 @@ fi
 pm2 save
 pm2 startup systemd -u root --hp "$HOME" >/dev/null || true
 
-app_resolved="$(getent ahostsv4 "$APP_DOMAIN" 2>/dev/null | awk '{print $1; exit}' || true)"
 kong_up=0
 if curl -fsS -m 2 "http://127.0.0.1:${KONG_HTTP}/auth/v1/health" >/dev/null 2>&1 \
   || curl -fsS -m 2 "http://127.0.0.1:${KONG_HTTP}/" >/dev/null 2>&1; then
@@ -253,9 +277,12 @@ write_nginx_app() {
 KONG
 )
   fi
+  # Evitar que el default de DonWeb/Kong (401/403) capture el apex.
+  rm -f /etc/nginx/sites-enabled/default 2>/dev/null || true
   cat > /etc/nginx/sites-available/sicr3p.conf <<EOF
 server {
   listen 80;
+  listen [::]:80;
   server_name $server_name;
 $kong_block
   location / {
@@ -282,7 +309,7 @@ if [ "$APP_DOMAIN" = "$DOMAIN" ] && [ "$dns_ok" -eq 1 ]; then
     }
   fi
   echo "==> App + Supabase en https://$DOMAIN (Kong local: $kong_up)"
-elif [ "$APP_DOMAIN" != "$DOMAIN" ] && [ "$app_resolved" = "$PUBLIC_IP" ]; then
+elif [ "$APP_DOMAIN" != "$DOMAIN" ] && [ "$app_dns_ok" -eq 1 ]; then
   # No tocar el vhost SSL de DOMAIN (supabase.*) que emitió el panel.
   write_nginx_app "$APP_DOMAIN" "0"
   app_ssl=0
@@ -298,10 +325,31 @@ elif [ "$APP_DOMAIN" != "$DOMAIN" ] && [ "$app_resolved" = "$PUBLIC_IP" ]; then
   fi
   echo "==> App publicada en https://$APP_DOMAIN (Supabase en https://$DOMAIN; Kong local: $kong_up)"
 else
-  echo "==> $APP_DOMAIN no apunta a $PUBLIC_IP. La app queda en 127.0.0.1:$APP_PORT"
+  echo "==> $APP_DOMAIN no apunta a $PUBLIC_IP (dig público). La app queda en 127.0.0.1:$APP_PORT"
+  echo "    Reintentá con: ASSUME_DNS_OK=1 DOMAIN=$DOMAIN APP_DOMAIN=$APP_DOMAIN bash scripts/configure-donweb-vps.sh"
+fi
+
+# Asegurar NEXT_PUBLIC_SUPABASE_URL aunque el primer pase haya usado dattaweb.
+if [ -f "$APP_DIR/.env" ] && [ "$dns_ok" -eq 1 ]; then
+  set_app() {
+    local key="$1" value="$2"
+    if grep -q "^${key}=" "$APP_DIR/.env"; then
+      sed -i "s|^${key}=.*|${key}=${value}|" "$APP_DIR/.env"
+    else
+      echo "${key}=${value}" >> "$APP_DIR/.env"
+    fi
+  }
+  set_app NEXT_PUBLIC_SUPABASE_URL "$public_url"
+  export NVM_DIR="$HOME/.nvm"
+  # shellcheck disable=SC1091
+  [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+  if command -v pm2 >/dev/null 2>&1; then
+    pm2 restart sicr3p --update-env || true
+  fi
 fi
 
 curl -fsS -m 5 "http://127.0.0.1:$APP_PORT/api/health"
 echo
 echo "==> Listo. Supabase: $public_url  App local: http://127.0.0.1:$APP_PORT/api/health"
 echo "==> Verificá /ops/config en https://$APP_DOMAIN cuando el proxy esté arriba."
+echo "==> npm vía nvm:  export NVM_DIR=\$HOME/.nvm; . \$NVM_DIR/nvm.sh"

@@ -39,7 +39,13 @@ El DNS **ya debe** resolver a la IP del Cloud Server antes del botón:
 En **Software y accesos → Configurar Dominio y SSL** ingresá exactamente `supabase.sicr3p.cl`
 (certificado emitido ahí). La app Next usa el apex `sicr3p.cl`.
 
-### Cuando ya tenés SSH (desde tu PC)
+### Si el bootstrap ya corrió pero dejó la URL dattaweb
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/Houmeecl/asg/cursor/supabase-sicr3p-ssl-775f/scripts/rewire-public-domains.sh | bash
+```
+
+### Bootstrap completo (SSH desde tu PC)
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/Houmeecl/asg/cursor/supabase-sicr3p-ssl-775f/scripts/RUN-EN-TU-SSH.sh | bash
@@ -47,6 +53,7 @@ curl -fsSL https://raw.githubusercontent.com/Houmeecl/asg/cursor/supabase-sicr3p
 
 Eso abre ufw 5757, fija `SITE_URL`/`API_EXTERNAL_URL` de Supabase a
 `https://supabase.sicr3p.cl`, no pisa el cert del panel, y levanta la app en `sicr3p.cl`.
+Usa `dig @8.8.8.8` + `ASSUME_DNS_OK=1` para no caer otra vez en la URL temporal.
 
 ### Consola web (si SSH no responde desde Internet)
 
