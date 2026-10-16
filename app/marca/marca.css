@@ -1,0 +1,201 @@
+.marca-page .marca-main {
+  padding: 48px 0 72px;
+}
+.marca-page h1 {
+  font-size: clamp(36px, 5vw, 52px);
+  margin: 8px 0 16px;
+  max-width: 16ch;
+}
+.marca-page .marca-lead {
+  max-width: 58ch;
+  color: var(--ink-soft);
+  font-size: 18px;
+  line-height: 1.55;
+  margin: 0 0 40px;
+}
+.marca-sec {
+  margin: 48px 0;
+  padding-top: 8px;
+}
+.marca-sec h2 {
+  font-size: 22px;
+  margin: 0 0 12px;
+}
+.marca-note {
+  color: var(--ink-soft);
+  font-size: 15px;
+  line-height: 1.5;
+  max-width: 62ch;
+  margin: 0 0 20px;
+}
+.marca-logo-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+}
+.marca-swatch {
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 28px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  align-items: flex-start;
+  justify-content: flex-end;
+  min-height: 160px;
+}
+.marca-swatch.light { background: #fff; }
+.marca-swatch.dark {
+  background: var(--navy);
+  border-color: transparent;
+}
+.marca-swatch figcaption {
+  font-size: 12px;
+  color: var(--ink-soft);
+}
+.marca-swatch.dark figcaption { color: rgba(255,255,255,.65); }
+.marca-tagline {
+  margin-top: 18px;
+  font-weight: 600;
+  color: var(--navy);
+}
+
+.marca-colors {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+}
+.marca-color {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 14px;
+}
+.marca-color .chip {
+  height: 72px;
+  border-radius: 10px;
+  margin-bottom: 12px;
+  border: 1px solid rgba(15, 27, 61, 0.06);
+}
+.marca-color h3 {
+  font-size: 14px;
+  margin: 0 0 6px;
+}
+.marca-color .hex {
+  font-family: ui-monospace, Menlo, monospace;
+  font-size: 13px;
+  font-weight: 700;
+  margin: 0;
+  color: var(--navy);
+}
+.marca-color .var {
+  font-family: ui-monospace, Menlo, monospace;
+  font-size: 11px;
+  color: var(--violet);
+  margin: 4px 0;
+}
+.marca-color .use {
+  font-size: 12px;
+  color: var(--ink-soft);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.marca-type {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 28px;
+}
+.marca-type .t-display {
+  font-size: clamp(28px, 4vw, 40px);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--navy);
+  margin: 0 0 16px;
+  line-height: 1.1;
+}
+.marca-type .t-body {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 15px;
+}
+
+.marca-list {
+  margin: 0 0 20px;
+  padding-left: 18px;
+  color: var(--ink-soft);
+  line-height: 1.6;
+}
+.marca-list code {
+  font-size: 12px;
+  background: var(--sicr-blue-soft, #e6f0ff);
+  color: var(--navy);
+  padding: 1px 6px;
+  border-radius: 6px;
+}
+.marca-cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.marca-foot {
+  border-top: 1px solid var(--line);
+  padding: 28px 0;
+  color: var(--ink-soft);
+  font-size: 13px;
+}
+
+@media (max-width: 960px) {
+  .marca-logo-grid,
+  .marca-colors {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media (max-width: 560px) {
+  .marca-logo-grid,
+  .marca-colors {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Kit de logos */
+.marca-kit-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+}
+.marca-kit-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 180px;
+  padding: 20px;
+}
+.marca-kit-img {
+  width: 100%;
+  height: 88px;
+  object-fit: contain;
+  object-position: left center;
+}
+.marca-kit-card figcaption {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 16px;
+  font-size: 13px;
+}
+.marca-kit-card figcaption a {
+  color: var(--sicr-violet, #6b5cf6);
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.marca-kit-card figcaption a:hover {
+  text-decoration: underline;
+}
+.marca-kit-card.dark figcaption a {
+  color: #c4b5fd;
+}

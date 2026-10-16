@@ -47,6 +47,18 @@ npm run dev
 
 La interfaz web corre en [http://localhost:3000](http://localhost:3000).
 
+## Marca y logos
+
+Manual de marca v1.0 (wordmark `sicr3p/`, acento violeta en `3/`):
+
+| Recurso | Ruta |
+|---------|------|
+| Página viva | `/marca` · kit descargable `/marca#kit` |
+| Documentación | [`docs/brand-manual.md`](docs/brand-manual.md) |
+| SVG | [`public/brand/logos/`](public/brand/logos/) → `/brand/logos/*.svg` |
+| React | `app/components/SicrLogo.js` (`full` · `mono` · `isotype`) |
+| Tokens | `app/brand.css` (`--sicr-navy`, `--sicr-violet`, …) |
+
 ## Pendientes conocidos (no simulables sin contratar servicios externos)
 
 - Firma Electrónica Avanzada (FEA) acreditada para los certificados.

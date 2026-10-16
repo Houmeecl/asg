@@ -22,5 +22,8 @@ Copy web en `/legal`: dueña = Fundación; operadora = SpA.
 | `/legal` | Dueña Fundación + operadora SpA |
 | `/contacto` | Formulario activo |
 | `/docs/legal/checklist` | Checklist del sitio (logo, dueña/operadora, teléfono, CRM, dLocal) |
+| `/marca` | Manual de marca + kit de logos SVG (`/marca#kit`) |
+
+Marca (logos, paleta, tipografía): [`docs/brand-manual.md`](../brand-manual.md) · kit [`public/brand/logos/`](../../public/brand/logos/).
 
 Copy: `lib/baas/legal-copy.js` · PJ: `lib/baas/config.js` · Env: `.env.example`.
