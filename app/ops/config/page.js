@@ -4,17 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import BaasShell, { formatClp } from '../../components/BaasShell';
 import { BAAS_LEGAL, DLOCAL_PAYOUT_COUNTRIES } from '@/lib/baas/config';
-
-const NAV = [
-  { href: '/ops', label: 'Cola' },
-  { href: '/ops/lotes', label: 'Lotes' },
-  { href: '/ops/pos', label: 'POS TUU' },
-  { href: '/ops/terminales', label: 'Conexión y KYC' },
-  { href: '/ops/mapa', label: 'Capas y mapa' },
-  { href: '/ops/open-banking', label: 'Open Banking' },
-  { href: '/ops/onboarding', label: 'Onboarding' },
-  { href: '/ops/config', label: 'Config' },
-];
+import { OPS_NAV } from '@/lib/baas/ops-nav';
 
 export default function ConfigPage() {
   const [data, setData] = useState(null);
@@ -51,7 +41,7 @@ export default function ConfigPage() {
   const apiText = supabase == null ? '…' : supabase.reachable ? `Responde ${supabase.status}` : 'Sin respuesta desde este servidor';
 
   return (
-    <BaasShell title="Configuración" subtitle="Rail SICR3P → TUU → lote → dLocal Go + Platforms. Entorno prueba (sandbox) y producción separados." nav={NAV} user={data?.usuario}>
+    <BaasShell title="Configuración" subtitle="Rail SICR3P → TUU → lote → dLocal Go + Platforms. Entorno prueba (sandbox) y producción separados." nav={OPS_NAV} user={data?.usuario}>
       <div className="baas-status-grid">
         <article className="baas-panel">
           <div className="baas-panel-head">
@@ -177,9 +167,13 @@ export default function ConfigPage() {
         <article className="baas-panel">
           <h2>Documentación interna</h2>
           <p className="sub">
-            Ver <code>docs/baas-architecture.md</code>, <code>docs/dns-vps-correo.md</code>,{' '}
-            <code>docs/open-banking.md</code>, <code>docs/tuu-partner-checklist.md</code> y{' '}
-            <Link href="/docs/open-banking">docs web OB</Link>.
+            Ver <code>docs/dlocal-infra.md</code>, <code>docs/dlocal-entornos.md</code>,{' '}
+            <code>docs/baas-architecture.md</code>, <code>docs/open-banking.md</code> y{' '}
+            <Link href="/docs/dlocal">docs dLocal</Link>
+            {' · '}
+            <Link href="/ops/dlocal">ops dLocal</Link>
+            {' · '}
+            <Link href="/docs/open-banking">docs OB</Link>.
           </p>
         </article>
       </div>

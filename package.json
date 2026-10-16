@@ -9,7 +9,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "baas:e2e": "node scripts/baas-e2e-demo.mjs"
+    "baas:e2e": "node scripts/baas-e2e-demo.mjs",
+    "dlocal:infra": "node scripts/dlocal-infra-smoke.mjs"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",

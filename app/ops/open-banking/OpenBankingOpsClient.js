@@ -3,17 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import BaasShell from '../../components/BaasShell';
-
-const NAV = [
-  { href: '/ops', label: 'Cola' },
-  { href: '/ops/lotes', label: 'Lotes' },
-  { href: '/ops/pos', label: 'POS TUU' },
-  { href: '/ops/terminales', label: 'Conexión y KYC' },
-  { href: '/ops/mapa', label: 'Capas y mapa' },
-  { href: '/ops/open-banking', label: 'Open Banking' },
-  { href: '/ops/onboarding', label: 'Onboarding' },
-  { href: '/ops/config', label: 'Config' },
-];
+import { OPS_NAV } from '@/lib/baas/ops-nav';
 
 export default function OpenBankingOpsClient({ initial }) {
   const [data, setData] = useState(initial);
@@ -57,7 +47,7 @@ export default function OpenBankingOpsClient({ initial }) {
     <BaasShell
       title="Open Banking"
       subtitle="API partner AIS/PIS sobre el rail BaaS (cuentas, consentimientos, pagos)."
-      nav={NAV}
+      nav={OPS_NAV}
       user={data?.usuario}
     >
       {err ? <p className="baas-banner warn">{err}</p> : null}

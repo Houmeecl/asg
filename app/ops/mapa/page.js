@@ -2,17 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import BaasShell, { formatClp, StatusPill } from '../../components/BaasShell';
-
-const NAV = [
-  { href: '/ops', label: 'Cola' },
-  { href: '/ops/lotes', label: 'Lotes' },
-  { href: '/ops/pos', label: 'POS TUU' },
-  { href: '/ops/terminales', label: 'Conexión y KYC' },
-  { href: '/ops/mapa', label: 'Capas y mapa' },
-  { href: '/ops/open-banking', label: 'Open Banking' },
-  { href: '/ops/onboarding', label: 'Onboarding' },
-  { href: '/ops/config', label: 'Config' },
-];
+import { OPS_NAV } from '@/lib/baas/ops-nav';
 
 const CIUDADES = [
   { nombre: 'Antofagasta', lat: -23.65, lng: -70.4 },
@@ -108,7 +98,7 @@ export default function MapaCapasPage() {
     <BaasShell
       title="Capas territoriales"
       subtitle="Análisis de POS, usuarios y cobros sobre la red M2M: terminales, GPS e IoT en el mismo mapa, con recorridos y geocercas."
-      nav={NAV}
+      nav={OPS_NAV}
       user={data?.usuario}
     >
       <div className="baas-kpis">

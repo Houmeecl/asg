@@ -4,17 +4,7 @@ import { useEffect, useState } from 'react';
 import QRCode from 'qrcode';
 import BaasShell, { formatClp } from '../../components/BaasShell';
 import { buildTuuPaymentPayload, TUU_PACKAGES } from '@/lib/baas/tuu';
-
-const NAV = [
-  { href: '/ops', label: 'Cola' },
-  { href: '/ops/lotes', label: 'Lotes' },
-  { href: '/ops/pos', label: 'POS TUU' },
-  { href: '/ops/terminales', label: 'Conexión y KYC' },
-  { href: '/ops/mapa', label: 'Capas y mapa' },
-  { href: '/ops/open-banking', label: 'Open Banking' },
-  { href: '/ops/onboarding', label: 'Onboarding' },
-  { href: '/ops/config', label: 'Config' },
-];
+import { OPS_NAV } from '@/lib/baas/ops-nav';
 
 export default function PosPage() {
   const [user, setUser] = useState(null);
@@ -57,7 +47,7 @@ export default function PosPage() {
   }
 
   return (
-    <BaasShell title="POS TUU" subtitle="Modo tarjeta InterApp (mock) y modo turista con QR de pago." nav={NAV} user={user}>
+    <BaasShell title="POS TUU" subtitle="Modo tarjeta InterApp (mock) y modo turista con QR de pago." nav={OPS_NAV} user={user}>
       <div className="baas-grid-2">
         <div className="baas-panel">
           <h2>InterApp TUU (contrato)</h2>
