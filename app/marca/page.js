@@ -147,6 +147,9 @@ export default function MarcaPage() {
           <h2>04 · Uso en producto</h2>
           <ul className="marca-list">
             <li>
+              Documentación: <code>docs/brand-manual.md</code> e índice <code>docs/README.md</code>.
+            </li>
+            <li>
               Tokens CSS en <code>app/brand.css</code> — fuente única de verdad.
             </li>
             <li>
