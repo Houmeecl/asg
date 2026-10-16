@@ -2,10 +2,10 @@
 # Instala poste.io (edición gratis) en el VPS sin pelearse por 80/443
 # con nginx/Supabase: HTTP interno en 127.0.0.1:8080 + vhost mail.*.
 #
-#   curl -fsSL https://raw.githubusercontent.com/Houmeecl/asg/cursor/supabase-sicr3p-ssl-775f/scripts/install-posteio.sh | bash
+#   curl -fsSL https://raw.githubusercontent.com/Houmeecl/asg/cursor/configurar-vps-plan-775f/scripts/install-posteio.sh | bash
 #
-# Requisitos: Docker, DNS A mail.sicr3p.cl → este server (para cert/webmail),
-# firewall panel con 25/465/587/993. No es software libre (FOSS → Mailu).
+# DNS ya debe tener A mail.sicr3p.cl → 149.50.155.61 (correo en el VPS).
+# Firewall panel: 25/465/587/993. No es FOSS (alternativa → Mailu).
 set -euo pipefail
 
 MAIL_DOMAIN=${MAIL_DOMAIN:-mail.sicr3p.cl}
