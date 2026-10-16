@@ -23,12 +23,24 @@ Software SICR3P ──POST /v1/payouts──► Beneficiario (cuenta banco CL/LA
 | Operaciones, lotes, liberar | `lib/baas/operations.js` |
 | Open Banking AIS/PIS (partner) | `lib/baas/open-banking.js` + `/api/open-banking/v1` |
 | Portal empresa | `app/portal/**` |
-| Ops / admin | `app/ops/**` (+ `/ops/open-banking`) |
+| Ops / admin | `app/ops/**` (+ `/ops/dlocal`, `/ops/open-banking`) |
+| Infra dLocal (discovery) | `lib/baas/dlocal-infra.js` + `GET /api/baas/dlocal/infra` |
 | Webhook dLocal Go | `app/api/baas/webhooks/dlocal` (HMAC si hay secret) |
 | Webhook Platforms | `app/api/baas/webhooks/dlocal-platforms` |
 | DNS VPS + correo Ferozo | `docs/dns-vps-correo.md` |
 
-Ver también `docs/open-banking.md` y `docs/dns-vps-correo.md`.
+Ver también `docs/dlocal-infra.md`, `docs/dlocal-entornos.md`, `docs/open-banking.md` y `docs/dns-vps-correo.md`.
+
+## Infraestructura dLocal
+
+| Superficie | Ruta |
+|------------|------|
+| Discovery | `GET /api/baas/dlocal/infra` |
+| Entornos | `GET /api/baas/dlocal/entorno` |
+| Ops | `/ops/dlocal` |
+| Docs | `/docs/dlocal` |
+| Webhook Go | `POST /api/baas/webhooks/dlocal` |
+| Webhook Platforms | `POST /api/baas/webhooks/dlocal-platforms` |
 
 ## Estados de operación
 
@@ -45,7 +57,7 @@ Ver plantilla en `.env.example`.
 - Slots: `DLOCAL_SANDBOX_*` + `DLOCAL_LIVE_*` (legacy `DLOCAL_API_KEY` / `SECRET` sigue válido)
 - `DLOCAL_PLATFORMS_MODE` + `DLOCAL_PLATFORMS_SANDBOX_*` / `DLOCAL_PLATFORMS_LIVE_*`
 - `DLOCAL_PLATFORMS_NOTIFICATION_URL` (default `https://sicr3p.cl/api/baas/webhooks/dlocal-platforms`)
-- Estado: `GET /api/baas/dlocal/entorno` · UI `/ops/config`
+- Estado: `GET /api/baas/dlocal/infra` · `GET /api/baas/dlocal/entorno` · UI `/ops/dlocal` / `/ops/config`
 - `SICR3P_RAZON_SOCIAL` / `SICR3P_RUT` / `SICR3P_CONTACT_EMAIL` / `SICR3P_CONTACT_PHONE`
 - `SICR3P_FUNDACION_*` (dueña Fundación Entretodos)
 - `HUBSPOT_PRIVATE_APP_TOKEN` (opcional; sin token = simulador)

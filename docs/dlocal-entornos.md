@@ -52,3 +52,10 @@ con radio **Prueba (sandbox)** o **Producción**. El campo `entorno` queda en
 - Ops UI: `/ops/config` (slots prueba + producción)
 - API: `GET /api/baas/dlocal/entorno` (detalle con sesión)
 - Agente: `/soporte` → preguntá “entorno de prueba” o “sandbox”
+
+## Infraestructura
+
+- Mapa completo: `docs/dlocal-infra.md`
+- Discovery: `GET /api/baas/dlocal/infra`
+- Ops: `/ops/dlocal`
+- Docs web: `/docs/dlocal`

@@ -76,10 +76,14 @@ const ITEMS = [
     href: '/contacto',
   },
   {
-    ok: Boolean(process.env.DLOCAL_API_KEY && process.env.DLOCAL_MODE && process.env.DLOCAL_MODE !== 'simulator'),
+    ok: Boolean(
+      (process.env.DLOCAL_SANDBOX_API_KEY || process.env.DLOCAL_API_KEY) &&
+        process.env.DLOCAL_MODE &&
+        process.env.DLOCAL_MODE !== 'simulator',
+    ),
     label: 'dLocal Go sandbox/live (opcional)',
-    detail: 'Sin claves: simulador local. Con DLOCAL_MODE=sandbox|live + API key: rail real.',
-    href: '/docs/legal/checklist',
+    detail: 'Sin claves: simulador local. Con DLOCAL_MODE=sandbox|live + API key: rail real. Infra: /docs/dlocal.',
+    href: '/docs/dlocal',
   },
 ];
 

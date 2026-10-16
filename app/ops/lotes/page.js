@@ -2,17 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import BaasShell, { formatClp, StatusPill } from '../../components/BaasShell';
-
-const NAV = [
-  { href: '/ops', label: 'Cola' },
-  { href: '/ops/lotes', label: 'Lotes' },
-  { href: '/ops/pos', label: 'POS TUU' },
-  { href: '/ops/terminales', label: 'Conexión y KYC' },
-  { href: '/ops/mapa', label: 'Capas y mapa' },
-  { href: '/ops/open-banking', label: 'Open Banking' },
-  { href: '/ops/onboarding', label: 'Onboarding' },
-  { href: '/ops/config', label: 'Config' },
-];
+import { OPS_NAV } from '@/lib/baas/ops-nav';
 
 export default function LotesPage() {
   const [data, setData] = useState(null);
@@ -38,7 +28,7 @@ export default function LotesPage() {
   }
 
   return (
-    <BaasShell title="Lotes" subtitle="Cierre de operaciones COBRADA → fondeo merchant → liberar FIFO con dLocal Go." nav={NAV} user={data?.usuario}>
+    <BaasShell title="Lotes" subtitle="Cierre de operaciones COBRADA → fondeo merchant → liberar FIFO con dLocal Go." nav={OPS_NAV} user={data?.usuario}>
       <div style={{ display: 'flex', gap: 10, marginBottom: 16 }}>
         <button type="button" className="baas-btn dark" onClick={() => action({ action: 'cerrar_lote' })}>Cerrar lote</button>
       </div>
