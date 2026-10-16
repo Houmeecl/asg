@@ -1,52 +1,82 @@
-// Wordmark oficial de sicr3p (versión "triple impacto"): "sicr3p" en minúsculas,
-// punto verde sobre la "i", y la "3" con el grafismo de red/molécula de 3 nodos
-// verdes conectados. Colores de marca: navy #0f1f2e / green #28a745, adaptado
-// a texto claro para el tema oscuro interno.
+/**
+ * Wordmark oficial sicr3p/ — Manual de marca v1.0 (oct 2026).
+ * Base: Azul Profundo #0F1B3D · Acento: Violeta SICR3P #6B5CF6 en «3/».
+ */
+const VIOLET = '#6B5CF6';
+const NAVY = '#0F1B3D';
+
+const SIZE = {
+  sm: { text: 'text-2xl', tag: 'text-[10px]', gap: 'gap-1' },
+  md: { text: 'text-3xl', tag: 'text-[11px]', gap: 'gap-1.5' },
+  lg: { text: 'text-5xl', tag: 'text-sm', gap: 'gap-2' },
+};
+
 export default function SicrLogo({
   size = 'md',
-  contrast = 'light',
+  contrast = 'dark',
   compact = false,
+  variant = 'full',
   className = '',
+  showTagline = !compact,
 }) {
-  const textSize = size === 'lg' ? 'text-6xl' : size === 'sm' ? 'text-2xl' : 'text-3xl';
-  const dotOffset = size === 'lg' ? '-top-3' : '-top-2';
-  const dotSize = size === 'lg' ? 'w-2 h-2' : 'w-[5px] h-[5px]';
-  const textColor = contrast === 'dark' ? 'text-[#0f1f2e]' : 'text-white';
-  const subtextColor = contrast === 'dark' ? 'text-slate-600' : 'text-slate-400';
+  const s = SIZE[size] || SIZE.md;
+  const inverse = contrast === 'light';
+  const base = inverse ? '#FFFFFF' : NAVY;
+  const accent = VIOLET;
+
+  if (variant === 'isotype') {
+    return (
+      <span
+        className={`sicr-logo inline-flex items-baseline font-bold tracking-tight leading-none ${s.text} ${className}`.trim()}
+        aria-label="sicr3p"
+        style={{ fontFamily: 'var(--font-body), Inter, sans-serif' }}
+      >
+        <span style={{ color: accent }}>3</span>
+        <span style={{ color: inverse ? '#FFFFFF' : NAVY }}>/</span>
+      </span>
+    );
+  }
+
+  const word =
+    variant === 'mono' ? (
+      <>
+        <span style={{ color: base }}>sicr</span>
+        <span style={{ color: base }}>3</span>
+        <span style={{ color: base }}>p/</span>
+      </>
+    ) : (
+      <>
+        <span style={{ color: base }}>sicr</span>
+        <span style={{ color: accent }}>3</span>
+        <span style={{ color: base }}>p</span>
+        <span style={{ color: accent }}>/</span>
+      </>
+    );
 
   return (
-    <div className={`sicr-logo flex flex-col gap-1 leading-none ${className}`.trim()}>
-      <div className={`${textSize} font-bold tracking-tight ${textColor} flex items-baseline`}>
-        <span>s</span>
-        <span className="relative inline-block">
-          i
-          <span aria-hidden="true" className={`absolute ${dotOffset} left-1/2 -translate-x-1/2 ${dotSize} rounded-full`} style={{ background: '#28a745' }} />
-        </span>
-        <span>cr</span>
-        <span className="relative inline-block">
-          3
-          <svg aria-hidden="true" viewBox="0 0 20 30" className="absolute inset-0 w-full h-full pointer-events-none">
-            <line x1="14" y1="7" x2="7" y2="15" stroke="#28a745" strokeWidth="1.4" />
-            <line x1="7" y1="15" x2="14" y2="23" stroke="#28a745" strokeWidth="1.4" />
-            <circle cx="14" cy="7" r="2.3" fill="#28a745" />
-            <circle cx="7" cy="15" r="2.3" fill="#28a745" />
-            <circle cx="14" cy="23" r="2.3" fill="#28a745" />
-          </svg>
-        </span>
-        <span>p</span>
+    <div
+      className={`sicr-logo flex flex-col ${s.gap} leading-none ${className}`.trim()}
+      style={{ fontFamily: 'var(--font-body), Inter, sans-serif' }}
+    >
+      <div className={`${s.text} font-bold tracking-tight flex items-baseline`} aria-label="sicr3p/">
+        {word}
       </div>
-      <div className="flex items-center gap-2">
-        <span className="h-px w-3" style={{ background: '#28a745' }} />
-        <span className={`text-[10px] font-bold tracking-widest ${textColor} uppercase`}>triple impacto</span>
-        <span className="h-px w-3" style={{ background: '#28a745' }} />
-      </div>
-      {!compact ? (
-        <div className={`text-[9px] ${subtextColor} flex items-center gap-1`}>
-          <span>social</span><span style={{ color: '#28a745' }}>·</span>
-          <span>ambiental</span><span style={{ color: '#28a745' }}>·</span>
-          <span>económico</span>
-        </div>
+      {showTagline ? (
+        <p
+          className={`${s.tag} font-medium tracking-wide`}
+          style={{ color: inverse ? 'rgba(255,255,255,0.72)' : '#5B6578' }}
+        >
+          Desarrollamos empresas. Acercamos soluciones.
+        </p>
       ) : null}
     </div>
   );
 }
+
+export const SICR_BRAND = {
+  navy: NAVY,
+  violet: VIOLET,
+  green: '#00B67A',
+  blueSoft: '#E6F0FF',
+  gray: '#F4F5F9',
+};
