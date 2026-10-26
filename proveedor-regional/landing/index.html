@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Programa Proveedor Regional · Desarrollo desde el territorio</title>
+<meta name="description" content="Programa para acompañar a empresas de la Región de Antofagasta en su desarrollo como proveedores: capacidades, evidencia y oportunidades en un solo espacio.">
+<style>
+  :root{
+    --ink:#183a49; --navy:#102e3d; --teal:#167d82; --teal-pale:#e5f3ef;
+    --gold:#c59a56; --sand:#faf8f3; --line:#e3e9e7; --muted:#5d6f73;
+    --white:#fff; --shadow:0 12px 34px #173b4410;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ink:#e6eef0; --navy:#0b1f29; --teal:#4fb3b7; --teal-pale:#14302f;
+      --gold:#d9b47a; --sand:#0f2530; --line:#24404a; --muted:#9db3b8;
+      --white:#132935; --shadow:0 12px 34px #00000055;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ink:#e6eef0; --navy:#0b1f29; --teal:#4fb3b7; --teal-pale:#14302f;
+    --gold:#d9b47a; --sand:#0f2530; --line:#24404a; --muted:#9db3b8;
+    --white:#132935; --shadow:0 12px 34px #00000055;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--sand);color:var(--ink);font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+  img,svg{max-width:100%}
+  a{color:var(--teal)}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 16px}
+  .skip{position:absolute;left:-9999px}
+  .skip:focus{left:16px;top:16px;background:var(--white);padding:8px 12px;z-index:10}
+
+  header.top{background:var(--navy);color:#f4f7f7}
+  header.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-top:14px;padding-bottom:14px;flex-wrap:wrap}
+  .brand{font-weight:700;letter-spacing:.01em;text-decoration:none;color:inherit}
+  .brand span{color:var(--gold)}
+  nav a{color:#d6e3e5;text-decoration:none;margin-left:18px;font-size:15px}
+  nav a:hover,nav a:focus{color:#fff;text-decoration:underline}
+
+  .hero{background:linear-gradient(135deg,var(--navy) 0%,#15505a 100%);color:#f4f7f7;padding:72px 0 84px}
+  .eyebrow{text-transform:uppercase;letter-spacing:.14em;font-size:13px;color:var(--gold);font-weight:700}
+  .hero h1{font-size:clamp(34px,5.4vw,56px);line-height:1.1;margin:12px 0 18px;max-width:18ch}
+  .hero p.lead{font-size:clamp(18px,2.2vw,21px);max-width:58ch;color:#d9e6e8;margin:0 0 28px}
+  .actions{display:flex;flex-wrap:wrap;gap:12px}
+  .btn{display:inline-block;padding:13px 22px;border-radius:10px;font-weight:700;text-decoration:none;border:2px solid transparent}
+  .btn.primary{background:var(--gold);color:#1d2a30}
+  .btn.primary:hover{filter:brightness(1.05)}
+  .btn.ghost{border-color:#c9dadd;color:#fff}
+  .btn.ghost:hover{background:#ffffff14}
+  .btn:focus-visible,nav a:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+
+  section{padding:72px 0}
+  section h2{font-size:clamp(26px,3.6vw,36px);line-height:1.2;margin:8px 0 14px}
+  section p.intro{color:var(--muted);max-width:64ch;margin:0 0 32px}
+  .grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+  .card{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:24px;box-shadow:var(--shadow)}
+  .card h3{margin:0 0 8px;font-size:19px;line-height:1.3}
+  .card p{margin:0;color:var(--muted);font-size:15px}
+  .num{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:var(--teal-pale);color:var(--teal);font-weight:800;margin-bottom:12px}
+
+  .split{background:var(--white);border-block:1px solid var(--line)}
+  .split .grid{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+  .tag{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--teal);background:var(--teal-pale);padding:4px 10px;border-radius:999px;margin-bottom:12px}
+  ul.check{list-style:none;padding:0;margin:14px 0 0}
+  ul.check li{padding:6px 0 6px 26px;position:relative;color:var(--ink)}
+  ul.check li::before{content:"";position:absolute;left:2px;top:14px;width:12px;height:7px;border-left:3px solid var(--teal);border-bottom:3px solid var(--teal);transform:rotate(-45deg)}
+
+  .trust .grid{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+  .trust .card{border-top:4px solid var(--gold)}
+
+  .status{background:var(--navy);color:#e8f0f2;border-radius:16px;padding:32px;margin-top:8px}
+  .status h2{color:#fff}
+  .status p{color:#c9dadd;max-width:70ch;margin:0 0 12px}
+  .status strong{color:#fff}
+
+  .cta{text-align:center}
+  .cta p{color:var(--muted);max-width:60ch;margin:0 auto 24px}
+  .cta .actions{justify-content:center}
+  .cta .btn.ghost{color:var(--ink);border-color:var(--teal)}
+  .cta .btn.ghost:hover{background:var(--teal-pale)}
+
+  footer{background:var(--navy);color:#b9cbd0;padding:36px 0;font-size:14px}
+  footer p{margin:0 0 10px;max-width:90ch}
+  footer a{color:#e8f0f2}
+
+  @media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+  @media (max-width:640px){
+    section{padding:52px 0}
+    .hero{padding:52px 0 60px}
+    nav a{margin-left:12px}
+  }
+</style>
+</head>
+<body>
+<a class="skip" href="#contenido">Saltar al contenido</a>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#inicio">Proveedor <span>Regional</span></a>
+    <nav aria-label="Principal">
+      <a href="#como-funciona">Cómo funciona</a>
+      <a href="#seguridad">Confianza</a>
+      <a href="#estado">Estado</a>
+    </nav>
+  </div>
+</header>
+
+<main id="contenido">
+
+<section class="hero" id="inicio">
+  <div class="wrap">
+    <div class="eyebrow">Región de Antofagasta</div>
+    <h1>Desarrollo de proveedores, desde el territorio.</h1>
+    <p class="lead">Un espacio para que las empresas de la región organicen sus capacidades, reúnan su evidencia y encuentren oportunidades, con la fundación acompañando cada paso.</p>
+    <div class="actions">
+      <a class="btn primary" href="/">Ver la demostración</a>
+      <a class="btn ghost" href="#como-funciona">Cómo funciona</a>
+    </div>
+  </div>
+</section>
+
+<section id="como-funciona">
+  <div class="wrap">
+    <div class="eyebrow">Proceso</div>
+    <h2>Tres pasos para avanzar como proveedor.</h2>
+    <p class="intro">Cada empresa tiene su propio espacio. La fundación ve lo que el programa necesita y lo que cada empresa decide compartir.</p>
+    <div class="grid">
+      <article class="card">
+        <span class="num" aria-hidden="true">1</span>
+        <h3>Registro y Pasaporte</h3>
+        <p>La empresa completa su perfil y sigue los requisitos del programa en un Pasaporte de desarrollo: identidad, operación regional, cumplimiento y formación.</p>
+      </article>
+      <article class="card">
+        <span class="num" aria-hidden="true">2</span>
+        <h3>Agenda y ruta de trabajo</h3>
+        <p>Cada organización registra sus actividades con fecha y las marca como completadas. La ruta de desarrollo queda a la vista, sin depender de planillas dispersas.</p>
+      </article>
+      <article class="card">
+        <span class="num" aria-hidden="true">3</span>
+        <h3>Finanzas bajo permiso</h3>
+        <p>La empresa decide si comparte saldos y movimientos con la fundación, por una o 24 horas, y puede revocar ese acceso en cualquier momento.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="split" aria-labelledby="quienes">
+  <div class="wrap">
+    <div class="eyebrow">Para quién</div>
+    <h2 id="quienes">Una plataforma, dos espacios separados.</h2>
+    <p class="intro">Fundación y empresas acceden con sus propias credenciales. Ninguna empresa ve la cuenta de otra.</p>
+    <div class="grid">
+      <div class="card">
+        <span class="tag">Fundación</span>
+        <h3>Operación del programa</h3>
+        <p>Seguimiento del registro de empresas, de sus actividades y de la información financiera que cada empresa autoriza.</p>
+        <ul class="check">
+          <li>Panel de empresas en programa</li>
+          <li>Finanzas propias de la fundación</li>
+          <li>Consultas solo con permiso vigente</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="tag">Empresa</span>
+        <h3>Su espacio de desarrollo</h3>
+        <p>Pasaporte, agenda, saldos y movimientos, y control total sobre lo que se comparte.</p>
+        <ul class="check">
+          <li>Pasaporte y requisitos del programa</li>
+          <li>Agenda propia de actividades</li>
+          <li>Permisos que se pueden revocar</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="seguridad" class="trust">
+  <div class="wrap">
+    <div class="eyebrow">Confianza</div>
+    <h2>Diseñado para cuidar la información.</h2>
+    <p class="intro">El portal organiza información y permisos. No recibe, no custodia ni mueve fondos.</p>
+    <div class="grid">
+      <article class="card">
+        <h3>Sin pagos desde el portal</h3>
+        <p>Los borradores de pago se guardan para revisión y no se envían. La ejecución de pagos reales no está habilitada.</p>
+      </article>
+      <article class="card">
+        <h3>Permisos temporales</h3>
+        <p>Cualquier acceso de la fundación a finanzas de una empresa vence solo y no permite operar sobre la cuenta.</p>
+      </article>
+      <article class="card">
+        <h3>Aislamiento por organización</h3>
+        <p>El servidor define a qué espacio pertenece cada sesión. Los datos de una empresa no se mezclan con los de otra.</p>
+      </article>
+      <article class="card">
+        <h3>Registro de actividad</h3>
+        <p>Las acciones relevantes quedan registradas en el espacio de la organización, para revisión posterior.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="estado">
+  <div class="wrap">
+    <div class="status">
+      <h2>Estado del proyecto</h2>
+      <p><strong>Esta es una versión de demostración.</strong> Los perfiles, documentos, saldos y movimientos son ficticios y no constituyen verificaciones reales ni certificación.</p>
+      <p>Todavía no están implementadas la carga y verificación de documentos, la emisión de Pasaportes reales ni la conexión a cuentas bancarias de empresas.</p>
+      <p>Antes de operar con datos reales se requieren una revisión de seguridad independiente, HTTPS en producción, respaldos y acuerdos de datos con cada participante.</p>
+    </div>
+  </div>
+</section>
+
+<section class="cta" aria-labelledby="cta-title">
+  <div class="wrap">
+    <div class="eyebrow">Explora el portal</div>
+    <h2 id="cta-title">Recorre la demostración.</h2>
+    <p>Entra con una de las cuentas de prueba y revisa el espacio de la fundación, el de una empresa y el flujo de permisos.</p>
+    <div class="actions">
+      <a class="btn primary" href="/">Abrir la demostración</a>
+      <a class="btn ghost" href="#estado">Leer el estado del proyecto</a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p><strong>Programa Proveedor Regional</strong> · Región de Antofagasta.</p>
+    <p>Las empresas son titulares de sus cuentas. Este portal no recibe ni custodia sus fondos. Las conversaciones con entidades externas se encuentran en desarrollo y no implican una alianza formalizada.</p>
+    <p>Datos de ejemplo únicamente en la demostración. No publicar credenciales de prueba en un entorno abierto.</p>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,436 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Webhook de Notificaciones B2B Global66",
+    "version": "1.0.0",
+    "description": "Este Webhook permite recibir notificaciones automáticas de transacciones desde Global66.\n\n## Descripción General\nTu empresa debe exponer un endpoint REST público que reciba notificaciones vía el recurso seleccionado.\nGlobal66 enviará información de transacciones en tiempo real a este endpoint.\n\n## Seguridad\nLa integración utiliza una API Key para validar la autenticidad de las notificaciones, que es generada en el momento de crear el webhook:\n\n1. **API Key**: La genera Global66 al crear el webhook\n\n### Proceso de Validación\n1. Extraer el header con la key: \"x-api-key\" y validar con la otorgada por Global66\n\nSi el contenido coincide exactamente, la petición es auténtica.\n\n## Importante\n- Tu endpoint **debe** responder con HTTP 200 OK\n- Global66 **no reintenta** si hay errores (400, 500) o timeout\n- Asegúrate de que tu lógica sea robusta y rápida\n\n---\n\nSi tienes dudas puedes contactarnos a **soporte.tech@global66.com**\n",
+    "contact": {
+      "name": "Soporte Global66",
+      "url": "https://global66.com",
+      "email": "soporte@global66.com"
+    }
+  },
+  "webhooks": {
+    "remittanceUpdate": {
+      "post": {
+        "tags": [
+          "Eventos (Webhooks)"
+        ],
+        "summary": "Cambio de estado de una remesa",
+        "description": "Endpoint para recibir notificaciones automáticas de transacciones desde Global66.\n\n**Requisitos:**\n- Debe responder con código HTTP 200 OK\n- Debe procesar la validación del header con la key: `x-api-key` otorgada al momento de la creación\n- La respuesta debe ser rápida para evitar timeouts\n",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EventRemittanceStatus"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Recibido OK"
+          }
+        }
+      }
+    },
+    "paymentReceived": {
+      "post": {
+        "tags": [
+          "Eventos (Webhooks)"
+        ],
+        "summary": "Recepción de dinero por transferencia bancaria",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EventPaymentReceived"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Recibido OK"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "AuthResponse": {
+        "type": "object",
+        "properties": {
+          "access_token": {
+            "type": "string",
+            "example": "eyJhbGciOiJIUzI1Ni..."
+          },
+          "expires_in": {
+            "type": "integer",
+            "example": 3600
+          },
+          "token_type": {
+            "type": "string",
+            "example": "Bearer"
+          }
+        }
+      },
+      "WebhookConfigInput": {
+        "type": "object",
+        "required": [
+          "name",
+          "endpoint_url",
+          "method",
+          "events"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Ejemplo Integración"
+          },
+          "method": {
+            "type": "string",
+            "enum": [
+              "POST",
+              "GET"
+            ],
+            "default": "POST"
+          },
+          "endpoint_url": {
+            "type": "string",
+            "format": "uri",
+            "example": "https://api.tu-empresa.com/webhook"
+          },
+          "security_certificate": {
+            "type": "string",
+            "format": "byte",
+            "description": "Certificado en base64"
+          },
+          "events": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "REMITTANCE_STATUS_CHANGE",
+                "MONEY_RECEIVED"
+              ]
+            },
+            "example": [
+              "REMITTANCE_STATUS_CHANGE"
+            ]
+          }
+        }
+      },
+      "QuoteRequest": {
+        "type": "object",
+        "properties": {
+          "amount": {
+            "type": "number",
+            "example": 1000
+          },
+          "currency_from": {
+            "type": "string",
+            "example": "CLP"
+          },
+          "currency_to": {
+            "type": "string",
+            "example": "USD"
+          }
+        }
+      },
+      "QuoteResponse": {
+        "type": "object",
+        "properties": {
+          "quote_id": {
+            "type": "string",
+            "example": "qt_987"
+          },
+          "exchange_rate": {
+            "type": "number",
+            "example": 0.0011
+          },
+          "final_amount": {
+            "type": "number",
+            "example": 1.1
+          }
+        }
+      },
+      "TransferRequest": {
+        "type": "object",
+        "properties": {
+          "quote_id": {
+            "type": "string"
+          },
+          "recipient": {
+            "$ref": "#/components/schemas/Recipient"
+          },
+          "reason": {
+            "type": "string",
+            "example": "Servicios"
+          }
+        }
+      },
+      "TransferResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "rem_555"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "PENDING",
+              "PAID"
+            ],
+            "example": "PENDING"
+          }
+        }
+      },
+      "Recipient": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Juan Perez"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          }
+        }
+      },
+      "EventRemittanceStatus": {
+        "type": "object",
+        "properties": {
+          "event": {
+            "type": "string",
+            "example": "RMT - Transaction"
+          },
+          "payload": {
+            "type": "object",
+            "properties": {
+              "transactionId": {
+                "type": "integer",
+                "format": "int64",
+                "description": "Identificador único de la transacción",
+                "example": 34567687
+              },
+              "accountNumberBeneficiary": {
+                "type": "string",
+                "description": "Número de cuenta del beneficiario",
+                "example": "000123456789"
+              },
+              "destinyCountryCodeBeneficiary": {
+                "type": "string",
+                "description": "Código ISO del país destino",
+                "minLength": 2,
+                "maxLength": 2,
+                "example": "CL"
+              },
+              "destinyCountryNameBeneficiary": {
+                "type": "string",
+                "description": "Nombre del país destino",
+                "example": "Chile"
+              },
+              "dniTypeBeneficiary": {
+                "type": "string",
+                "description": "Tipo de documento de identidad del beneficiario",
+                "enum": [
+                  "RUT",
+                  "DNI",
+                  "PASSPORT",
+                  "CE"
+                ],
+                "example": "RUT"
+              },
+              "dniBeneficiary": {
+                "type": "string",
+                "description": "Número de documento de identidad del beneficiario",
+                "example": "11.111.111-1"
+              },
+              "originCurrencyCode": {
+                "type": "string",
+                "description": "Código ISO de la moneda de origen",
+                "minLength": 3,
+                "maxLength": 3,
+                "example": "USD"
+              },
+              "destinyCurrencyCode": {
+                "type": "string",
+                "description": "Código ISO de la moneda de destino",
+                "minLength": 3,
+                "maxLength": 3,
+                "example": "CLP"
+              },
+              "discountAmount": {
+                "type": "number",
+                "format": "double",
+                "description": "Monto de descuento aplicado",
+                "example": 0
+              },
+              "originAmount": {
+                "type": "number",
+                "format": "double",
+                "description": "Monto en la moneda de origen",
+                "example": 5000
+              },
+              "originAmountUsd": {
+                "type": "number",
+                "format": "double",
+                "description": "Monto equivalente en USD",
+                "example": 5.39
+              },
+              "destinyAmount": {
+                "type": "number",
+                "format": "double",
+                "description": "Monto en la moneda de destino",
+                "example": 4990
+              },
+              "discountAmountUsd": {
+                "type": "number",
+                "format": "double",
+                "description": "Monto de descuento equivalente en USD",
+                "example": 0
+              },
+              "customerId": {
+                "type": "string",
+                "description": "Identificador del cliente",
+                "example": "2000000584"
+              },
+              "createdAt": {
+                "type": "string",
+                "format": "date-time",
+                "description": "Fecha y hora de creación de la transacción (ISO 8601)",
+                "example": "2025-01-01T22:10:00Z"
+              },
+              "status": {
+                "type": "string",
+                "description": "Estado actual de la transacción",
+                "enum": [
+                  "successful",
+                  "created",
+                  "rejected",
+                  "sent"
+                ],
+                "example": "successful"
+              },
+              "internacional": {
+                "type": "boolean",
+                "description": "Indica si la transacción es internacional",
+                "example": false
+              },
+              "purpose": {
+                "type": "string",
+                "description": "Propósito o descripción de la transacción",
+                "example": "API connectivity test"
+              },
+              "accountType": {
+                "type": "string",
+                "description": "Tipo de cuenta del beneficiario",
+                "example": "RUT"
+              },
+              "bank": {
+                "type": "string",
+                "description": "Nombre del banco del beneficiario",
+                "example": "Banco Estado"
+              }
+            }
+          }
+        }
+      },
+      "EventPaymentReceived": {
+        "type": "object",
+        "properties": {
+          "event": {
+            "type": "string",
+            "example": "WALLET - Founding status"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "accountBranch": {
+                "type": "string",
+                "example": "001-23"
+              },
+              "originAmount": {
+                "type": "number",
+                "format": "double",
+                "description": "Monto en la moneda de origen",
+                "example": 150
+              },
+              "originAmountUSD\"": {
+                "type": "number",
+                "format": "double",
+                "description": "Monto equivalente en USD",
+                "example": 150
+              },
+              "originCountryCode": {
+                "type": "string",
+                "description": "Código ISO de la moneda de origen",
+                "minLength": 3,
+                "maxLength": 3,
+                "example": "PE"
+              },
+              "originCurrencyCode": {
+                "type": "string",
+                "description": "Código ISO de la moneda de origen",
+                "minLength": 3,
+                "maxLength": 3,
+                "example": "PEN"
+              },
+              "remitterBankName": {
+                "type": "string",
+                "example": "Banco Remitente S.A."
+              },
+              "status": {
+                "type": "string",
+                "description": "Estado actual de la transacción",
+                "enum": [
+                  "COMPLETED",
+                  "PAID",
+                  "PENDING_VERIFICATION",
+                  "REJECTED",
+                  "RELEASED",
+                  "REJETED",
+                  "PENDING",
+                  "VERIFIED"
+                ],
+                "example": "COMPLETED"
+              },
+              "thirdPartyClientName": {
+                "type": "string",
+                "example": "Acme S.A."
+              },
+              "transactionId": {
+                "type": "integer",
+                "format": "int64",
+                "description": "Identificador único de la transacción",
+                "example": 34567687
+              },
+              "customerId": {
+                "type": "integer",
+                "format": "int64",
+                "description": "Identificador único del usuario",
+                "example": 3456767
+              },
+              "type": {
+                "type": "string",
+                "description": "Tipo de operación",
+                "example": "DEPOSIT"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

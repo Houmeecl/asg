@@ -1,0 +1,46 @@
+{
+  "fecha": "2026-10-26",
+  "version": "0.2.0",
+  "estado": "MVP local con contrato de notificaciones aportado",
+  "pruebas_backend_y_conector": {
+    "total": 40,
+    "resultado": "aprobadas",
+    "Global66_real": false
+  },
+  "navegador_v01": {
+    "crear_actividad": true,
+    "borrador_no_enviado": true,
+    "permiso_empresa": true,
+    "lectura_delegada_sin_borradores": true,
+    "revocacion_inmediata": true,
+    "simulacion_sin_backend": true,
+    "no_desborde_movil": true,
+    "monedas_y_datos_ausentes": true,
+    "errores_js": []
+  },
+  "navegador_webhooks": {
+    "simulaciones_sin_cambio_de_saldo": true,
+    "fuente_simulada_explicita": true,
+    "permiso_existente_no_amplia_notificaciones": true,
+    "simulacion_sin_backend": true,
+    "sin_desborde_movil": true,
+    "errores_js": []
+  },
+  "contrato": {
+    "openapi": "3.1.0",
+    "titulo": "Webhook de Notificaciones B2B Global66",
+    "version": "1.0.0",
+    "tipos": [
+      "remittanceUpdate",
+      "paymentReceived"
+    ],
+    "credenciales_operativas": false
+  },
+  "limites": [
+    "Sin despliegue público ni registro de endpoints en Global66",
+    "Sin cuentas reales conectadas",
+    "Sin ejecución de pagos ni modificación de saldos por notificaciones",
+    "Callbacks externos solo en piloto con clave por organización; demo solo simulaciones",
+    "Pasaportes y registro de ejemplo; sin carga o verificación real de documentos"
+  ]
+}
