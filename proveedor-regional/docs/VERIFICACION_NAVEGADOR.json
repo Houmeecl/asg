@@ -1,0 +1,11 @@
+{
+  "crear_actividad": true,
+  "borrador_no_enviado": true,
+  "permiso_empresa": true,
+  "lectura_delegada_sin_borradores": true,
+  "revocacion_inmediata": true,
+  "simulacion_sin_backend": true,
+  "no_desborde_movil": true,
+  "monedas_y_datos_ausentes": true,
+  "errores_js": []
+}

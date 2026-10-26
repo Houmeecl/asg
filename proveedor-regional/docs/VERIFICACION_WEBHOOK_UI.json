@@ -1,0 +1,8 @@
+{
+  "simulaciones_sin_cambio_de_saldo": true,
+  "fuente_simulada_explicita": true,
+  "permiso_existente_no_amplia_notificaciones": true,
+  "simulacion_sin_backend": true,
+  "sin_desborde_movil": true,
+  "errores_js": []
+}
